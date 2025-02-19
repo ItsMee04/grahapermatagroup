@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         User::create([
             'email'         =>  'admin@grahapermatagroup.com',
             'password'      =>  Hash::make('matadewa'),
-            'pegawai_id'    =>  2,
+            'pegawai_id'    =>  1,
             'role_id'       =>  1,
             'status'        =>  1,
         ]);

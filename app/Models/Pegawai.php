@@ -31,7 +31,7 @@ class Pegawai extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function jeniskalmin(): BelongsTo
+    public function jeniskelamin(): BelongsTo
     {
         return $this->belongsTo(JenisKelamin::class, 'jeniskelamin_id', 'id');
     }
