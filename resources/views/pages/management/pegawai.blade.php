@@ -329,7 +329,7 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" name="image" class="custom-file-input"
-                                                id="image">
+                                                id="editimage">
                                             <label class="custom-file-label">Choose
                                                 file</label>
                                         </div>

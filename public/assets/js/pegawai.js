@@ -1,7 +1,9 @@
 $(document).ready(function () {
     loadPegawai();
-    uploadImage()
-    resetFieldTutupModalTambah()
+    uploadImage();
+    resetFieldTutupModalTambah();
+    resetFieldTutupModalEdit();
+    uploadEditImage();
 
     function uploadImage() {
         //ini saat input
@@ -18,6 +20,27 @@ $(document).ready(function () {
                 img.src = reader.result;
 
                 previewImage.appendChild(img);
+            });
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function uploadEditImage() {
+        //ini saat input
+        const imgEditInput = document.getElementById("editimage");
+        const previewEditImage = document.getElementById("editPreview");
+
+        imgEditInput.addEventListener("change", () => {
+            const file = imgEditInput.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+                previewEditImage.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = reader.result;
+
+                previewEditImage.appendChild(img);
             });
 
             reader.readAsDataURL(file);
@@ -295,7 +318,7 @@ $(document).ready(function () {
                 $("#editalamat").val(response.Data.alamat);
 
                 // Update preview gambar
-                let imageSrc = response.Data.image
+                var imageSrc = response.Data.image
                     ? `/storage/avatar/${response.Data.image}`
                     : `/assets/dist/img/notfound.png`;
                 $("#editPreview img").attr("src", imageSrc);
@@ -366,6 +389,116 @@ $(document).ready(function () {
                     "error"
                 );
             },
+        });
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalEdit() {
+        $("#mdEditPegawai").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeEditPegawai")[0].reset();
+        });
+    }
+
+    //kirim data ke server <i class=""></i>
+    $("#storeEditPegawai").on("submit", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+
+        // Buat objek FormData
+        const formData = new FormData(this);
+        // Ambil ID dari form
+        const idPegawai = formData.get("id"); // Mengambil nilai input dengan name="id"
+
+        $.ajax({
+            url: `/pegawai/${idPegawai}`, // Endpoint Laravel untuk menyimpan pegawai
+            type: "POST",
+            data: formData,
+            processData: false, // Agar data tidak diubah menjadi string
+            contentType: false, // Agar header Content-Type otomatis disesuaikan
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdEditPegawai").modal("hide"); // Tutup modal
+                resetFieldTutupModalEdit();
+                tablePegawai.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                // Tampilkan pesan error dari server
+                const errors = xhr.responseJSON.errors;
+                if (errors) {
+                    let errorMessage = "";
+                    for (let key in errors) {
+                        errorMessage += `${errors[key][0]}\n`;
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage,
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
+                }
+            },
+        });
+    });
+
+    $(document).on("click", ".btndelete", function () {
+        let id = $(this).data("id");
+
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+            customClass: {
+                popup: 'animated bounceIn', // Animasi masuk
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/pegawai/delete/${id}`, // Ganti dengan endpoint yang sesuai
+                    type: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") // Ambil token CSRF dari meta tag
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Terhapus!",
+                            text: "Data berhasil dihapus.",
+                            icon: "success",
+                            customClass: {
+                                popup: 'animated fadeOut' // Animasi keluar
+                            }
+                        });
+                        tablePegawai.ajax.reload(null, false);// Reload DataTable setelah penghapusan
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Gagal!",
+                            text: "Terjadi kesalahan, coba lagi nanti.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
         });
     });
 

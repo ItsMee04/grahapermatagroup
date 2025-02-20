@@ -9,6 +9,7 @@ use App\Http\Controllers\Master\LokasiController;
 use App\Http\Controllers\Master\JabatanController;
 use App\Http\Controllers\Master\RekeningController;
 use App\Http\Controllers\Management\PegawaiController;
+use App\Http\Controllers\Management\UserController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\SubkontraktorController;
@@ -110,4 +111,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/pegawai/getPegawai', [PegawaiController::class, 'getPegawai']);
     Route::post('/pegawai', [PegawaiController::class, 'store']);
     Route::get('/pegawai/{id}', [PegawaiController::class, 'show']);
+    Route::post('/pegawai/{id}', [PegawaiController::class, 'update']);
+    Route::delete('/pegawai/delete/{id}', [PegawaiController::class, 'delete']);
+
+    Route::get('/users', function () {
+        return view('Pages.Management.user');
+    });
+    Route::get('/users/getUsers', [UserController::class, 'getUsers']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::post('/users/{id}', [UserController::class, 'update']);
+
+
+    Route::get('/logout', [AuthController::class, 'logout']);
 });
