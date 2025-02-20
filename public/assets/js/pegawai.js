@@ -2,6 +2,28 @@ $(document).ready(function () {
     loadPegawai();
     uploadImage()
     resetFieldTutupModalTambah()
+
+    function uploadImage() {
+        //ini saat input
+        const imgInput = document.getElementById("image");
+        const previewImage = document.getElementById("preview");
+
+        imgInput.addEventListener("change", () => {
+            const file = imgInput.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+                previewImage.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = reader.result;
+
+                previewImage.appendChild(img);
+            });
+
+            reader.readAsDataURL(file);
+        });
+    }
+
     // Inisialisasi Select2 dengan tema Bootstrap 4
     $('.select2bs4').select2({
         theme: 'bootstrap4'
@@ -17,7 +39,7 @@ $(document).ready(function () {
     //ketika menekan tombol refresh
     $(document).on("click", "#btnRefresh", function () {
         if (tablePegawai) {
-            tablePegawai.ajax.reload(); // Reload data dari server
+            tablePegawai.ajax.reload(null, false); // Reload data dari server
         }
         var Toast = Swal.mixin({
             toast: true,
@@ -218,15 +240,20 @@ $(document).ready(function () {
             processData: false, // Agar data tidak diubah menjadi string
             contentType: false, // Agar header Content-Type otomatis disesuaikan
             success: function (response) {
-                const successtoastExample =
-                    document.getElementById("successToast");
-                const toast = new bootstrap.Toast(successtoastExample);
-                $(".toast-body").text(response.message);
-                toast.show();
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
                 $("#mdTambahPegawai").modal("hide"); // Tutup modal
-                $("#storePegawai")[0].reset(); // Reset form
-                $("#preview").empty();
-                loadPegawai();
+                resetFieldTutupModalTambah();
+                tablePegawai.ajax.reload(null, false);
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -236,40 +263,110 @@ $(document).ready(function () {
                     for (let key in errors) {
                         errorMessage += `${errors[key][0]}\n`;
                     }
-                    const dangertoastExamplee =
-                        document.getElementById("dangerToastError");
-                    const toast = new bootstrap.Toast(dangertoastExamplee);
-                    $(".toast-body").text(errorMessage);
-                    toast.show();
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
                 } else {
-                    const dangertoastExamplee =
-                        document.getElementById("dangerToastError");
-                    const toast = new bootstrap.Toast(dangertoastExamplee);
-                    $(".toast-body").text(response.message);
-                    toast.show();
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
                 }
             },
         });
     });
 
-    function uploadImage() {
-        //ini saat input
-        const imgInput = document.getElementById("image");
-        const previewImage = document.getElementById("preview");
+    //ketika button edit di tekan
+    $(document).on("click", ".btnedit", function () {
+        const pegawaiID = $(this).data("id");
 
-        imgInput.addEventListener("change", () => {
-            const file = imgInput.files[0];
-            const reader = new FileReader();
+        $.ajax({
+            url: `/pegawai/${pegawaiID}`, // Endpoint untuk mendapatkan data pegawai
+            type: "GET",
+            success: function (response) {
+                // Isi modal dengan data pegawai
+                $("#editid").val(response.Data.id);
+                $("#editnip").val(response.Data.nip);
+                $("#editnama").val(response.Data.nama);
+                $("#edittempat").val(response.Data.tempat);
+                $("#edittanggal").val(response.Data.tanggal);
+                $("#editkontak").val(response.Data.kontak);
+                $("#editalamat").val(response.Data.alamat);
 
-            reader.addEventListener("load", () => {
-                previewImage.innerHTML = "";
-                const img = document.createElement("img");
-                img.src = reader.result;
+                // Update preview gambar
+                let imageSrc = response.Data.image
+                    ? `/storage/avatar/${response.Data.image}`
+                    : `/assets/dist/img/notfound.png`;
+                $("#editPreview img").attr("src", imageSrc);
 
-                previewImage.appendChild(img);
-            });
+                // Muat opsi agama
+                $.ajax({
+                    url: "/jeniskelamin/getJenisKelamin",
+                    type: "GET",
+                    success: function (jabatanResponse) {
+                        let options =
+                            '<option value="">-- PILIH JENIS KELAMIN --</option>';
+                        jabatanResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.jeniskelamin_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.jeniskelamin}</option>`;
+                        });
+                        $("#editjeniskelamin").html(options);
+                    },
+                });
 
-            reader.readAsDataURL(file);
+                // Muat opsi agama
+                $.ajax({
+                    url: "/agama/getAgama",
+                    type: "GET",
+                    success: function (jabatanResponse) {
+                        let options =
+                            '<option value="">-- PILIH AGAMA --</option>';
+                        jabatanResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.agama_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.agama}</option>`;
+                        });
+                        $("#editagama").html(options);
+                    },
+                });
+
+                // Muat opsi jabatan
+                $.ajax({
+                    url: "/jabatan/getJabatan",
+                    type: "GET",
+                    success: function (jabatanResponse) {
+                        let options =
+                            '<option value="">-- PILIH JABATAN --</option>';
+                        jabatanResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.jabatan_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.jabatan}</option>`;
+                        });
+                        $("#editjabatan").html(options);
+                    },
+                });
+
+                // Update dropdown status sesuai dengan data yang diterima
+
+                // Tampilkan modal edit
+                $("#mdEditPegawai").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data pegawai.",
+                    "error"
+                );
+            },
         });
-    }
+    });
+
 })

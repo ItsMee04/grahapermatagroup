@@ -64,4 +64,10 @@ class PegawaiController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Data Pegawai Berhasil Disimpan']);
     }
+
+    public function show($id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+        return response()->json(['success' => true, 'message' => 'Data Pegawai Berhasil Ditemukan', 'Data' => $pegawai]);
+    }
 }

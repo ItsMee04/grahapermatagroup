@@ -13,7 +13,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#btnRefresh", function () {
         if (tableBlok) {
-            tableBlok.ajax.reload(); // Reload data dari server
+            tableBlok.ajax.reload(null, false); // Reload data dari server
         }
         var Toast = Swal.mixin({
             toast: true,
@@ -188,9 +188,9 @@ $(document).ready(function () {
     function resetFieldTutupModalTambah() {
         $("#mdTambahBlok").on("hidden.bs.modal", function () {
             // Reset dropdown lokasi jika perlu
-            $("#lokasi").val("").trigger("change"); // Reset select status jika menggunakan Select2 atau lainnya
+            $("#lokasi").val(null).trigger('change'); // Reset select status jika menggunakan Select2 atau lainnya
             // Reset dropdown tipe jika perlu
-            $("#tipe").val("").trigger("change"); // Reset select status jika menggunakan Select2 atau lainnya
+            $("#tipe").val(null).trigger('change'); // Reset select status jika menggunakan Select2 atau lainnya
             // Reset form input (termasuk gambar dan status)
             $("#storeBlok")[0].reset();
         });
@@ -224,7 +224,7 @@ $(document).ready(function () {
 
                 $("#mdTambahBlok").modal("hide"); // Tutup modal
                 resetFieldTutupModalTambah();
-                tableBlok.ajax.reload(); // Reload data dari server
+                tableBlok.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -355,7 +355,7 @@ $(document).ready(function () {
 
                 $("#mdEditBlok").modal("hide"); // Tutup modal
                 resetFieldTutupModalEdit();
-                tableBlok.ajax.reload(); // Reload data dari server
+                tableBlok.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
