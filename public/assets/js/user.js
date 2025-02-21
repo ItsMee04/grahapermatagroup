@@ -72,7 +72,11 @@ $(document).ready(function () {
                     data: "email",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return `<b>${data}</b>`; // Menjadikan teks lokasi tebal
+                        if(data == null) {
+                            return `<b> - </b>`
+                        } else {
+                            return `<b>${data}</b>`; // Menjadikan teks lokasi tebal
+                        }
                     },
                 },
                 {

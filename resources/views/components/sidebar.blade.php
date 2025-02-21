@@ -117,6 +117,29 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>
+                            Marketing
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/calonkonsumen" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Calon Konsumen</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/konsumen" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Konsumen</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
                     <a href="/logout" class="nav-link">
                         <i class="nav-icon fas fa-times"></i>
                         <p>

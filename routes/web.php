@@ -121,6 +121,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::post('/users/{id}', [UserController::class, 'update']);
 
+    Route::get('/calonkonsumen', function () {
+        return view('Pages.marketing.calonkonsumen');
+    });
+
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
