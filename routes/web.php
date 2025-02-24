@@ -10,6 +10,7 @@ use App\Http\Controllers\Master\JabatanController;
 use App\Http\Controllers\Master\RekeningController;
 use App\Http\Controllers\Management\PegawaiController;
 use App\Http\Controllers\Management\UserController;
+use App\Http\Controllers\Master\AbsensiController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\SubkontraktorController;
@@ -100,6 +101,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/jabatan/{id}', [JabatanController::class, 'show']);
     Route::post('/jabatan/{id}', [JabatanController::class, 'update']);
     Route::delete('/jabatan/delete/{id}', [JabatanController::class, 'delete']);
+
+    Route::get('/pengaturanabsensi', function () {
+        return view('Pages.Master.settingabsensi');
+    });
+    Route::get('/pengaturanabsensi/getSettingAbsensi', [AbsensiController::class, 'getSettingAbsensi']);
+    Route::post('/pengaturanabsensi/storeSettingAbsensi', [AbsensiController::class, 'storeSettingAbsensi']);
+    Route::get('/pengaturanabsensi/showSettingAbsensi/{id}', [AbsensiController::class, 'showSettingAbsensi']);
+    Route::post('/pengaturanabsensi/patchPengaturanAbsensi/{id}', [AbsensiController::class, 'patchPengaturanAbsensi']);
+    Route::delete('/pengaturanabsensi/deletePengaturanAbsensi/{id}', [AbsensiController::class, 'deleteSettingAbsensi']);
+
+
 
     Route::get('/jeniskelamin/getJenisKelamin', [JenisKelaminController::class, 'getJenisKelamin']);
 
