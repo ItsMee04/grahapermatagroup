@@ -13,6 +13,7 @@ use App\Http\Controllers\Management\UserController;
 use App\Http\Controllers\Master\AbsensiController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\JenisKelaminController;
+use App\Http\Controllers\Master\MetodePembayaranController;
 use App\Http\Controllers\Master\SubkontraktorController;
 
 /*
@@ -111,6 +112,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturanabsensi/patchPengaturanAbsensi/{id}', [AbsensiController::class, 'patchPengaturanAbsensi']);
     Route::delete('/pengaturanabsensi/deletePengaturanAbsensi/{id}', [AbsensiController::class, 'deleteSettingAbsensi']);
 
+    Route::get('/metodepembayaran', function () {
+        return view('Pages.Master.metodepembayaran');
+    });
+    Route::get('/metodepembayaran/getMetodePembayaran', [MetodePembayaranController::class, 'getMetodePembayaran']);
+    Route::post('/metodepembayaran/storeMetodePembayaran', [MetodePembayaranController::class, 'storeMetodePembayaran']);
+    Route::get('/metodepembayaran/showMetodePembayaran/{id}', [MetodePembayaranController::class, 'showMetodePembayaran']);
+    Route::post('/metodepembayaran/patchMetodePembayaran/{id}', [MetodePembayaranController::class, 'patchMetodePembayaran']);
+    Route::delete('/metodepembayaran/deleteMetodePembayaran/{id}', [MetodePembayaranController::class, 'deleteMetodePembayaran']);
 
 
     Route::get('/jeniskelamin/getJenisKelamin', [JenisKelaminController::class, 'getJenisKelamin']);

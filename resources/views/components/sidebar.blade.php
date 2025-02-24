@@ -86,6 +86,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="/metodepembayaran" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Metode Pembayaran</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="/pengaturanabsensi" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Setting Absensi</p>

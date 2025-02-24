@@ -11,7 +11,7 @@ $(document).ready(function () {
     }
 
     function loadCalonKonsumen() {
-        tableCalon = new DataTable("#tableCalonKonsumen", {
+        let tableCalon = new DataTable("#tableCalonKonsumen", {
             paging: true,
             lengthChange: false,
             searching: true,
@@ -20,63 +20,37 @@ $(document).ready(function () {
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: `/marketing/getCalonKonsumen`, // Ganti dengan URL endpoint server Anda
-                type: "GET", // Metode HTTP (GET/POST)
-                dataSrc: "Data", // Jalur data di response JSON
+                url: "/marketing/getCalonKonsumen", // Menampilkan semua data secara default
+                type: "GET",
+                dataSrc: "Data",
             },
             columns: [
                 {
-                    data: null, // Kolom nomor urut
+                    data: null,
                     className: "text-center",
                     render: function (data, type, row, meta) {
-                        return meta.row + 1; // Nomor urut dimulai dari 1
+                        return meta.row + 1;
                     },
                     orderable: false,
                 },
+                { data: "nama", className: "text-center", render: data => `<b>${data}</b>` },
+                { data: "tanggalkomunikasi", className: "text-center", render: data => `<b>${data}</b>` },
+                { data: "progres", className: "text-center", render: data => `<b>${data}</b>` },
+                { data: "metodepembayaran.pembayaran", className: "text-center", render: data => `<b>${data}</b>` },
+                { data: "sumber", className: "text-center", render: data => `<b>${data}</b>` },
                 {
-                    data: "lokasi.lokasi",
+                    data: null,
+                    orderable: false,
                     className: "text-center",
                     render: function (data, type, row) {
-                        return `<b>${data}</b>`; // Menjadikan teks lokasi tebal
-                    },
-                },
-                {
-                    data: "tipe.tipe",
-                    className: "text-center",
-                    render: function (data, type, row) {
-                        return `<b>${data}</b>`; // Menjadikan teks lokasi tebal
-                    },
-                },
-                {
-                    data: "blok",
-                    className: "text-center",
-                    render: function (data, type, row) {
-                        return `<b>${data}</b>`; // Menjadikan teks lokasi tebal
-                    },
-                },
-                {
-                    data: "status",
-                    className: "text-center",
-                    render: function (data, type, row) {
-                        // Menampilkan badge sesuai dengan status
-                        if (data == 1) {
-                            return `<span class="badge badge-success">Aktif</span>`;
-                        } else if (data == 2) {
-                            return `<span class="badge badge-danger"> Tidak Aktif</span>`;
-                        } else {
-                            return `<span class="bg-dark"> Unknown</span>`;
-                        }
-                    },
-                },
-                {
-                    data: null, // Kolom aksi
-                    orderable: false, // Aksi tidak perlu diurutkan
-                    className: "text-center",
-                    render: function (data, type, row, meta) {
                         return `
-                        <button type="button" class="btn btn-outline-warning btn-sm btnedit" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="EDIT DATA"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-outline-danger btn-sm btndelete" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="HAPUS DATA"><i class="fa fa-trash"></i></button>
-                    `;
+                            <button type="button" class="btn btn-outline-warning btn-sm btnedit" data-id="${row.id}" title="EDIT DATA">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btndelete" data-id="${row.id}" title="HAPUS DATA">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        `;
                     },
                 },
             ],
@@ -85,24 +59,25 @@ $(document).ready(function () {
             },
             initComplete: function () {
                 let api = this.api();
-                
-                // Tambahkan wrapper untuk tombol refresh dan dropdown lokasi di kanan atas
+    
+                // Tambahkan dropdown lokasi di atas tabel
                 $("#tableCalonKonsumen_wrapper .col-md-6:eq(0)").append(`
                     <div class="d-flex align-items-center">
-                        <label>PILIH LOKASI</label>
-                        <select id="lokasiDropdown" class="form-control select2bs4 ml-2">
+                        <label class="mr-2">Pilih Lokasi</label>
+                        <select id="lokasiDropdown" class="form-control select2bs4">
+                            <option value="">Semua Lokasi</option>
                         </select>
                     </div>
                 `);
-
-                // Tambahkan tombol refresh ke dalam header tabel
+    
+                // Tambahkan tombol refresh di dalam filter
                 $("#tableCalonKonsumen_wrapper .dataTables_filter").append(`
                     <button id="btnRefresh" class="btn btn-primary btn-sm ml-2">
                         <i class="fa fa-sync"></i> Refresh
                     </button>
                 `);
-                
-                // Ambil data lokasi dan isi dropdown
+    
+                // Ambil data lokasi untuk dropdown
                 $.ajax({
                     url: "lokasi/getLokasi",
                     type: "GET",
@@ -110,29 +85,29 @@ $(document).ready(function () {
                     success: function (response) {
                         if (response.success && response.Data.length > 0) {
                             response.Data.forEach(function (lokasi) {
-                                $("#lokasiDropdown").append(`
-                                    <option value="${lokasi.id}">${lokasi.lokasi}</option>
-                                `);
+                                $("#lokasiDropdown").append(`<option value="${lokasi.id}">${lokasi.lokasi}</option>`);
                             });
                         }
                     },
                     error: function () {
                         console.error("Gagal mengambil data lokasi");
-                    }
+                    },
                 });
-            }
+            },
         });
-        
-        // Event listener untuk filter berdasarkan lokasi
+    
+        // Event listener untuk mengubah data tabel berdasarkan lokasi yang dipilih
         $(document).on("change", "#lokasiDropdown", function () {
             let selectedValue = $(this).val();
-            console.log(selectedValue)
+            let url = selectedValue ? `/marketing/getCalonKonsumen/${selectedValue}` : "/marketing/getCalonKonsumen";
+            tableCalon.ajax.url(url).load();
         });
-        
+    
         // Event listener untuk tombol refresh
         $(document).on("click", "#btnRefresh", function () {
             tableCalon.ajax.reload(null, false);
         });
     }
+    
 
 })
