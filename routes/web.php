@@ -10,6 +10,7 @@ use App\Http\Controllers\Master\JabatanController;
 use App\Http\Controllers\Master\RekeningController;
 use App\Http\Controllers\Management\PegawaiController;
 use App\Http\Controllers\Management\UserController;
+use App\Http\Controllers\Marketing\MarketingController;
 use App\Http\Controllers\Master\AbsensiController;
 use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\JenisKelaminController;
@@ -121,7 +122,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/metodepembayaran/patchMetodePembayaran/{id}', [MetodePembayaranController::class, 'patchMetodePembayaran']);
     Route::delete('/metodepembayaran/deleteMetodePembayaran/{id}', [MetodePembayaranController::class, 'deleteMetodePembayaran']);
 
-
     Route::get('/jeniskelamin/getJenisKelamin', [JenisKelaminController::class, 'getJenisKelamin']);
 
     Route::get('/agama/getAgama', [AgamaController::class, 'getAgama']);
@@ -145,6 +145,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/calonkonsumen', function () {
         return view('Pages.marketing.calonkonsumen');
     });
+    Route::get('/marketing/calonkonsumen/getCalonKonsumen', [MarketingController::class, 'getCalonKonsumen']);
+    Route::get('/marketing/calonkonsumen/getCalonKonsumen/{id}', [MarketingController::class, 'getCalonKonsumenByLokasi']);
 
 
     Route::get('/logout', [AuthController::class, 'logout']);

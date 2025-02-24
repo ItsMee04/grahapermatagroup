@@ -1,9 +1,5 @@
 $(document).ready(function () {
     loadCalonKonsumen();
-    // Inisialisasi Select2 dengan tema Bootstrap 4
-    $('.select2bs4').select2({
-        theme: 'bootstrap4'
-    });
 
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
@@ -20,7 +16,7 @@ $(document).ready(function () {
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: "/marketing/getCalonKonsumen", // Menampilkan semua data secara default
+                url: "/marketing/calonkonsumen/getCalonKonsumen", // Menampilkan semua data secara default
                 type: "GET",
                 dataSrc: "Data",
             },
@@ -59,24 +55,28 @@ $(document).ready(function () {
             },
             initComplete: function () {
                 let api = this.api();
-    
+
                 // Tambahkan dropdown lokasi di atas tabel
                 $("#tableCalonKonsumen_wrapper .col-md-6:eq(0)").append(`
                     <div class="d-flex align-items-center">
                         <label class="mr-2">Pilih Lokasi</label>
-                        <select id="lokasiDropdown" class="form-control select2bs4">
-                            <option value="">Semua Lokasi</option>
+                        <select id="lokasiDropdown" class="form-control select2bs4" style="width: 100%;">
                         </select>
                     </div>
                 `);
-    
+
+                // Inisialisasi Select2 dengan tema Bootstrap 4
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                });
+
                 // Tambahkan tombol refresh di dalam filter
                 $("#tableCalonKonsumen_wrapper .dataTables_filter").append(`
                     <button id="btnRefresh" class="btn btn-primary btn-sm ml-2">
                         <i class="fa fa-sync"></i> Refresh
                     </button>
                 `);
-    
+
                 // Ambil data lokasi untuk dropdown
                 $.ajax({
                     url: "lokasi/getLokasi",
@@ -95,19 +95,19 @@ $(document).ready(function () {
                 });
             },
         });
-    
+
         // Event listener untuk mengubah data tabel berdasarkan lokasi yang dipilih
         $(document).on("change", "#lokasiDropdown", function () {
             let selectedValue = $(this).val();
-            let url = selectedValue ? `/marketing/getCalonKonsumen/${selectedValue}` : "/marketing/getCalonKonsumen";
+            let url = selectedValue ? `/marketing/calonkonsumen/getCalonKonsumen/${selectedValue}` : "/marketing/calonkonsumen/getCalonKonsumen";
             tableCalon.ajax.url(url).load();
         });
-    
+
         // Event listener untuk tombol refresh
         $(document).on("click", "#btnRefresh", function () {
             tableCalon.ajax.reload(null, false);
         });
     }
-    
+
 
 })
