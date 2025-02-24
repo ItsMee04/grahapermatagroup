@@ -30,43 +30,33 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             if (Auth::user()->status != 1) {
-                return redirect('login')->with('errors-message', 'User Account Belum Aktif !');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User Account Belum Aktif !'
+                ]);
             } else {
-                if (Auth::user()->role_id == 1) {
-                    $pegawai = Pegawai::where('id', Auth::user()->pegawai_id)->first()->nama;
-                    $image   = Pegawai::where('id', Auth::user()->pegawai_id)->first()->image;
+                $user = Auth::user();
+                $pegawai = Pegawai::where('id', $user->pegawai_id)->first();
+                $jabatan = Jabatan::where('id', $pegawai->jabatan_id)->first()->jabatan;
+                $role = Role::where('id', $user->role_id)->first()->role;
 
-                    $jabatan_id   = Pegawai::where('id', Auth::user()->pegawai_id)->first()->jabatan_id;
-                    $jabatan     = Jabatan::where('id', $jabatan_id)->first()->jabatan;
+                Session::put('nama', $pegawai->nama);
+                Session::put('image', $pegawai->image);
+                Session::put('jabatan', $jabatan);
+                Session::put('role', $role);
 
-                    $role   = Role::where('id', Auth::user()->role_id)->first()->role;
-
-                    Session::put('nama', $pegawai);
-                    Session::put('image', $image);
-                    Session::put('jabatan', $jabatan);
-                    Session::put('role', $role);
-
-                    return redirect('dashboard')->with('success-message', 'Login Berhasil');
-                } elseif (Auth::user()->role_id == 2) {
-                    $pegawai = Pegawai::where('id', Auth::user()->pegawai_id)->first()->nama;
-                    $image   = Pegawai::where('id', Auth::user()->pegawai_id)->first()->image;
-
-                    $jabatan_id   = Pegawai::where('id', Auth::user()->pegawai_id)->first()->jabatan_id;
-                    $jabatan     = Jabatan::where('id', $jabatan_id)->first()->jabatan;
-
-                    $role   = Role::where('id', Auth::user()->role_id)->first()->role;
-
-                    Session::put('nama', $pegawai);
-                    Session::put('image', $image);
-                    Session::put('jabatan', $jabatan);
-                    Session::put('role', $role);
-
-                    return redirect('dashboard')->with('success-message', 'Login Berhasil');
-                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login Berhasil',
+                    'redirect' => url('dashboard')
+                ]);
             }
         }
 
-        return redirect('login')->with('errors-message', 'username atau password salah !');
+        return response()->json([
+            'success' => false,
+            'message' => 'Username atau password salah!'
+        ]);
     }
 
     public function logout(Request $request)
