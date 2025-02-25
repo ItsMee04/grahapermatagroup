@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#btnRefresh", function () {
         if (tableTipe) {
-            tableTipe.ajax.reload(); // Reload data dari server
+            tableTipe.ajax.reload(null, false); // Reload data dari server
         }
         var Toast = Swal.mixin({
             toast: true,
@@ -161,7 +161,7 @@ $(document).ready(function () {
 
                 $("#mdTambahTipe").modal("hide"); // Tutup modal
                 $("#storeTipe")[0].reset(); // Reset form
-                tableTipe.ajax.reload(); // Reload data dari server
+                tableTipe.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -264,7 +264,7 @@ $(document).ready(function () {
 
                 $("#mdEditTipe").modal("hide"); // Tutup modal
                 $("#storeEditTipe")[0].reset(); // Reset form
-                tableTipe.ajax.reload(); // Reload data dari server
+                tableTipe.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -322,7 +322,7 @@ $(document).ready(function () {
                                 popup: 'animated fadeOut' // Animasi keluar
                             }
                         });
-                        tableTipe.ajax.reload(); // Reload DataTable setelah penghapusan
+                        tableTipe.ajax.reload(null, false); // Reload DataTable setelah penghapusan
                     },
                     error: function () {
                         Swal.fire({

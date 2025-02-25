@@ -1,9 +1,31 @@
 $(document).ready(function () {
     loadCalonKonsumen();
+    resetFieldTutupModalTambah();
 
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
         $('[data-toggle="tooltip"]').tooltip()
+    }
+
+    function uploadImage() {
+        //ini saat input
+        const imgSurvei = document.getElementById("imgSurvei");
+        const previewImgSurvei = document.getElementById("previewImgSurvei");
+
+        imgSurvei.addEventListener("change", () => {
+            const file = imgSurvei.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+                previewImgSurvei.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = reader.result;
+
+                previewImgSurvei.appendChild(img);
+            });
+
+            reader.readAsDataURL(file);
+        });
     }
 
     function loadCalonKonsumen() {
@@ -105,9 +127,132 @@ $(document).ready(function () {
 
         // Event listener untuk tombol refresh
         $(document).on("click", "#btnRefresh", function () {
-            tableCalon.ajax.reload(null, false);
+            if (tableCalon) {
+                tableCalon.ajax.reload(null, false);
+            }
+            var Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+            });
+
+            Toast.fire({
+                icon: "success",
+                title: "Data Calon Konsumen Berhasil Di Refresh",
+            });
         });
     }
 
+    // Fungsi untuk memuat data lokasi
+    function loadLokasi() {
+        $.ajax({
+            url: "/lokasi/getLokasi", // Endpoint untuk mendapatkan data jabatan
+            type: "GET",
+            success: function (response) {
+                let options = '<option value="">-- PILIH LOKASI --</option>';
+                response.Data.forEach((item) => {
+                    options += `<option value="${item.id}">${item.lokasi}</option>`;
+                });
+                $("#lokasi").html(options); // Masukkan data ke select
+            },
+            error: function () {
+                Toast.fire({
+                    icon: "error",
+                    title: "Gagal Memuat Data Lokasi!",
+                });
+            },
+        });
+    }
 
+    // Fungsi untuk memuat data lokasi
+    function loadPembayaran() {
+        $.ajax({
+            url: "/metodepembayaran/getMetodePembayaran", // Endpoint untuk mendapatkan data jabatan
+            type: "GET",
+            success: function (response) {
+                let options = '<option value="">-- PILIH METODE PEMBAYARAN --</option>';
+                response.Data.forEach((item) => {
+                    options += `<option value="${item.id}">${item.pembayaran}</option>`;
+                });
+                $("#metodepembayaran").html(options); // Masukkan data ke select
+            },
+            error: function () {
+                Toast.fire({
+                    icon: "error",
+                    title: "Gagal Memuat Data Metode Pembayaran!",
+                });
+            },
+        });
+    }
+
+    //ketika menekan tombol tambah subkontraktor
+    $(".btn-tambahCalonKonsumen").on("click", function () {
+        $("#mdTambahCalonKonsumen").modal("show");
+        uploadImage();
+        loadLokasi();
+        loadPembayaran();
+
+        $("#lokasi").on("change", function () {
+            let lokasiId = $(this).val();
+
+            if (lokasiId) {
+                $.ajax({
+                    url: "/tipe/getTipeByLokasi/" + lokasiId, // Endpoint untuk mendapatkan data jabatan
+                    type: "GET",
+                    success: function (response) {
+                        let options = '<option value="">-- PILIH TIPE --</option>';
+                        response.Data.forEach((item) => {
+                            options += `<option value="${item.id}">${item.tipe}</option>`;
+                        });
+                        $("#tipe").html(options); // Masukkan data ke select
+                    },
+                    error: function () {
+                        Toast.fire({
+                            icon: "error",
+                            title: "Gagal Memuat Data Tipe!",
+                        });
+                    },
+                });
+            }
+        });
+
+        $("#tipe").on("change", function () {
+            let tipeId = $(this).val();
+
+            if (tipeId) {
+                $.ajax({
+                    url: "/blok/getBlokByTipe/" + tipeId, // Endpoint untuk mendapatkan data jabatan
+                    type: "GET",
+                    success: function (response) {
+                        let options = '<option value="">-- PILIH BLOK --</option>';
+                        response.Data.forEach((item) => {
+                            options += `<option value="${item.id}">${item.blok}</option>`;
+                        });
+                        $("#blok").html(options); // Masukkan data ke select
+                    },
+                    error: function () {
+                        Toast.fire({
+                            icon: "error",
+                            title: "Gagal Memuat Data Blok!",
+                        });
+                    },
+                });
+            }
+        });
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalTambah() {
+        $("#mdTambahCalonKonsumen").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeCalonKonsumen")[0].reset();
+            previewImgSurvei.innerHTML = "";
+            imgSurvei.value = ""; // Reset input file
+
+            // Hapus isi dropdown tipe dan blok tanpa menyisakan teks apa pun
+            $("#tipe").html("").trigger("change");
+            $("#blok").html("").trigger("change");
+        });
+    }
 })

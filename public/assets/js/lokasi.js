@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#btnRefresh", function () {
         if (lokasiTable) {
-            lokasiTable.ajax.reload(); // Reload data dari server
+            lokasiTable.ajax.reload(null, false); // Reload data dari server
         }
         var Toast = Swal.mixin({
             toast: true,
@@ -126,7 +126,7 @@ $(document).ready(function () {
 
                 $("#mdTambahLokasi").modal("hide"); // Tutup modal
                 $("#storeLokasi")[0].reset(); // Reset form
-                lokasiTable.ajax.reload(); // Reload data dari server
+                lokasiTable.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -210,7 +210,7 @@ $(document).ready(function () {
 
                 $("#mdEditLokasi").modal("hide"); // Tutup modal
                 $("#storeEditLokasi")[0].reset(); // Reset form
-                lokasiTable.ajax.reload(); // Reload data dari server
+                lokasiTable.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
                 // Tampilkan pesan error dari server
@@ -268,7 +268,7 @@ $(document).ready(function () {
                                 popup: 'animated fadeOut' // Animasi keluar
                             }
                         });
-                        lokasiTable.ajax.reload(); // Reload DataTable setelah penghapusan
+                        lokasiTable.ajax.reload(null, false); // Reload DataTable setelah penghapusan
                     },
                     error: function () {
                         Swal.fire({

@@ -2,37 +2,11 @@
 @section('title', 'Pegawai')
 @section('content')
     <style>
-        #preview {
-            display: flex;
-            justify-content: center;
-            /* Tengahkan secara horizontal */
-            align-items: center;
-            /* Tengahkan secara vertikal */
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-            background-color: #f0f0f0;
-            /* Untuk memastikan area terlihat */
-        }
-
         #preview img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             /* Gambar tetap proporsional dan tidak terpotong */
-        }
-
-        #editPreview {
-            display: flex;
-            justify-content: center;
-            /* Tengahkan secara horizontal */
-            align-items: center;
-            /* Tengahkan secara vertikal */
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-            background-color: #f0f0f0;
-            /* Untuk memastikan area terlihat */
         }
 
         #editPreview img {
@@ -184,21 +158,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>ALAMAT PEGAWAI</label>
+                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat" required></textarea>
+                        </div>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>ALAMAT PEGAWAI</label>
-                                    <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat" required></textarea>
-                                </div>
-                            </div>
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>Foto</label>
+                                    <label>IMAGE</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" name="image" class="custom-file-input"
-                                                id="image">
+                                            <input type="file" name="image" class="custom-file-input" id="image">
                                             <label class="custom-file-label">Choose
                                                 file</label>
                                         </div>
@@ -207,8 +178,14 @@
                                         </div>
                                     </div>
                                     <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>PREVIEW</label>
                                     <div class="form-group">
-                                        <a href="#" id="preview"
+                                        <a href="#" id="preview" class="img-thumbnail"
                                             style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
                                     </div>
                                 </div>
@@ -315,13 +292,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>ALAMAT PEGAWAI</label>
+                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
+                        </div>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>ALAMAT PEGAWAI</label>
-                                    <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
-                                </div>
-                            </div>
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
@@ -338,14 +313,13 @@
                                         </div>
                                     </div>
                                     <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
-                                    <div class="form-group">
-                                        <div class="profile-pic-upload">
-                                            <div style="width: 150px; height: 150px; display: block; overflow: hidden;"
-                                                id="editPreview">
-                                                <img src="" alt="avatar">
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>PREVIEW</label>
+                                    <a href="#" id="editPreview" class="img-thumbnail"
+                                        style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
                                 </div>
                             </div>
                         </div>

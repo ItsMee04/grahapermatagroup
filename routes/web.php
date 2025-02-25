@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
         return view('Pages.Master.blok');
     });
     Route::get('/blok/getBlok', [BlokController::class, 'getBlok']);
+    Route::get('/blok/getBlokByTipe/{id}', [BlokController::class, 'getBlokByTipe']);
     Route::post('/blok', [BlokController::class, 'store']);
     Route::get('/blok/{id}', [BlokController::class, 'show']);
     Route::post('/blok/{id}', [BlokController::class, 'update']);

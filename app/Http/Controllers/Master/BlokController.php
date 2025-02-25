@@ -15,6 +15,13 @@ class BlokController extends Controller
         return response()->json(['success' => true, 'message' => 'Data Blok Berhasil Ditemukan', 'Data' => $blok]);
     }
 
+    public function getBlokByTipe($id)
+    {
+        $blok = Blok::with(['lokasi', 'tipe'])->where('status', 1)->where('tipe_id', $id)->get();
+
+        return response()->json(['success' => true, 'message' => 'Data Blok Berhasil Ditemukan', 'Data' => $blok]);
+    }
+
     public function store(Request $request)
     {
         $messages = [
