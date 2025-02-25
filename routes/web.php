@@ -123,9 +123,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/metodepembayaran/patchMetodePembayaran/{id}', [MetodePembayaranController::class, 'patchMetodePembayaran']);
     Route::delete('/metodepembayaran/deleteMetodePembayaran/{id}', [MetodePembayaranController::class, 'deleteMetodePembayaran']);
 
+    Route::get('/jeniskelamin', function () {
+        return view('Pages.Refrensi.jeniskelamin');
+    });
     Route::get('/jeniskelamin/getJenisKelamin', [JenisKelaminController::class, 'getJenisKelamin']);
+    Route::post('/jeniskelamin/storeJenisKelamin', [JenisKelaminController::class, 'storeJenisKelamin']);
+    Route::get('/jeniskelamin/showJenisKelamin/{id}', [JenisKelaminController::class, 'showJenisKelamin']);
+    Route::post('/jeniskelamin/updateJenisKelamin/{id}', [JenisKelaminController::class, 'updateJenisKelamin']);
+    Route::delete('/jeniskelamin/deleteJenisKelamin/{id}', [JenisKelaminController::class, 'deleteJenisKelamin']);
 
+    Route::get('/agama', function () {
+        return view('Pages.Refrensi.agama');
+    });
     Route::get('/agama/getAgama', [AgamaController::class, 'getAgama']);
+    Route::post('/agama/storeAgama', [AgamaController::class, 'storeAgama']);
+    Route::get('/agama/showAgama/{id}', [AgamaController::class, 'showAgama']);
+    Route::post('/agama/updateAgama/{id}', [AgamaController::class, 'updateAgama']);
+    Route::delete('/agama/deleteAgama/{id}', [AgamaController::class, 'deleteAgama']);
+
 
     Route::get('/pegawai', function () {
         return view('Pages.Management.pegawai');

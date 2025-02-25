@@ -36,6 +36,35 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-asterisk"></i>
+                        <p>
+                            Refrensi
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/jabatan" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Jabatan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/jeniskelamin" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Jenis Kelamin</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/agama" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Agama</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-server"></i>
                         <p>
                             Master
@@ -61,6 +90,7 @@
                                 <p>Blok</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a href="/rekening" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -77,12 +107,6 @@
                             <a href="/role" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Hak Akses</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/jabatan" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Jabatan</p>
                             </a>
                         </li>
                         <li class="nav-item">
