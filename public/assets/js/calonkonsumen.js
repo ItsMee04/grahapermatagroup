@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip(); // Inisialisasi ulang tooltip
     }
 
     function uploadImage() {
@@ -51,10 +51,42 @@ $(document).ready(function () {
                     },
                     orderable: false,
                 },
-                { data: "nama", className: "text-center", render: data => `<b>${data}</b>` },
+                { data: "konsumen", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "tanggalkomunikasi", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "progres", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "metodepembayaran.pembayaran", className: "text-center", render: data => `<b>${data}</b>` },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data, type, row) {
+                        // Menampilkan badge sesuai dengan status
+                        let missingImages = [];
+
+                        // Cek setiap kolom gambar, jika null maka masukkan ke dalam daftar
+                        if (!row.image_ktp) missingImages.push("KTP");
+                        if (!row.image_kk) missingImages.push("KK");
+                        if (!row.image_npwp) missingImages.push("NPWP");
+                        if (!row.image_slipgaji) missingImages.push("Slip Gaji");
+                        if (!row.image_tambahan) missingImages.push("Tambahan");
+                        if (!row.image_buktibooking) missingImages.push("Bukti Booking");
+                        if (!row.image_sp3bak) missingImages.push("SP3 BANK");
+
+                        // Jika semua gambar ada, tampilkan "Sudah Lengkap"
+                        if (missingImages.length === 0) {
+                            return `<span class="badge badge-success">SUDAH LENGKAP</span>`;
+                        }
+
+                        // Jika ada yang kosong, tampilkan "Belum Lengkap" beserta daftar yang belum terisi
+                        let missingText = missingImages.map(item => `<span class="badge badge-warning">${item}</span>`).join(" ");
+
+                        return `
+                            <button type="button" class="btn btn-outline-danger btn-xs btn-detail" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS">
+                                <b>BELUM LENGKAP</b>
+                            </button>
+                            <div class="mt-1">${missingText}</div>
+                        `;
+                    },
+                },
                 { data: "sumber", className: "text-center", render: data => `<b>${data}</b>` },
                 {
                     data: null,
@@ -62,10 +94,10 @@ $(document).ready(function () {
                     className: "text-center",
                     render: function (data, type, row) {
                         return `
-                            <button type="button" class="btn btn-outline-warning btn-sm btnedit" data-id="${row.id}" title="EDIT DATA">
+                            <button type="button" class="btn btn-outline-warning btn-sm btnedit" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="EDIT DATA">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btndelete" data-id="${row.id}" title="HAPUS DATA">
+                            <button type="button" class="btn btn-outline-danger btn-sm btndelete" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="HAPUS DATA">
                                 <i class="fa fa-trash"></i>
                             </button>
                         `;

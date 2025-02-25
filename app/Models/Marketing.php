@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Marketing extends Model
 {
@@ -35,4 +36,15 @@ class Marketing extends Model
         'user_id',
         'status'
     ];
+
+
+    /**
+     * Get the metodepembayaran that owns the Marketing
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function metodepembayaran(): BelongsTo
+    {
+        return $this->belongsTo(MetodePembayaran::class, 'metodepembayaran_id', 'id');
+    }
 }
