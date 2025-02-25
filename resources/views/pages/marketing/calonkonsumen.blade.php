@@ -2,14 +2,16 @@
 @section('title', 'Calon Konsumen')
 @section('content')
     <style>
-        #previewImgSurvei img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            /* Gambar tetap proporsional dan tidak terpotong */
-        }
-
-        #editPreviewImgSurvei img {
+        #previewImgSurvei img,
+        #editPreviewImgSurvei img,
+        #previewImgKTP img,
+        #editPreviewImgKTP img,
+        #previewImgKK img,
+        #previewImgNPWP img,
+        #previewImgSlipGaji img,
+        #previewImgTambahan img,
+        #previewImgBuktiBooking img,
+        #previewImgSP3BANK img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
@@ -174,10 +176,8 @@
                                     <label>FOTO HASIL SURVEI</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" name="image_survei" class="custom-file-input"
-                                                id="imgSurvei">
-                                            <label class="custom-file-label">Choose
-                                                file</label>
+                                            <input type="file" class="custom-file-input" id="imgSurvei">
+                                            <label class="custom-file-label">Choose file</label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text">Upload</span>
@@ -191,6 +191,207 @@
                                 <div class="form-group">
                                     <a href="#" id="previewImgSurvei" class="img-thumbnail"
                                         style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
+                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="mdBerkasCalonKonsumen">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>BERKAS CALON KONSUMEN</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="storeBerkasCalonKonsumen" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" name="id" id="showid" class="form-control"
+                                placeholder="Masukan Nama" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>NAMA KONSUMEN</label>
+                            <input type="text" name="konsumen" id="showkonsumen" class="form-control"
+                                placeholder="Masukan Nama" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BERKAS KTP</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_ktp" class="custom-file-input"
+                                                id="imgKTP">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW KTP</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgKTP" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>BERKAS KK</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_kk" class="custom-file-input"
+                                                id="imgKK">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW KK</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgKK" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BERKAS NPWP</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_npwp" class="custom-file-input"
+                                                id="imgNPWP">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW NPWP</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgNPWP" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>BERKAS SLIP GAJI</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_slipgaji" class="custom-file-input"
+                                                id="imgSlipGaji">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW SLIP GAJI</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgSlipGaji" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BERKAS TAMBAHAN</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_tambahan" class="custom-file-input"
+                                                id="imgTambahan">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW TAMBAHAN</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgTambahan" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>BERKAS BUKTI BOOKING</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_buktibooking" class="custom-file-input"
+                                                id="imgBuktiBooking">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW BUKTI BOOKING</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgBuktiBooking" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BERKAS SP3 BANK</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_sp3bank" class="custom-file-input"
+                                                id="imgSP3BANK">
+                                            <label class="custom-file-label">Choose
+                                                file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                                <label>PREVIEW SP3 BANK</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgSP3BANK" class="img-thumbnail"
+                                        style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
                                 </div>
                             </div>
                         </div>

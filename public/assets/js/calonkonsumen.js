@@ -1,27 +1,28 @@
 $(document).ready(function () {
     resetFieldTutupModalTambah();
 
+    bsCustomFileInput.init();
+
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
         $('[data-toggle="tooltip"]').tooltip(); // Inisialisasi ulang tooltip
     }
 
-    function uploadImage() {
-        //ini saat input
-        const imgSurvei = document.getElementById("imgSurvei");
-        const previewImgSurvei = document.getElementById("previewImgSurvei");
+    function uploadImage(inputId, previewId) {
+        const inputFile = document.getElementById(inputId);
+        const previewContainer = document.getElementById(previewId);
 
-        imgSurvei.addEventListener("change", () => {
-            const file = imgSurvei.files[0];
+        inputFile.addEventListener("change", () => {
+            const file = inputFile.files[0];
+            if (!file) return;
+
             const reader = new FileReader();
-
-            reader.addEventListener("load", () => {
-                previewImgSurvei.innerHTML = "";
+            reader.onload = () => {
+                previewContainer.innerHTML = "";
                 const img = document.createElement("img");
                 img.src = reader.result;
-
-                previewImgSurvei.appendChild(img);
-            });
+                previewContainer.appendChild(img);
+            };
 
             reader.readAsDataURL(file);
         });
@@ -57,7 +58,15 @@ $(document).ready(function () {
                     },
                     orderable: false,
                 },
-                { data: "konsumen", className: "text-center", render: data => `<b>${data}</b>` },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        let konsumen = data.konsumen ? data.konsumen : "Tidak ada nama";
+                        let blok = data.blok?.blok ? data.blok.blok : "Tidak ada blok";
+                        return `<b>${konsumen} / ${blok}</b>`;
+                    }
+                },
                 { data: "tanggalkomunikasi", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "progres", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "metodepembayaran.pembayaran", className: "text-center", render: data => `<b>${data}</b>` },
@@ -86,7 +95,7 @@ $(document).ready(function () {
                         let missingText = missingImages.map(item => `<span class="badge badge-warning">${item}</span>`).join(" ");
 
                         return `
-                            <button type="button" class="btn btn-outline-danger btn-xs btn-detail" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS">
+                            <button type="button" class="btn btn-outline-danger btn-xs btndetail" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS">
                                 <b>BELUM LENGKAP</b>
                             </button>
                             <div class="mt-1">${missingText}</div>
@@ -181,7 +190,7 @@ $(document).ready(function () {
             });
         });
     }
-    
+
     loadCalonKonsumen();
 
     // Fungsi untuk memuat data lokasi
@@ -229,7 +238,9 @@ $(document).ready(function () {
     //ketika menekan tombol tambah subkontraktor
     $(".btn-tambahCalonKonsumen").on("click", function () {
         $("#mdTambahCalonKonsumen").modal("show");
-        uploadImage();
+
+        // Panggil fungsi untuk setiap input gambar
+        uploadImage("imgSurvei", "previewImgSurvei");
         loadLokasi();
         loadPembayaran();
 
@@ -356,6 +367,39 @@ $(document).ready(function () {
                         title: response.message,
                     });
                 }
+            },
+        });
+    });
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btndetail", function () {
+        const marketingID = $(this).data("id");
+        uploadImage("imgKTP", "previewImgKTP");
+        uploadImage("imgKK", "previewImgKK");
+        uploadImage("imgNPWP", "previewImgNPWP");
+        uploadImage("imgSlipGaji", "previewImgSlipGaji");
+        uploadImage("imgTambahan", "previewImgTambahan");
+        uploadImage("imgBuktiBooking", "previewImgBuktiBooking");
+        uploadImage("imgSP3BANK", "previewImgSP3BANK");
+
+        $.ajax({
+            url: `/marketing/calonkonsumen/showCalonKonsumen/${marketingID}`,
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+
+                // Set ID & Blok ke Form
+                $("#showid").val(data.id);
+                $("#showkonsumen").val(data.konsumen);
+
+                // Tampilkan Modal Edit
+                $("#mdBerkasCalonKonsumen").modal("show");
+            },
+            error: function () {
+                Toast.fire({
+                    icon: "error",
+                    title: "Tidak dapat mengambil data jabatan.",
+                });
             },
         });
     });

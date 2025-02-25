@@ -47,4 +47,34 @@ class Marketing extends Model
     {
         return $this->belongsTo(MetodePembayaran::class, 'metodepembayaran_id', 'id');
     }
+
+    /**
+     * Get the lokasi that owns the Marketing
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function lokasi(): BelongsTo
+    {
+        return $this->belongsTo(Lokasi::class, 'lokasi_id', 'id');
+    }
+
+    /**
+     * Get the tipe that owns the Marketing
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function tipe(): BelongsTo
+    {
+        return $this->belongsTo(Tipe::class, 'tipe_id', 'id');
+    }
+
+    /**
+     * Get the blok that owns the Marketing
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function blok(): BelongsTo
+    {
+        return $this->belongsTo(Blok::class, 'blok_id', 'id');
+    }
 }

@@ -10,6 +10,8 @@ $(document).ready(function () {
     }
 
     loadBlok();
+    resetFieldTutupModalTambah();
+    resetFieldTutupModalEdit();
 
     $(document).on("click", "#btnRefresh", function () {
         if (tableBlok) {
@@ -188,9 +190,9 @@ $(document).ready(function () {
     function resetFieldTutupModalTambah() {
         $("#mdTambahBlok").on("hidden.bs.modal", function () {
             // Reset dropdown lokasi jika perlu
-            $("#lokasi").val(null).trigger('change'); // Reset select status jika menggunakan Select2 atau lainnya
-            // Reset dropdown tipe jika perlu
-            $("#tipe").val(null).trigger('change'); // Reset select status jika menggunakan Select2 atau lainnya
+            $("#lokasi").html("").trigger('change'); // Reset select status jika menggunakan Select2 atau lainnya
+            // Hapus isi dropdown tipe dan blok tanpa menyisakan teks apa pun
+            $("#tipe").html("").trigger("change");
             // Reset form input (termasuk gambar dan status)
             $("#storeBlok")[0].reset();
         });
