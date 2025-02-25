@@ -110,7 +110,7 @@
                         </div>
                         <div class="form-group">
                             <label>PROGRES</label>
-                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Progress" required></textarea>
+                            <textarea class="form-control" rows="4" name="progres" placeholder="Masukan Progress" required></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -174,7 +174,7 @@
                                     <label>FOTO HASIL SURVEI</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" name="image_survey" class="custom-file-input"
+                                            <input type="file" name="image_survei" class="custom-file-input"
                                                 id="imgSurvei">
                                             <label class="custom-file-label">Choose
                                                 file</label>

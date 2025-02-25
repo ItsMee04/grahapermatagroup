@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    loadCalonKonsumen();
     resetFieldTutupModalTambah();
 
     // Inisialisasi tooltip Bootstrap
@@ -28,8 +27,15 @@ $(document).ready(function () {
         });
     }
 
+    let tableCalon; // Deklarasi variabel global
+
     function loadCalonKonsumen() {
-        let tableCalon = new DataTable("#tableCalonKonsumen", {
+
+        if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+            tableCalon.destroy(); // Hapus instance DataTable sebelumnya
+        }
+
+        tableCalon = $("#tableCalonKonsumen").DataTable({
             paging: true,
             lengthChange: false,
             searching: true,
@@ -175,6 +181,8 @@ $(document).ready(function () {
             });
         });
     }
+    
+    loadCalonKonsumen();
 
     // Fungsi untuk memuat data lokasi
     function loadLokasi() {
@@ -287,4 +295,68 @@ $(document).ready(function () {
             $("#blok").html("").trigger("change");
         });
     }
+
+    //kirim data ke server <i class=""></i>
+    $("#storeCalonKonsumen").on("submit", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+        // Ambil elemen input file
+
+        // Buat objek FormData
+        const formData = new FormData(this);
+        $.ajax({
+            url: "/marketing/calonkonsumen/storeCalonKonsumen/", // Endpoint Laravel untuk menyimpan pegawai
+            type: "POST",
+            data: formData,
+            processData: false, // Agar data tidak diubah menjadi string
+            contentType: false, // Agar header Content-Type otomatis disesuaikan
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdTambahCalonKonsumen").modal("hide"); // Tutup modal
+                $("#storeCalonKonsumen")[0].reset(); // Reset form
+                // **Pastikan tableCalon sudah didefinisikan sebelum reload**
+                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                    tableCalon.ajax.reload(null, false);
+                } else {
+                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                }
+            },
+            error: function (xhr) {
+                // Tampilkan pesan error dari server
+                const errors = xhr.responseJSON.errors;
+                if (errors) {
+                    let errorMessage = "";
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+
+                    for (let key in errors) {
+                        errorMessage += `${errors[key][0]}\n`;
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage,
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
+                }
+            },
+        });
+    });
 })

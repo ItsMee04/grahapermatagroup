@@ -163,7 +163,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/marketing/calonkonsumen/getCalonKonsumen', [MarketingController::class, 'getCalonKonsumen']);
     Route::get('/marketing/calonkonsumen/getCalonKonsumen/{id}', [MarketingController::class, 'getCalonKonsumenByLokasi']);
-
+    Route::POST('/marketing/calonkonsumen/storeCalonKonsumen', [MarketingController::class, 'storeCalonKonsumen']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
