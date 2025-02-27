@@ -2,6 +2,7 @@ $(document).ready(function () {
     resetFieldTutupModalTambah();
     resetFieldTutupModalBerkas();
     resetFieldTutupModalBerkasKomunikasi();
+    resetFieldTutupModalEditCalonKonsumen();
 
     bsCustomFileInput.init();
 
@@ -705,4 +706,167 @@ $(document).ready(function () {
             },
         });
     });
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnedit", function () {
+        const marketingBerkasID = $(this).data("id");
+        $.ajax({
+            url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingBerkasID}`, // Endpoint untuk mendapatkan data pegawai
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+                // Isi modal dengan data pegawai
+                $("#editid").val(response.Data.id);
+                $("#editkonsumen").val(response.Data.konsumen);
+                $("#editkontak").val(response.Data.kontak);
+                $("#editalamat").val(response.Data.alamat);
+                $("#editprogres").val(response.Data.progres);
+                $("#edittanggalkomunikasi").val(response.Data.tanggalkomunikasi);
+                $("#editsumber").val(response.Data.sumber);
+
+                // Muat opsi metodepembayaran
+                $.ajax({
+                    url: "/metodepembayaran/getMetodePembayaran",
+                    type: "GET",
+                    success: function (metodeResponse) {
+                        let options =
+                            '<option value="">-- PILIH METODE PEMBAYARAN --</option>';
+                            metodeResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.metodepembayaran_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.pembayaran}</option>`;
+                        });
+                        $("#editmetodepembayaran").html(options);
+                    },
+                });
+
+                // Muat opsi lokasi
+                $.ajax({
+                    url: "/lokasi/getLokasi",
+                    type: "GET",
+                    success: function (lokasiResponse) {
+                        let options =
+                            '<option value="">-- PILIH LOKASI --</option>';
+                            lokasiResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.lokasi_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.lokasi}</option>`;
+                        });
+                        $("#editlokasi").html(options);
+                    },
+                });
+
+                // Muat opsi tipe
+                $.ajax({
+                    url: "/tipe/getTipe",
+                    type: "GET",
+                    success: function (tipeResponse) {
+                        let options =
+                            '<option value="">-- PILIH TIPE --</option>';
+                            tipeResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.tipe_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.tipe}</option>`;
+                        });
+                        $("#edittipe").html(options);
+                    },
+                });
+
+                // Muat opsi blok
+                $.ajax({
+                    url: "/blok/getBlok",
+                    type: "GET",
+                    success: function (blokResponse) {
+                        let options =
+                            '<option value="">-- PILIH BLOK --</option>';
+                            blokResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.blok_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.blok}</option>`;
+                        });
+                        $("#editblok").html(options);
+                    },
+                });
+
+                $("#editlokasi").on("change", function () {
+                    let lokasiId = $(this).val();
+        
+                    if (lokasiId) {
+                        $.ajax({
+                            url: "/tipe/getTipeByLokasi/" + lokasiId, // Endpoint untuk mendapatkan data jabatan
+                            type: "GET",
+                            success: function (response) {
+                                let options = '<option value="">-- PILIH TIPE --</option>';
+                                response.Data.forEach((item) => {
+                                    options += `<option value="${item.id}">${item.tipe}</option>`;
+                                });
+                                $("#edittipe").html(options); // Masukkan data ke select
+                            },
+                            error: function () {
+                                Toast.fire({
+                                    icon: "error",
+                                    title: "Gagal Memuat Data Tipe!",
+                                });
+                            },
+                        });
+                    }
+                });
+        
+                $("#edittipe").on("change", function () {
+                    let tipeId = $(this).val();
+        
+                    if (tipeId) {
+                        $.ajax({
+                            url: "/blok/getBlokByTipe/" + tipeId, // Endpoint untuk mendapatkan data jabatan
+                            type: "GET",
+                            success: function (response) {
+                                let options = '<option value="">-- PILIH BLOK --</option>';
+                                response.Data.forEach((item) => {
+                                    options += `<option value="${item.id}">${item.blok}</option>`;
+                                });
+                                $("#editblok").html(options); // Masukkan data ke select
+                            },
+                            error: function () {
+                                Toast.fire({
+                                    icon: "error",
+                                    title: "Gagal Memuat Data Blok!",
+                                });
+                            },
+                        });
+                    }
+                });
+
+                // Tampilkan modal edit
+                $("#mdEditCalonKonsumen").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Berkas Calon Konsumen.",
+                    "error"
+                );
+            },
+        });
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalEditCalonKonsumen() {
+        $("#mdEditCalonKonsumen").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeEditCalonKonsumen")[0].reset();
+            // Hapus isi dropdown tipe dan blok tanpa menyisakan teks apa pun
+            $("#editmetodepembayaran").html("").trigger("change");
+            $("#editlokasi").html("").trigger("change");
+            $("#edittipe").html("").trigger("change");
+            $("#editblok").html("").trigger("change");
+        });
+    }
 })

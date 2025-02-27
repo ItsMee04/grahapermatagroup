@@ -476,6 +476,117 @@
     </div>
     <!-- /.modal -->
 
+    <div class="modal fade" id="mdEditCalonKonsumen">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>EDIT CALON KONSUMEN</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="storeEditCalonKonsumen" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" name="id" id="editid" class="form-control"
+                                placeholder="Masukan Nama" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>NAMA KONSUMEN</label>
+                                    <input type="text" name="konsumen" id="editkonsumen" class="form-control"
+                                        placeholder="Masukan Nama">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>KONTAK KONSUMEN</label>
+                                    <input type="text" name="kontak" id="editkontak" class="form-control"
+                                        placeholder="Masukan Kontak">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>ALAMAT KONSUMEN</label>
+                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>PROGRES</label>
+                            <textarea class="form-control" rows="4" id="editprogres" name="progres" placeholder="Masukan Progress"
+                                required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>METODE PEMBAYARAN</label>
+                                    <select class="form-control select2bs4" style="width: 100%;"
+                                        name="editmetodepembayaran" id="editmetodepembayaran" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>LOKASI PROYEK</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="lokasi"
+                                        id="editlokasi" required>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>TIPE</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="tipe"
+                                        id="edittipe" required>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>BLOK</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="blok"
+                                        id="editblok" required>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>TANGGAL AWAL KOMUNIKASI</label>
+                                    <input type="date" id="edittanggalkomunikasi" name="tanggalkomunikasi"
+                                        class="form-control" placeholder="Masukan Tanggal">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>SUMBER INFORMASI</label>
+                                    <input type="text" name="sumber" id="editsumber" class="form-control"
+                                        placeholder="Masukan Sumber" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
+                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
     <!-- jQuery -->
     <script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
     <script src="{{ asset('assets') }}/js/calonkonsumen.js"></script>

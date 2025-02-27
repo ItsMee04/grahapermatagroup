@@ -204,7 +204,7 @@ $(document).ready(function () {
                     type: "GET",
                     success: function (lokasiResponse) {
                         let options =
-                            '<option value="">-- Pilih Jabatan --</option>';
+                            '<option value="">-- PILIH LOKASI --</option>';
                             lokasiResponse.Data.forEach((item) => {
                             const selected =
                                 item.id === response.Data.lokasi_id
