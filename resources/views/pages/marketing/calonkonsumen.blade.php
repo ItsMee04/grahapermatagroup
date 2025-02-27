@@ -176,7 +176,8 @@
                                     <label>FOTO HASIL SURVEI</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="imgSurvei">
+                                            <input type="file" name="image_survei" class="custom-file-input"
+                                                id="imgSurvei">
                                             <label class="custom-file-label">Choose file</label>
                                         </div>
                                         <div class="input-group-append">

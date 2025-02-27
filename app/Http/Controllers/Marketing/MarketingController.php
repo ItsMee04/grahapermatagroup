@@ -45,13 +45,10 @@ class MarketingController extends Controller
             'image_survei'      =>  'mimes:png,jpg,jpeg'
         ], $messages);
 
-        $ImageSurvei = '';
-
         if ($request->file('image_survei')) {
-            $extension = $request->file('image_survei')->getClientOriginalExtension();
-            $ImageSurvei = Carbon::now() . '.' . $extension;
-            $request->file('image_survei')->storeAs('ImageSurvei', $ImageSurvei);
-            $request['image_survei'] = $ImageSurvei;
+            $file = $request->file('image_survei');
+            $imageSurvei = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/ImageSurvei'), $imageSurvei); // Simpan di public/uploads/ImageSurvei
         }
 
         $calonkonsumen = Marketing::create([
@@ -65,11 +62,18 @@ class MarketingController extends Controller
             'blok_id'               => $request->blok,
             'tanggalkomunikasi'     => $request->tanggalkomunikasi,
             'sumber'                => $request->sumber,
-            'image_survei'          => $ImageSurvei,
+            'image_survey'          => $imageSurvei,
             'user_id'               => Auth::user()->id,
             'status'                => 1,
         ]);
 
         return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Disimpan']);
+    }
+
+    public function showBerkasCalonKonsmen($id)
+    {
+        $berkasCalonKonsumen = Marketing::findOrFail($id);
+
+        return response()->json(['success' => true, 'message' => 'Data Berkas Calon Konsumen Berhasil Ditemukan', 'Data' => $berkasCalonKonsumen]);
     }
 }

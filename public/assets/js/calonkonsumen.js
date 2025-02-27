@@ -1,5 +1,6 @@
 $(document).ready(function () {
     resetFieldTutupModalTambah();
+    resetFieldTutupModalBerkas();
 
     bsCustomFileInput.init();
 
@@ -371,36 +372,170 @@ $(document).ready(function () {
         });
     });
 
-    //ketika button edit di tekan
     $(document).on("click", ".btndetail", function () {
         const marketingID = $(this).data("id");
-        uploadImage("imgKTP", "previewImgKTP");
-        uploadImage("imgKK", "previewImgKK");
-        uploadImage("imgNPWP", "previewImgNPWP");
-        uploadImage("imgSlipGaji", "previewImgSlipGaji");
-        uploadImage("imgTambahan", "previewImgTambahan");
-        uploadImage("imgBuktiBooking", "previewImgBuktiBooking");
-        uploadImage("imgSP3BANK", "previewImgSP3BANK");
-
+        
         $.ajax({
-            url: `/marketing/calonkonsumen/showCalonKonsumen/${marketingID}`,
+            url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingID}`,
             type: "GET",
             success: function (response) {
                 const data = response.Data;
-
-                // Set ID & Blok ke Form
+    
+                // Cek dan tampilkan gambar jika ada
+                updatePreviewImage("imgKTP", "previewImgKTP", data.image_ktp);
+                updatePreviewImage("imgKK", "previewImgKK", data.image_kk);
+                updatePreviewImage("imgNPWP", "previewImgNPWP", data.image_npwp);
+                updatePreviewImage("imgSlipGaji", "previewImgSlipGaji", data.image_slipgaji);
+                updatePreviewImage("imgTambahan", "previewImgTambahan", data.image_tambahan);
+                updatePreviewImage("imgBuktiBooking", "previewImgBuktiBooking", data.image_buktibooking);
+                updatePreviewImage("imgSP3BANK", "previewImgSP3BANK", data.image_sp3bank);
+    
+                // Set ID & Konsumen ke Form
                 $("#showid").val(data.id);
                 $("#showkonsumen").val(data.konsumen);
-
+    
                 // Tampilkan Modal Edit
                 $("#mdBerkasCalonKonsumen").modal("show");
             },
             error: function () {
                 Toast.fire({
                     icon: "error",
-                    title: "Tidak dapat mengambil data jabatan.",
+                    title: "Tidak dapat mengambil data berkas.",
                 });
             },
         });
     });
+    
+    // Fungsi untuk update preview gambar berdasarkan respons
+    function updatePreviewImage(inputId, previewId, imageName) {
+        const inputFile = document.getElementById(inputId);
+        const previewContainer = document.getElementById(previewId);
+    
+        if (imageName) {
+            // Jika gambar tersedia dari database, tampilkan dari asset
+            previewContainer.innerHTML = "";
+            const img = document.createElement("img");
+            img.src = `/assets/uploads/${imageName}`; // Sesuaikan path sesuai struktur proyek
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "150px";
+            img.style.objectFit = "contain";
+            previewContainer.appendChild(img);
+        } else {
+            // Jika tidak ada gambar, kosongkan preview
+            previewContainer.innerHTML = "";
+        }
+    
+        // Event listener untuk input file agar bisa preview gambar baru saat upload
+        inputFile.addEventListener("change", () => {
+            const file = inputFile.files[0];
+            if (!file) return;
+    
+            const reader = new FileReader();
+            reader.onload = () => {
+                previewContainer.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = reader.result;
+                img.style.maxWidth = "100%";
+                img.style.maxHeight = "150px";
+                img.style.objectFit = "contain";
+                previewContainer.appendChild(img);
+            };
+    
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalBerkas() {
+        $("#mdBerkasCalonKonsumen").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeBerkasCalonKonsumen")[0].reset();
+
+            // Reset semua input file
+            const inputFiles = [
+                "imgKTP", "imgKK", "imgNPWP", "imgSlipGaji",
+                "imgTambahan", "imgBuktiBooking", "imgSP3BANK"
+            ];
+
+            inputFiles.forEach(id => {
+                let inputElement = document.getElementById(id);
+                if (inputElement) {
+                    inputElement.value = ""; // Reset input file
+                }
+            });
+
+            // Kosongkan semua preview gambar
+            const previewContainers = document.querySelectorAll("[id^=previewImg]");
+            previewContainers.forEach(container => {
+                container.innerHTML = "";
+            });
+
+        });
+    }
+
+    //kirim data ke server <i class=""></i>
+    $("#storeBerkasCalonKonsumen").on("submit", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+        // Buat objek FormData
+        const formData = new FormData(this);
+        // Ambil ID dari form
+        const idJenisKelamin = formData.get("id"); // Mengambil nilai input dengan name="id"
+
+        $.ajax({
+            url: "/marketing/calonkonsumen/updateBerkasCalonKonsumen/{id}", // Endpoint Laravel untuk menyimpan pegawai
+            type: "POST",
+            data: formData,
+            processData: false, // Agar data tidak diubah menjadi string
+            contentType: false, // Agar header Content-Type otomatis disesuaikan
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdBerkasCalonKonsumen").modal("hide"); // Tutup modal
+                $("#storeBerkasCalonKonsumen")[0].reset(); // Reset form
+                // **Pastikan tableCalon sudah didefinisikan sebelum reload**
+                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                    tableCalon.ajax.reload(null, false);
+                } else {
+                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                }
+            },
+            error: function (xhr) {
+                // Tampilkan pesan error dari server
+                const errors = xhr.responseJSON.errors;
+                if (errors) {
+                    let errorMessage = "";
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+
+                    for (let key in errors) {
+                        errorMessage += `${errors[key][0]}\n`;
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage,
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
+                }
+            },
+        });
+    });
+    
 })
