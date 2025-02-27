@@ -389,13 +389,13 @@ $(document).ready(function () {
                 const data = response.Data;
 
                 // Cek dan tampilkan gambar jika ada
-                updatePreviewImage("imgKTP", "previewImgKTP", data.image_ktp);
-                updatePreviewImage("imgKK", "previewImgKK", data.image_kk);
-                updatePreviewImage("imgNPWP", "previewImgNPWP", data.image_npwp);
-                updatePreviewImage("imgSlipGaji", "previewImgSlipGaji", data.image_slipgaji);
-                updatePreviewImage("imgTambahan", "previewImgTambahan", data.image_tambahan);
-                updatePreviewImage("imgBuktiBooking", "previewImgBuktiBooking", data.image_buktibooking);
-                updatePreviewImage("imgSP3BANK", "previewImgSP3BANK", data.image_sp3bank);
+                updatePreviewImage("imgKTP", "previewImgKTP", "imageKTP", data.image_ktp);
+                updatePreviewImage("imgKK", "previewImgKK", "imageKK", data.image_kk);
+                updatePreviewImage("imgNPWP", "previewImgNPWP", "imageNPWP", data.image_npwp);
+                updatePreviewImage("imgSlipGaji", "previewImgSlipGaji", "imageSlipGaji", data.image_slipgaji);
+                updatePreviewImage("imgTambahan", "previewImgTambahan", "imageTambahan", data.image_tambahan);
+                updatePreviewImage("imgBuktiBooking", "previewImgBuktiBooking", "imageBuktiBooking", data.image_buktibooking);
+                updatePreviewImage("imgSP3BANK", "previewImgSP3BANK", "imageSP3BANK", data.image_sp3bank);
 
                 // Set ID & Konsumen ke Form
                 $("#showid").val(data.id);
@@ -414,43 +414,56 @@ $(document).ready(function () {
     });
 
     // Fungsi untuk update preview gambar berdasarkan respons
-    function updatePreviewImage(inputId, previewId, imageName) {
+    function updatePreviewImage(inputId, previewId, folderName, imageName) {
         const inputFile = document.getElementById(inputId);
         const previewContainer = document.getElementById(previewId);
 
+        if (!inputFile || !previewContainer) {
+            console.error("Elemen tidak ditemukan!");
+            return;
+        }
+
         if (imageName) {
-            // Jika gambar tersedia dari database, tampilkan dari asset
-            previewContainer.innerHTML = "";
-            const img = document.createElement("img");
-            img.src = `/assets/uploads/${imageName}`; // Sesuaikan path sesuai struktur proyek
-            img.style.maxWidth = "100%";
-            img.style.maxHeight = "150px";
-            img.style.objectFit = "contain";
-            previewContainer.appendChild(img);
+            // Jika gambar tersedia dari database, tampilkan dari storage sesuai folder
+            const imageSrc = `/storage/${folderName}/${imageName}`;
+
+            previewContainer.innerHTML = `
+            <a href="${imageSrc}" target="_blank">
+                <img src="${imageSrc}" alt="Preview Gambar" style="width: 100%; height: 100%; object-fit: contain;">
+            </a>
+        `;
         } else {
             // Jika tidak ada gambar, kosongkan preview
             previewContainer.innerHTML = "";
         }
 
         // Event listener untuk input file agar bisa preview gambar baru saat upload
-        inputFile.addEventListener("change", () => {
+        inputFile.onchange = () => {
             const file = inputFile.files[0];
             if (!file) return;
 
+            // Validasi agar hanya file gambar yang diproses
+            if (!file.type.startsWith("image/")) {
+                alert("Hanya file gambar yang diperbolehkan!");
+                inputFile.value = ""; // Reset input jika bukan gambar
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = () => {
-                previewContainer.innerHTML = "";
-                const img = document.createElement("img");
-                img.src = reader.result;
-                img.style.maxWidth = "100%";
-                img.style.maxHeight = "150px";
-                img.style.objectFit = "contain";
-                previewContainer.appendChild(img);
+                const newImageSrc = reader.result;
+
+                previewContainer.innerHTML = `
+                <a href="${newImageSrc}" target="_blank">
+                    <img src="${newImageSrc}" alt="Preview Gambar" style="width: 100%; height: 100%; object-fit: contain;">
+                </a>
+            `;
             };
 
             reader.readAsDataURL(file);
-        });
+        };
     }
+
 
     // Ketika modal ditutup, reset semua field
     function resetFieldTutupModalBerkas() {
@@ -652,6 +665,43 @@ $(document).ready(function () {
                         title: response.message,
                     });
                 }
+            },
+        });
+    });
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnBerkasCalonKonsumen", function () {
+        const marketingBerkasID = $(this).data("id");
+        $.ajax({
+            url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingBerkasID}`, // Endpoint untuk mendapatkan data pegawai
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+                // Cek dan tampilkan gambar jika ada
+                updatePreviewImage("imgKTP", "previewImgKTP", "ImageKTP", data.image_ktp);
+                updatePreviewImage("imgKK", "previewImgKK", "ImageKK", data.image_kk);
+                updatePreviewImage("imgNPWP", "previewImgNPWP", "ImageNPWP", data.image_npwp);
+                updatePreviewImage("imgSlipGaji", "previewImgSlipGaji", "ImageSlipGaji", data.image_slipgaji);
+                updatePreviewImage("imgTambahan", "previewImgTambahan", "ImageTambahan", data.image_tambahan);
+                updatePreviewImage("imgBuktiBooking", "previewImgBuktiBooking", "ImageBuktiBooking", data.image_buktibooking);
+                updatePreviewImage("imgSP3BANK", "previewImgSP3BANK", "ImageSP3BANK", data.image_sp3bank);
+                // Isi modal dengan data pegawai
+                $("#showid").val(response.Data.id);
+                $("#showkonsumen").val(response.Data.konsumen);
+
+                // Update href dan isi dengan gambar
+                // $("#showKomunikasiImageSurvey").attr("href", imageSrc);
+                // $("#showKomunikasiImageSurvey").html(`<img src="${imageSrc}" style="width: 100%; height: 100%;">`);
+
+                // Tampilkan modal edit
+                $("#mdBerkasCalonKonsumen").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Berkas Calon Konsumen.",
+                    "error"
+                );
             },
         });
     });

@@ -4,7 +4,9 @@ $(document).ready(function(){
     resetFieldTutupModalEdit();
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover' // Tooltip hanya muncul saat hover, tidak saat klik
+        });
     }
 
     //ketika menekan tombol refresh

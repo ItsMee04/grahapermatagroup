@@ -8,7 +8,9 @@ $(document).ready(function () {
 
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover' // Tooltip hanya muncul saat hover, tidak saat klik
+        });
     }
 
     $(document).on("click", "#btnRefresh", function () {

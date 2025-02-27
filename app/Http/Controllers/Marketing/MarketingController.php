@@ -133,8 +133,8 @@ class MarketingController extends Controller
 
                 // Hapus file lama jika ada
                 if (!empty($marketing->$key)) {
-                    $oldFilePath = public_path($marketing->$key);
-                    if (file_exists($oldFilePath)) {
+                    $oldFilePath = storage_path("app/public/{$folder}/" . $marketing->$key);
+                    if (file_exists($oldFilePath) && !is_dir($oldFilePath)) {
                         unlink($oldFilePath);
                     }
                 }
@@ -142,12 +142,12 @@ class MarketingController extends Controller
                 // Pindahkan file baru ke folder tujuan
                 $file->move($destinationPath, $filename);
 
-                // Simpan path relatif ke database (supaya bisa diakses melalui URL)
-                $dataToUpdate[$key] = "storage/{$folder}/" . $filename;
+                // Simpan hanya nama file di database
+                $dataToUpdate[$key] = $filename;
 
-                // Cek apakah field ini termasuk yang butuh tanggal otomatis
+                // Jika field butuh tanggal, update juga
                 if (isset($tanggalFields[$key])) {
-                    $dataToUpdate[$tanggalFields[$key]] = Carbon::now()->toDateString();
+                    $dataToUpdate[$tanggalFields[$key]] = now()->toDateString();
                 }
             }
         }
@@ -157,8 +157,13 @@ class MarketingController extends Controller
             $marketing->update($dataToUpdate);
         }
 
-        return response()->json(['success' => true, 'message' => 'Berkas berhasil diperbarui', 'data' => $dataToUpdate]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Berkas berhasil diperbarui',
+            'data' => $dataToUpdate
+        ]);
     }
+
 
     public function updateBerkasKomunikasiCalonKonsumen(Request $request, $id)
     {
