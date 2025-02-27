@@ -76,4 +76,133 @@ class MarketingController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Data Berkas Calon Konsumen Berhasil Ditemukan', 'Data' => $berkasCalonKonsumen]);
     }
+
+    public function updateBerkasCalonKonsumen(Request $request, $id)
+    {
+        $messages = [
+            'required' => ':attribute wajib diisi !!!',
+            'mimes'    => ':attribute format wajib menggunakan PNG/JPG',
+            'max'      => ':attribute ukuran maksimal 1MB',
+        ];
+
+        $credentials = $request->validate([
+            'image_ktp'             => 'mimes:png,jpg,jpeg|max:1024',
+            'image_kk'              => 'mimes:png,jpg,jpeg|max:1024',
+            'image_npwp'            => 'mimes:png,jpg,jpeg|max:1024',
+            'image_slipgaji'        => 'mimes:png,jpg,jpeg|max:1024',
+            'image_tambahan'        => 'mimes:png,jpg,jpeg|max:1024',
+            'image_buktibooking'    => 'mimes:png,jpg,jpeg|max:1024',
+            'image_sp3bank'         => 'mimes:png,jpg,jpeg|max:1024'
+        ], $messages);
+
+        $marketing = Marketing::where('id', $id)->first();
+
+        if (!$marketing) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        $dataToUpdate = [];
+
+        // Struktur folder penyimpanan
+        $folders = [
+            'image_ktp'          => 'imageKTP',
+            'image_kk'           => 'imageKK',
+            'image_npwp'         => 'imageNPWP',
+            'image_slipgaji'     => 'imageSlipGaji',
+            'image_tambahan'     => 'imageTambahan',
+            'image_buktibooking' => 'imageBuktiBooking',
+            'image_sp3bank'      => 'imageSP3BANK',
+        ];
+
+        // Field yang membutuhkan tanggal otomatis saat diupload
+        $tanggalFields = [
+            'image_buktibooking' => 'tanggalbooking',
+            'image_sp3bank'      => 'tanggalsp3'
+        ];
+
+        foreach ($folders as $key => $folder) {
+            if ($request->hasFile($key)) {
+                $file = $request->file($key);
+                $filename = time() . '_' . $file->getClientOriginalName(); // Nama unik
+                $destinationPath = public_path("storage/{$folder}"); // Path tujuan di dalam public/storage/
+
+                // Buat folder jika belum ada
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0777, true);
+                }
+
+                // Hapus file lama jika ada
+                if (!empty($marketing->$key)) {
+                    $oldFilePath = public_path($marketing->$key);
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+
+                // Pindahkan file baru ke folder tujuan
+                $file->move($destinationPath, $filename);
+
+                // Simpan path relatif ke database (supaya bisa diakses melalui URL)
+                $dataToUpdate[$key] = "storage/{$folder}/" . $filename;
+
+                // Cek apakah field ini termasuk yang butuh tanggal otomatis
+                if (isset($tanggalFields[$key])) {
+                    $dataToUpdate[$tanggalFields[$key]] = Carbon::now()->toDateString();
+                }
+            }
+        }
+
+        // Update data di database hanya jika ada perubahan
+        if (!empty($dataToUpdate)) {
+            $marketing->update($dataToUpdate);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Berkas berhasil diperbarui', 'data' => $dataToUpdate]);
+    }
+
+    public function updateBerkasKomunikasiCalonKonsumen(Request $request, $id)
+    {
+        $messages = [
+            'required' => ':attribute wajib diisi !!!',
+            'mimes'    => ':attribute format wajib menggunakan PNG/JPG',
+            'max'      => ':attribute ukuran maksimal 1MB',
+        ];
+
+        $credentials = $request->validate([
+            'image_survei'             => 'mimes:png,jpg,jpeg|max:1024',
+        ], $messages);
+
+        $marketing = Marketing::where('id', $id)->first();
+
+        if (!$marketing) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        if ($request->hasFile('image_survei')) {
+            $file = $request->file('image_survei');
+            $filename = time() . '_' . $file->getClientOriginalName(); // Nama unik
+            $storagePath = "storage/ImageSurvei/";
+            $destinationPath = public_path($storagePath);
+
+            // Buat folder jika belum ada
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Hapus file lama jika ada
+            if (!empty($marketing->image_survey)) {
+                $oldFilePath = public_path($marketing->image_survey);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            // Simpan file baru
+            $file->move($destinationPath, $filename);
+            $marketing->image_survey = $filename;
+            $marketing->save();
+        }
+
+        return response()->json(['success' => true, 'message' => 'Berkas komunikasi berhasil diperbarui']);
+    }
 }

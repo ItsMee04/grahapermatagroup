@@ -165,6 +165,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/marketing/calonkonsumen/getCalonKonsumen/{id}', [MarketingController::class, 'getCalonKonsumenByLokasi']);
     Route::post('/marketing/calonkonsumen/storeCalonKonsumen', [MarketingController::class, 'storeCalonKonsumen']);
     Route::get('/marketing/calonkonsumen/showBerkasCalonKonsmen/{id}', [MarketingController::class, 'showBerkasCalonKonsmen']);
+    Route::post('/marketing/calonkonsumen/updateBerkasCalonKonsumen/{id}', [MarketingController::class, 'updateBerkasCalonKonsumen']);
+    Route::post('/marketing/calonkonsumen/updateBerkasKomunikasiCalonKonsumen/{id}', [MarketingController::class, 'updateBerkasKomunikasiCalonKonsumen']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

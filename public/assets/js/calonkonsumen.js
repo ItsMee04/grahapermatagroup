@@ -1,12 +1,15 @@
 $(document).ready(function () {
     resetFieldTutupModalTambah();
     resetFieldTutupModalBerkas();
+    resetFieldTutupModalBerkasKomunikasi();
 
     bsCustomFileInput.init();
 
     // Inisialisasi tooltip Bootstrap
     function initializeTooltip() {
-        $('[data-toggle="tooltip"]').tooltip(); // Inisialisasi ulang tooltip
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover' // Tooltip hanya muncul saat hover, tidak saat klik
+        });
     }
 
     function uploadImage(inputId, previewId) {
@@ -68,7 +71,11 @@ $(document).ready(function () {
                         return `<b>${konsumen} / ${blok}</b>`;
                     }
                 },
-                { data: "tanggalkomunikasi", className: "text-center", render: data => `<b>${data}</b>` },
+                {
+                    data: "tanggalkomunikasi",
+                    className: "text-center",
+                    render: (data, type, row) => `<button class="btn btn-outline-primary btn-xs btnTglKomunikasi" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS"><b>${data}</b></button>`
+                },
                 { data: "progres", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "metodepembayaran.pembayaran", className: "text-center", render: data => `<b>${data}</b>` },
                 {
@@ -85,11 +92,11 @@ $(document).ready(function () {
                         if (!row.image_slipgaji) missingImages.push("Slip Gaji");
                         if (!row.image_tambahan) missingImages.push("Tambahan");
                         if (!row.image_buktibooking) missingImages.push("Bukti Booking");
-                        if (!row.image_sp3bak) missingImages.push("SP3 BANK");
+                        if (!row.image_sp3bank) missingImages.push("SP3 BANK");
 
                         // Jika semua gambar ada, tampilkan "Sudah Lengkap"
                         if (missingImages.length === 0) {
-                            return `<span class="badge badge-success">SUDAH LENGKAP</span>`;
+                            return `<button class="btn btn-outline-success btn-xs btnBerkasCalonKonsumen" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS"><b>SUDAH LENGKAP</b></button>`;
                         }
 
                         // Jika ada yang kosong, tampilkan "Belum Lengkap" beserta daftar yang belum terisi
@@ -374,13 +381,13 @@ $(document).ready(function () {
 
     $(document).on("click", ".btndetail", function () {
         const marketingID = $(this).data("id");
-        
+
         $.ajax({
             url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingID}`,
             type: "GET",
             success: function (response) {
                 const data = response.Data;
-    
+
                 // Cek dan tampilkan gambar jika ada
                 updatePreviewImage("imgKTP", "previewImgKTP", data.image_ktp);
                 updatePreviewImage("imgKK", "previewImgKK", data.image_kk);
@@ -389,11 +396,11 @@ $(document).ready(function () {
                 updatePreviewImage("imgTambahan", "previewImgTambahan", data.image_tambahan);
                 updatePreviewImage("imgBuktiBooking", "previewImgBuktiBooking", data.image_buktibooking);
                 updatePreviewImage("imgSP3BANK", "previewImgSP3BANK", data.image_sp3bank);
-    
+
                 // Set ID & Konsumen ke Form
                 $("#showid").val(data.id);
                 $("#showkonsumen").val(data.konsumen);
-    
+
                 // Tampilkan Modal Edit
                 $("#mdBerkasCalonKonsumen").modal("show");
             },
@@ -405,12 +412,12 @@ $(document).ready(function () {
             },
         });
     });
-    
+
     // Fungsi untuk update preview gambar berdasarkan respons
     function updatePreviewImage(inputId, previewId, imageName) {
         const inputFile = document.getElementById(inputId);
         const previewContainer = document.getElementById(previewId);
-    
+
         if (imageName) {
             // Jika gambar tersedia dari database, tampilkan dari asset
             previewContainer.innerHTML = "";
@@ -424,12 +431,12 @@ $(document).ready(function () {
             // Jika tidak ada gambar, kosongkan preview
             previewContainer.innerHTML = "";
         }
-    
+
         // Event listener untuk input file agar bisa preview gambar baru saat upload
         inputFile.addEventListener("change", () => {
             const file = inputFile.files[0];
             if (!file) return;
-    
+
             const reader = new FileReader();
             reader.onload = () => {
                 previewContainer.innerHTML = "";
@@ -440,7 +447,7 @@ $(document).ready(function () {
                 img.style.objectFit = "contain";
                 previewContainer.appendChild(img);
             };
-    
+
             reader.readAsDataURL(file);
         });
     }
@@ -479,10 +486,10 @@ $(document).ready(function () {
         // Buat objek FormData
         const formData = new FormData(this);
         // Ambil ID dari form
-        const idJenisKelamin = formData.get("id"); // Mengambil nilai input dengan name="id"
+        const idKonsumen = formData.get("id"); // Mengambil nilai input dengan name="id"
 
         $.ajax({
-            url: "/marketing/calonkonsumen/updateBerkasCalonKonsumen/{id}", // Endpoint Laravel untuk menyimpan pegawai
+            url: `/marketing/calonkonsumen/updateBerkasCalonKonsumen/${idKonsumen}`, // Endpoint Laravel untuk menyimpan pegawai
             type: "POST",
             data: formData,
             processData: false, // Agar data tidak diubah menjadi string
@@ -537,5 +544,115 @@ $(document).ready(function () {
             },
         });
     });
-    
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnTglKomunikasi", function () {
+        const marketingTanggalID = $(this).data("id");
+        $.ajax({
+            url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingTanggalID}`, // Endpoint untuk mendapatkan data pegawai
+            type: "GET",
+            success: function (response) {
+                uploadImage("imgKomunikasiSurvei", "showKomunikasiImageSurvey");
+                // Isi modal dengan data pegawai
+                $("#showkomunikasiid").val(response.Data.id);
+                $("#showkomunikasikonsumen").val(response.Data.konsumen);
+                $("#showTanggalKomunikasiKonsumen").val(response.Data.tanggalkomunikasi);
+
+                // Path gambar survei
+                var imagePath = `/storage/ImageSurvei/${response.Data.image_survey}`;
+
+                // Cek apakah gambar tersedia, jika tidak pakai default
+                var imageSrc = response.Data.image_survey ? imagePath : `/assets/dist/img/notfound.png`;
+
+                // Update href dan isi dengan gambar
+                $("#showKomunikasiImageSurvey").attr("href", imageSrc);
+                $("#showKomunikasiImageSurvey").html(`<img src="${imageSrc}" style="width: 100%; height: 100%;">`);
+
+                // Tampilkan modal edit
+                $("#mdBerkasKomunikasiKonsumen").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Calon Konsumen.",
+                    "error"
+                );
+            },
+        });
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalBerkasKomunikasi() {
+        $("#mdBerkasKomunikasiKonsumen").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeBerkasKomunikasiCalonKonsumen")[0].reset();
+            showKomunikasiImageSurvey.innerHTML = "";
+            imgKomunikasiSurvei.value = ""; // Reset input file
+        });
+    }
+
+    //kirim data ke server <i class=""></i>
+    $("#storeBerkasKomunikasiCalonKonsumen").on("submit", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+        // Buat objek FormData
+        const formData = new FormData(this);
+        // Ambil ID dari form
+        const idKonsumen = formData.get("id"); // Mengambil nilai input dengan name="id"
+
+        $.ajax({
+            url: `/marketing/calonkonsumen/updateBerkasKomunikasiCalonKonsumen/${idKonsumen}`, // Endpoint Laravel untuk menyimpan pegawai
+            type: "POST",
+            data: formData,
+            processData: false, // Agar data tidak diubah menjadi string
+            contentType: false, // Agar header Content-Type otomatis disesuaikan
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdBerkasKomunikasiKonsumen").modal("hide"); // Tutup modal
+                $("#storeBerkasKomunikasiCalonKonsumen")[0].reset(); // Reset form
+                // **Pastikan tableCalon sudah didefinisikan sebelum reload**
+                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                    tableCalon.ajax.reload(null, false);
+                } else {
+                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                }
+            },
+            error: function (xhr) {
+                // Tampilkan pesan error dari server
+                const errors = xhr.responseJSON.errors;
+                if (errors) {
+                    let errorMessage = "";
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+
+                    for (let key in errors) {
+                        errorMessage += `${errors[key][0]}\n`;
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage,
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
+                }
+            },
+        });
+    });
 })

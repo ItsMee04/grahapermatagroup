@@ -11,7 +11,8 @@
         #previewImgSlipGaji img,
         #previewImgTambahan img,
         #previewImgBuktiBooking img,
-        #previewImgSP3BANK img {
+        #previewImgSP3BANK img,
+        #showKomunikasiImageSurvey img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
@@ -393,6 +394,72 @@
                                 <div class="form-group">
                                     <a href="#" id="previewImgSP3BANK" class="img-thumbnail"
                                         style="width: 100%; max-width: 300px; height: 150px; display: block;"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
+                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="mdBerkasKomunikasiKonsumen">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>BERKAS CALON KONSUMEN</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="storeBerkasKomunikasiCalonKonsumen" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" name="id" id="showkomunikasiid" class="form-control"
+                                placeholder="Masukan Nama" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>NAMA KONSUMEN</label>
+                            <input type="text" name="konsumen" id="showkomunikasikonsumen" class="form-control"
+                                placeholder="Masukan Nama" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>TANGGAL AWAL KOMUNIKASI</label>
+                            <input type="date" name="tanggalkomunikasi" id="showTanggalKomunikasiKonsumen"
+                                class="form-control" placeholder="Masukan Tanggal">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>FOTO HASIL SURVEI</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_survei" class="custom-file-input"
+                                                id="imgKomunikasiSurvei">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>PREVIEW</label>
+                                <div class="form-group">
+                                    <a href="#" id="showKomunikasiImageSurvey" class="img-thumbnail"
+                                        style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
                                 </div>
                             </div>
                         </div>
