@@ -178,72 +178,6 @@
     </div>
     <!-- /.modal -->
 
-    <div class="modal fade" id="mdBerkasKomunikasiKonsumen">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h4 class="modal-title"><b>BERKAS KONSUMEN</b></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="storeBerkasKomunikasiKonsumen" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" name="id" id="showkomunikasiid" class="form-control"
-                                placeholder="Masukan Nama" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>NAMA KONSUMEN</label>
-                            <input type="text" name="konsumen" id="showkomunikasikonsumen" class="form-control"
-                                placeholder="Masukan Nama" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>TANGGAL AWAL KOMUNIKASI</label>
-                            <input type="date" name="tanggalkomunikasi" id="showTanggalKomunikasiKonsumen"
-                                class="form-control" placeholder="Masukan Tanggal">
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>FOTO HASIL SURVEI</label>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" name="image_survei" class="custom-file-input"
-                                                id="imgKomunikasiSurvei">
-                                            <label class="custom-file-label">Choose file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Upload</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label>PREVIEW</label>
-                                <div class="form-group">
-                                    <a href="#" id="showKomunikasiImageSurvey" class="img-thumbnail"
-                                        style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
-                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
     <div class="modal fade" id="mdEditKonsumen">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -257,52 +191,25 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" name="id" id="editid" class="form-control"
-                                placeholder="Masukan Nama" readonly>
+                            <label>LOKASI</label>
+                            <input type="text" id="editshowlokasi" class="form-control" readonly>
+                            <input type="hidden" id="editidlokasi" name="lokasi" class="form-control">
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>NAMA KONSUMEN</label>
-                                    <input type="text" name="konsumen" id="editkonsumen" class="form-control"
-                                        placeholder="Masukan Nama">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>KONTAK KONSUMEN</label>
-                                    <input type="text" name="kontak" id="editkontak" class="form-control"
-                                        placeholder="Masukan Kontak">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>ALAMAT KONSUMEN</label>
-                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>PROGRES</label>
-                            <textarea class="form-control" rows="4" id="editprogres" name="progres" placeholder="Masukan Progress"
-                                required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>METODE PEMBAYARAN</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="metodepembayaran"
-                                        id="editmetodepembayaran" required>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
+                                        id="konsumen" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>LOKASI PROYEK</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="lokasi"
-                                        id="editlokasi" required>
-                                    </select>
+                                    <label>TANGGAL AJB NOTARIS</label>
+                                    <input type="date" name="ajbnotaris" id="editajbnotaris" class="form-control"
+                                        placeholder="Masukan Tanggal">
                                 </div>
                             </div>
                         </div>
@@ -310,18 +217,16 @@
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>TIPE</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="tipe"
-                                        id="edittipe" required>
-                                    </select>
+                                    <label>TANGGAL AJB BANK</label>
+                                    <input type="date" name="ajbbank" id="editajbbank" class="form-control"
+                                        placeholder="Masukan Tanggal">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>BLOK</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="blok"
-                                        id="editblok" required>
-                                    </select>
+                                    <label>TANGGAL TTD DIREKTUR</label>
+                                    <input type="date" name="ttddirektur" id="editttddirektur" class="form-control"
+                                        placeholder="Masukan Tanggal">
                                 </div>
                             </div>
                         </div>
@@ -329,16 +234,45 @@
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>TANGGAL AWAL KOMUNIKASI</label>
-                                    <input type="date" id="edittanggalkomunikasi" name="tanggalkomunikasi"
-                                        class="form-control" placeholder="Masukan Tanggal">
+                                    <label>SERTIFIKAT</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="sertifikat"
+                                        required>
+                                        <option value="READY">READY</option>
+                                        <option value="NON READY">NON READY</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>SUMBER INFORMASI</label>
-                                    <input type="text" name="sumber" id="editsumber" class="form-control"
-                                        placeholder="Masukan Sumber" required>
+                                    <label>KETERANGAN</label>
+                                    <textarea class="form-control" rows="4" name="keterangan" id="editketerangan"
+                                        placeholder="Masukan Keterangan" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BUKTI SERAH TERIMA</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_bukti" class="custom-file-input"
+                                                id="imgBukti">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>PREVIEW</label>
+                                <div class="form-group">
+                                    <a href="#" id="previewImgBukti" class="img-thumbnail"
+                                        style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
                                 </div>
                             </div>
                         </div>

@@ -64,7 +64,7 @@ class DataKonsumenController extends Controller
 
     public function showDataKonsumen($id)
     {
-        $dataKonsumen = DataKonsumen::findOrFail($id);
+        $dataKonsumen = DataKonsumen::with(['lokasi'])->findOrFail($id);
 
         return response()->json(['success' => true, 'message' => 'Data Berkas Konsumen Berhasil Ditemukan', 'Data' => $dataKonsumen]);
     }

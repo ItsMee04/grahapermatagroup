@@ -300,4 +300,87 @@ $(document).ready(function () {
             },
         });
     });
+
+    // Fungsi untuk update preview gambar berdasarkan respons
+    function updatePreviewImage(inputId, previewId, folderName, imageName) {
+        const inputFile = document.getElementById(inputId);
+        const previewContainer = document.getElementById(previewId);
+
+        if (!inputFile || !previewContainer) {
+            console.error("Elemen tidak ditemukan!");
+            return;
+        }
+
+        if (imageName) {
+            // Jika gambar tersedia dari database, tampilkan dari storage sesuai folder
+            const imageSrc = `/storage/${folderName}/${imageName}`;
+
+            previewContainer.innerHTML = `
+            <a href="${imageSrc}" target="_blank">
+                <img src="${imageSrc}" alt="Preview Gambar" style="width: 100%; height: 100%; object-fit: contain;">
+            </a>
+        `;
+        } else {
+            // Jika tidak ada gambar, kosongkan preview
+            previewContainer.innerHTML = "";
+        }
+
+        // Event listener untuk input file agar bisa preview gambar baru saat upload
+        inputFile.onchange = () => {
+            const file = inputFile.files[0];
+            if (!file) return;
+
+            // Validasi agar hanya file gambar yang diproses
+            if (!file.type.startsWith("image/")) {
+                alert("Hanya file gambar yang diperbolehkan!");
+                inputFile.value = ""; // Reset input jika bukan gambar
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const newImageSrc = reader.result;
+
+                previewContainer.innerHTML = `
+                <a href="${newImageSrc}" target="_blank">
+                    <img src="${newImageSrc}" alt="Preview Gambar" style="width: 100%; height: 100%; object-fit: contain;">
+                </a>
+            `;
+            };
+
+            reader.readAsDataURL(file);
+        };
+    }
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnedit", function () {
+        const dataKonsumenID = $(this).data("id");
+        $.ajax({
+            url: `/marketing/datakonsumen/showDataKonsumen/${dataKonsumenID}`, // Endpoint untuk mendapatkan data pegawai
+            type: "GET",
+            success: function (response) {
+                loadNamaKonsumen();
+                const data = response.Data;
+                // Cek dan tampilkan gambar jika ada
+                updatePreviewImage("imgBukti", "previewImgBukti", "ImageBukti", data.image_bukti);
+                // Isi modal dengan data pegawai
+                $("#editidlokasi").val(response.Data.id);
+                $("#editshowlokasi").val(response.Data.lokasi.lokasi);
+                $("#editajbnotaris").val(response.Data.ajbnotaris);
+                $("#editajbbank").val(response.Data.ajbbank);
+                $("#editttddirektur").val(response.Data.ttddirektur);
+                $("#editketerangan").val(response.Data.keterangan);
+
+                // Tampilkan modal edit
+                $("#mdEditKonsumen").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Konsumen.",
+                    "error"
+                );
+            },
+        });
+    });
 })
