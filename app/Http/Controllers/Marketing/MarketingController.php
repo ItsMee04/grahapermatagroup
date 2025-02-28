@@ -210,4 +210,63 @@ class MarketingController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Berkas komunikasi berhasil diperbarui']);
     }
+
+    public function updateCalonKonsumen(Request $request, $id)
+    {
+        $messages = [
+            'required' => ':attribute wajib di isi !!!',
+            'mimes'    => ':attribute format wajib menggunakan PNG/JPG',
+        ];
+
+        $credentials = $request->validate([
+            'konsumen'          =>  'required',
+            'kontak'            =>  'required',
+            'alamat'            =>  'required',
+            'progres'           =>  'required',
+            'metodepembayaran'  =>  'required',
+            'lokasi'            =>  'required',
+            'tipe'              =>  'required',
+            'blok'              =>  'required',
+            'tanggalkomunikasi' =>  'required',
+            'sumber'            =>  'required',
+        ], $messages);
+
+        $marketing = Marketing::findOrFail($id);
+
+        $marketing->update([
+            'konsumen'              =>  $request->konsumen,
+            'kontak'                =>  $request->kontak,
+            'alamat'                =>  $request->alamat,
+            'progres'               =>  $request->progres,
+            'metodepembayaran_id'   =>  $request->metodepembayaran,
+            'lokasi_id'             =>  $request->lokasi,
+            'tipe_id'               =>  $request->tipe,
+            'blok_id'               =>  $request->blok,
+            'tanggalkomunikasi'     =>  $request->tanggalkomunikasi,
+            'sumber'                =>  $request->sumber,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Disimpan']);
+    }
+
+    public function deleteCalonKonsumen($id)
+    {
+        $marketing = Marketing::where('id', $id)->first();
+
+        if ($marketing) {
+            Marketing::where('id', $id)
+                ->update([
+                    'status' => 0,
+                ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Dihapus']);
+    }
+
+    public function getKonsumen()
+    {
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('tanggalbooking', '!=', null)->get();
+
+        return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Ditemukan', 'Data' => $calonkonsumen]);
+    }
 }

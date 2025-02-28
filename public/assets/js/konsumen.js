@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    resetFieldTutupModalTambah();
     resetFieldTutupModalBerkas();
     resetFieldTutupModalBerkasKomunikasi();
     resetFieldTutupModalEditCalonKonsumen();
@@ -35,13 +34,13 @@ $(document).ready(function () {
 
     let tableCalon; // Deklarasi variabel global
 
-    function loadCalonKonsumen() {
+    function loadKonsumen() {
 
-        if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+        if ($.fn.DataTable.isDataTable("#tableKonsumen")) {
             tableCalon.destroy(); // Hapus instance DataTable sebelumnya
         }
 
-        tableCalon = $("#tableCalonKonsumen").DataTable({
+        tableCalon = $("#tableKonsumen").DataTable({
             paging: true,
             lengthChange: false,
             searching: true,
@@ -50,7 +49,7 @@ $(document).ready(function () {
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: "/marketing/calonkonsumen/getCalonKonsumen", // Menampilkan semua data secara default
+                url: "/marketing/konsumen/getKonsumen", // Menampilkan semua data secara default
                 type: "GET",
                 dataSrc: "Data",
             },
@@ -97,7 +96,7 @@ $(document).ready(function () {
 
                         // Jika semua gambar ada, tampilkan "Sudah Lengkap"
                         if (missingImages.length === 0) {
-                            return `<button class="btn btn-outline-success btn-xs btnBerkasCalonKonsumen" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS"><b>SUDAH LENGKAP</b></button>`;
+                            return `<button class="btn btn-outline-success btn-xs btnBerkasKonsumen" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS"><b>SUDAH LENGKAP</b></button>`;
                         }
 
                         // Jika ada yang kosong, tampilkan "Belum Lengkap" beserta daftar yang belum terisi
@@ -135,7 +134,7 @@ $(document).ready(function () {
                 let api = this.api();
 
                 // Tambahkan dropdown lokasi di atas tabel
-                $("#tableCalonKonsumen_wrapper .col-md-6:eq(0)").append(`
+                $("#tableKonsumen_wrapper .col-md-6:eq(0)").append(`
                     <div class="d-flex align-items-center">
                         <label class="mr-2">Pilih Lokasi</label>
                         <select id="lokasiDropdown" class="form-control select2bs4" style="width: 100%;">
@@ -149,7 +148,7 @@ $(document).ready(function () {
                 });
 
                 // Tambahkan tombol refresh di dalam filter
-                $("#tableCalonKonsumen_wrapper .dataTables_filter").append(`
+                $("#tableKonsumen_wrapper .dataTables_filter").append(`
                     <button id="btnRefresh" class="btn btn-primary btn-sm ml-2">
                         <i class="fa fa-sync"></i> Refresh
                     </button>
@@ -195,190 +194,12 @@ $(document).ready(function () {
 
             Toast.fire({
                 icon: "success",
-                title: "Data Calon Konsumen Berhasil Di Refresh",
+                title: "Data Konsumen Berhasil Di Refresh",
             });
         });
     }
 
-    loadCalonKonsumen();
-
-    // Fungsi untuk memuat data lokasi
-    function loadLokasi() {
-        $.ajax({
-            url: "/lokasi/getLokasi", // Endpoint untuk mendapatkan data jabatan
-            type: "GET",
-            success: function (response) {
-                let options = '<option value="">-- PILIH LOKASI --</option>';
-                response.Data.forEach((item) => {
-                    options += `<option value="${item.id}">${item.lokasi}</option>`;
-                });
-                $("#lokasi").html(options); // Masukkan data ke select
-            },
-            error: function () {
-                Toast.fire({
-                    icon: "error",
-                    title: "Gagal Memuat Data Lokasi!",
-                });
-            },
-        });
-    }
-
-    // Fungsi untuk memuat data lokasi
-    function loadPembayaran() {
-        $.ajax({
-            url: "/metodepembayaran/getMetodePembayaran", // Endpoint untuk mendapatkan data jabatan
-            type: "GET",
-            success: function (response) {
-                let options = '<option value="">-- PILIH METODE PEMBAYARAN --</option>';
-                response.Data.forEach((item) => {
-                    options += `<option value="${item.id}">${item.pembayaran}</option>`;
-                });
-                $("#metodepembayaran").html(options); // Masukkan data ke select
-            },
-            error: function () {
-                Toast.fire({
-                    icon: "error",
-                    title: "Gagal Memuat Data Metode Pembayaran!",
-                });
-            },
-        });
-    }
-
-    //ketika menekan tombol tambah subkontraktor
-    $(".btn-tambahCalonKonsumen").on("click", function () {
-        $("#mdTambahCalonKonsumen").modal("show");
-
-        // Panggil fungsi untuk setiap input gambar
-        uploadImage("imgSurvei", "previewImgSurvei");
-        loadLokasi();
-        loadPembayaran();
-
-        $("#lokasi").on("change", function () {
-            let lokasiId = $(this).val();
-
-            if (lokasiId) {
-                $.ajax({
-                    url: "/tipe/getTipeByLokasi/" + lokasiId, // Endpoint untuk mendapatkan data jabatan
-                    type: "GET",
-                    success: function (response) {
-                        let options = '<option value="">-- PILIH TIPE --</option>';
-                        response.Data.forEach((item) => {
-                            options += `<option value="${item.id}">${item.tipe}</option>`;
-                        });
-                        $("#tipe").html(options); // Masukkan data ke select
-                    },
-                    error: function () {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Gagal Memuat Data Tipe!",
-                        });
-                    },
-                });
-            }
-        });
-
-        $("#tipe").on("change", function () {
-            let tipeId = $(this).val();
-
-            if (tipeId) {
-                $.ajax({
-                    url: "/blok/getBlokByTipe/" + tipeId, // Endpoint untuk mendapatkan data jabatan
-                    type: "GET",
-                    success: function (response) {
-                        let options = '<option value="">-- PILIH BLOK --</option>';
-                        response.Data.forEach((item) => {
-                            options += `<option value="${item.id}">${item.blok}</option>`;
-                        });
-                        $("#blok").html(options); // Masukkan data ke select
-                    },
-                    error: function () {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Gagal Memuat Data Blok!",
-                        });
-                    },
-                });
-            }
-        });
-    });
-
-    // Ketika modal ditutup, reset semua field
-    function resetFieldTutupModalTambah() {
-        $("#mdTambahCalonKonsumen").on("hidden.bs.modal", function () {
-            // Reset form input (termasuk gambar dan status)
-            $("#storeCalonKonsumen")[0].reset();
-            previewImgSurvei.innerHTML = "";
-            imgSurvei.value = ""; // Reset input file
-
-            // Hapus isi dropdown tipe dan blok tanpa menyisakan teks apa pun
-            $("#tipe").html("").trigger("change");
-            $("#blok").html("").trigger("change");
-        });
-    }
-
-    //kirim data ke server <i class=""></i>
-    $("#storeCalonKonsumen").on("submit", function (event) {
-        event.preventDefault(); // Mencegah form submit secara default
-        // Ambil elemen input file
-
-        // Buat objek FormData
-        const formData = new FormData(this);
-        $.ajax({
-            url: "/marketing/calonkonsumen/storeCalonKonsumen/", // Endpoint Laravel untuk menyimpan pegawai
-            type: "POST",
-            data: formData,
-            processData: false, // Agar data tidak diubah menjadi string
-            contentType: false, // Agar header Content-Type otomatis disesuaikan
-            success: function (response) {
-                var Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 3000,
-                });
-
-                Toast.fire({
-                    icon: "success",
-                    title: response.message,
-                });
-
-                $("#mdTambahCalonKonsumen").modal("hide"); // Tutup modal
-                $("#storeCalonKonsumen")[0].reset(); // Reset form
-                // **Pastikan tableCalon sudah didefinisikan sebelum reload**
-                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
-                    tableCalon.ajax.reload(null, false);
-                } else {
-                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
-                }
-            },
-            error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
-                    let errorMessage = "";
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    });
-
-                    for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
-                    }
-                    Toast.fire({
-                        icon: "error",
-                        title: errorMessage,
-                    });
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: response.message,
-                    });
-                }
-            },
-        });
-    });
+    loadKonsumen();
 
     $(document).on("click", ".btndetail", function () {
         const marketingID = $(this).data("id");
@@ -403,7 +224,7 @@ $(document).ready(function () {
                 $("#showkonsumen").val(data.konsumen);
 
                 // Tampilkan Modal Edit
-                $("#mdBerkasCalonKonsumen").modal("show");
+                $("#mdBerkasKonsumen").modal("show");
             },
             error: function () {
                 Toast.fire({
@@ -468,9 +289,9 @@ $(document).ready(function () {
 
     // Ketika modal ditutup, reset semua field
     function resetFieldTutupModalBerkas() {
-        $("#mdBerkasCalonKonsumen").on("hidden.bs.modal", function () {
+        $("#mdBerkasKonsumen").on("hidden.bs.modal", function () {
             // Reset form input (termasuk gambar dan status)
-            $("#storeBerkasCalonKonsumen")[0].reset();
+            $("#storeBerkasKonsumen")[0].reset();
 
             // Reset semua input file
             const inputFiles = [
@@ -495,7 +316,7 @@ $(document).ready(function () {
     }
 
     //kirim data ke server <i class=""></i>
-    $("#storeBerkasCalonKonsumen").on("submit", function (event) {
+    $("#storeBerkasKonsumen").on("submit", function (event) {
         event.preventDefault(); // Mencegah form submit secara default
         // Buat objek FormData
         const formData = new FormData(this);
@@ -521,13 +342,13 @@ $(document).ready(function () {
                     title: response.message,
                 });
 
-                $("#mdBerkasCalonKonsumen").modal("hide"); // Tutup modal
-                $("#storeBerkasCalonKonsumen")[0].reset(); // Reset form
+                $("#mdBerkasKonsumen").modal("hide"); // Tutup modal
+                $("#storeBerkasKonsumen")[0].reset(); // Reset form
                 // **Pastikan tableCalon sudah didefinisikan sebelum reload**
-                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                if ($.fn.DataTable.isDataTable("#tableKonsumen")) {
                     tableCalon.ajax.reload(null, false);
                 } else {
-                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                    loadKonsumen(); // Jika belum ada, inisialisasi ulang
                 }
             },
             error: function (xhr) {
@@ -599,14 +420,14 @@ $(document).ready(function () {
     function resetFieldTutupModalBerkasKomunikasi() {
         $("#mdBerkasKomunikasiKonsumen").on("hidden.bs.modal", function () {
             // Reset form input (termasuk gambar dan status)
-            $("#storeBerkasKomunikasiCalonKonsumen")[0].reset();
+            $("#storeBerkasKomunikasiKonsumen")[0].reset();
             showKomunikasiImageSurvey.innerHTML = "";
             imgKomunikasiSurvei.value = ""; // Reset input file
         });
     }
 
     //kirim data ke server <i class=""></i>
-    $("#storeBerkasKomunikasiCalonKonsumen").on("submit", function (event) {
+    $("#storeBerkasKomunikasiKonsumen").on("submit", function (event) {
         event.preventDefault(); // Mencegah form submit secara default
         // Buat objek FormData
         const formData = new FormData(this);
@@ -633,12 +454,12 @@ $(document).ready(function () {
                 });
 
                 $("#mdBerkasKomunikasiKonsumen").modal("hide"); // Tutup modal
-                $("#storeBerkasKomunikasiCalonKonsumen")[0].reset(); // Reset form
+                $("#storeBerkasKomunikasiKonsumen")[0].reset(); // Reset form
                 // **Pastikan tableCalon sudah didefinisikan sebelum reload**
-                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                if ($.fn.DataTable.isDataTable("#tableKonsumen")) {
                     tableCalon.ajax.reload(null, false);
                 } else {
-                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                    loadKonsumen(); // Jika belum ada, inisialisasi ulang
                 }
             },
             error: function (xhr) {
@@ -671,7 +492,7 @@ $(document).ready(function () {
     });
 
     //ketika button edit di tekan
-    $(document).on("click", ".btnBerkasCalonKonsumen", function () {
+    $(document).on("click", ".btnBerkasKonsumen", function () {
         const marketingBerkasID = $(this).data("id");
         $.ajax({
             url: `/marketing/calonkonsumen/showBerkasCalonKonsmen/${marketingBerkasID}`, // Endpoint untuk mendapatkan data pegawai
@@ -695,7 +516,7 @@ $(document).ready(function () {
                 // $("#showKomunikasiImageSurvey").html(`<img src="${imageSrc}" style="width: 100%; height: 100%;">`);
 
                 // Tampilkan modal edit
-                $("#mdBerkasCalonKonsumen").modal("show");
+                $("#mdBerkasKonsumen").modal("show");
             },
             error: function () {
                 Swal.fire(
@@ -845,7 +666,7 @@ $(document).ready(function () {
                 });
 
                 // Tampilkan modal edit
-                $("#mdEditCalonKonsumen").modal("show");
+                $("#mdEditKonsumen").modal("show");
             },
             error: function () {
                 Swal.fire(
@@ -859,9 +680,9 @@ $(document).ready(function () {
 
     // Ketika modal ditutup, reset semua field
     function resetFieldTutupModalEditCalonKonsumen() {
-        $("#mdEditCalonKonsumen").on("hidden.bs.modal", function () {
+        $("#mdEditKonsumen").on("hidden.bs.modal", function () {
             // Reset form input (termasuk gambar dan status)
-            $("#storeEditCalonKonsumen")[0].reset();
+            $("#storeEditKonsumen")[0].reset();
             // Hapus isi dropdown tipe dan blok tanpa menyisakan teks apa pun
             $("#editmetodepembayaran").html("").trigger("change");
             $("#editlokasi").html("").trigger("change");
@@ -871,7 +692,7 @@ $(document).ready(function () {
     }
 
     //kirim data ke server
-    $("#storeEditCalonKonsumen").on("submit", function (event) {
+    $("#storeEditKonsumen").on("submit", function (event) {
         event.preventDefault(); // Mencegah form submit secara default
         // Buat objek FormData
         const formData = new FormData(this);
@@ -897,12 +718,12 @@ $(document).ready(function () {
                     title: response.message,
                 });
 
-                $("#mdEditCalonKonsumen").modal("hide"); // Tutup modal
+                $("#mdEditKonsumen").modal("hide"); // Tutup modal
                 // **Pastikan tableCalon sudah didefinisikan sebelum reload**
-                if ($.fn.DataTable.isDataTable("#tableCalonKonsumen")) {
+                if ($.fn.DataTable.isDataTable("#tableKonsumen")) {
                     tableCalon.ajax.reload(null, false);
                 } else {
-                    loadCalonKonsumen(); // Jika belum ada, inisialisasi ulang
+                    loadKonsumen(); // Jika belum ada, inisialisasi ulang
                 }
             },
             error: function (xhr) {

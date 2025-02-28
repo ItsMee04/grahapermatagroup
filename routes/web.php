@@ -5,17 +5,18 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Master\BlokController;
 use App\Http\Controllers\Master\RoleController;
 use App\Http\Controllers\Master\TipeController;
+use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\LokasiController;
+use App\Http\Controllers\Master\AbsensiController;
 use App\Http\Controllers\Master\JabatanController;
+use App\Http\Controllers\Management\UserController;
 use App\Http\Controllers\Master\RekeningController;
 use App\Http\Controllers\Management\PegawaiController;
-use App\Http\Controllers\Management\UserController;
 use App\Http\Controllers\Marketing\MarketingController;
-use App\Http\Controllers\Master\AbsensiController;
-use App\Http\Controllers\Master\AgamaController;
 use App\Http\Controllers\Master\JenisKelaminController;
-use App\Http\Controllers\Master\MetodePembayaranController;
 use App\Http\Controllers\Master\SubkontraktorController;
+use App\Http\Controllers\Marketing\DataKonsumenController;
+use App\Http\Controllers\Master\MetodePembayaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +168,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/marketing/calonkonsumen/showBerkasCalonKonsmen/{id}', [MarketingController::class, 'showBerkasCalonKonsmen']);
     Route::post('/marketing/calonkonsumen/updateBerkasCalonKonsumen/{id}', [MarketingController::class, 'updateBerkasCalonKonsumen']);
     Route::post('/marketing/calonkonsumen/updateBerkasKomunikasiCalonKonsumen/{id}', [MarketingController::class, 'updateBerkasKomunikasiCalonKonsumen']);
+    Route::post('/marketing/calonkonsumen/updateCalonKonsumen/{id}', [MarketingController::class, 'updateCalonKonsumen']);
+    Route::delete('/marketing/calonkonsumen/deleteCalonKonsumen/{id}', [MarketingController::class, 'deleteCalonKonsumen']);
+
+    Route::get('/konsumen', function () {
+        return view('Pages.marketing.konsumen');
+    });
+    Route::get('/marketing/konsumen/getKonsumen', [MarketingController::class, 'getKonsumen']);
+
+    Route::get('/datakonsumen', function () {
+        return view('Pages.marketing.datakonsumen');
+    });
+    Route::get('/marketing/datakonsumen/getDataKonsumen', [DataKonsumenController::class, 'getDataKonsumen']);
+    Route::get('/marketing/datakonsumen/getDataKonsumen/{id}', [DataKonsumenController::class, 'getDataKonsumenByLokasi']);
+    Route::post('/marketing/datakonsumen/storeDataKonsumen', [DataKonsumenController::class, 'storeDataKonsumen']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
