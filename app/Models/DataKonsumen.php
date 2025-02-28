@@ -19,7 +19,7 @@ class DataKonsumen extends Model
         'ajbbank',
         'ttddirektur',
         'sertifikat',
-        'bukti',
+        'image_bukti',
         'keterangan',
         'user_id',
         'status'

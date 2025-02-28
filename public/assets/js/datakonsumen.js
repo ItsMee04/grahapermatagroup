@@ -50,9 +50,23 @@ $(document).ready(function () {
                 { data: "ajbbank", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "ttddirektur", className: "text-center", render: data => `<b>${data}</b>` },
                 { 
-                    data: "sertifikat",
+                    data: "image_bukti",
                     className: "text-center",
-                    render: (data, type, row) => `<button class="btn btn-outline-success btn-xs btnTglKomunikasi" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="DETAIL BERKAS"><b>${data}</b></button>`
+                    render: (data, type, row) => {
+                        if (!data) {
+                            return `<span class="text-muted">Tidak ada berkas</span>`; // Jika tidak ada sertifikat
+                        }
+                        
+                        let fileUrl = `/storage/ImageBukti/${data}`; // Sesuaikan dengan path penyimpanan file
+                
+                        return `
+                            <a href="${fileUrl}" target="_blank">
+                                <button class="btn btn-outline-success btn-xs" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="Lihat Berkas">
+                                    <b>READY</b>
+                                </button>
+                            </a>
+                        `;
+                    }
                 },
                 { data: "keterangan", className: "text-center", render: data => `<b>${data}</b>` },
                 {

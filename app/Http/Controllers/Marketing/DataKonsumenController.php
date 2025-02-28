@@ -61,4 +61,11 @@ class DataKonsumenController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Data Konsumen Berhasil Disimpan']);
     }
+
+    public function showDataKonsumen($id)
+    {
+        $dataKonsumen = DataKonsumen::findOrFail($id);
+
+        return response()->json(['success' => true, 'message' => 'Data Berkas Konsumen Berhasil Ditemukan', 'Data' => $dataKonsumen]);
+    }
 }
