@@ -465,7 +465,6 @@ $(document).ready(function () {
         };
     }
 
-
     // Ketika modal ditutup, reset semua field
     function resetFieldTutupModalBerkas() {
         $("#mdBerkasCalonKonsumen").on("hidden.bs.modal", function () {
