@@ -64,8 +64,83 @@ class DataKonsumenController extends Controller
 
     public function showDataKonsumen($id)
     {
-        $dataKonsumen = DataKonsumen::with(['lokasi'])->findOrFail($id);
+        $dataKonsumen = DataKonsumen::with(['lokasi', 'marketing', 'marketing.lokasi'])->findOrFail($id);
 
         return response()->json(['success' => true, 'message' => 'Data Berkas Konsumen Berhasil Ditemukan', 'Data' => $dataKonsumen]);
+    }
+
+    public function updateDataKonsumen(Request $request, $id)
+    {
+        $messages = [
+            'required' => ':attribute wajib diisi !!!',
+            'mimes'    => ':attribute format wajib menggunakan PNG/JPG',
+            'max'      => ':attribute ukuran maksimal 1MB',
+        ];
+
+        $credentials = $request->validate([
+            'konsumen'      => 'required',
+            'ajbnotaris'    => 'required',
+            'ajbbank'       => 'required',
+            'ttddirektur'   => 'required',
+            'keterangan'    => 'required',
+            'image_bukti'   => 'mimes:png,jpg,jpeg|max:1024',
+        ], $messages);
+
+        $konsumen = DataKonsumen::where('id', $id)->first();
+
+        if (!$konsumen) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        // Update data lainnya
+        $konsumen->konsumen_id = $request->konsumen;
+        $konsumen->ajbnotaris  = $request->ajbnotaris;
+        $konsumen->ajbbank     = $request->ajbbank;
+        $konsumen->ttddirektur = $request->ttddirektur;
+        $konsumen->keterangan  = $request->keterangan;
+
+        // Jika ada file baru yang diunggah
+        if ($request->hasFile('image_bukti')) {
+            $file = $request->file('image_bukti');
+            $filename = time() . '_' . $file->getClientOriginalName(); // Nama unik
+            $storagePath = "storage/ImageBukti/";
+            $destinationPath = public_path($storagePath);
+
+            // Buat folder jika belum ada
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Hapus file lama jika ada
+            if (!empty($konsumen->image_bukti)) {
+                $oldFilePath = public_path($storagePath . $konsumen->image_bukti);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            // Simpan file baru
+            $file->move($destinationPath, $filename);
+            $konsumen->image_bukti = $filename;
+        }
+
+        // Simpan perubahan ke database
+        $konsumen->save();
+
+        return response()->json(['success' => true, 'message' => 'Data konsumen berhasil diperbarui']);
+    }
+
+    public function deleteDataKonsumen($id)
+    {
+        $konsumen = DataKonsumen::where('id', $id)->first();
+
+        if ($konsumen) {
+            DataKonsumen::where('id', $id)
+                ->update([
+                    'status' => 0,
+                ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Data Konsumen Berhasil Dihapus']);
     }
 }

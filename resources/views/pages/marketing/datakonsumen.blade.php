@@ -121,23 +121,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>SERTIFIKAT</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="sertifikat" required>
-                                        <option value="READY">READY</option>
-                                        <option value="NON READY">NON READY</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>KETERANGAN</label>
-                                    <textarea class="form-control" rows="4" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>KETERANGAN</label>
+                            <textarea class="form-control" rows="4" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -191,9 +177,8 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>LOKASI</label>
-                            <input type="text" id="editshowlokasi" class="form-control" readonly>
-                            <input type="hidden" id="editidlokasi" name="lokasi" class="form-control">
+                            <label>ID</label>
+                            <input type="text" name="id" id="editid" class="form-control" readonly>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -201,7 +186,7 @@
                                 <div class="form-group">
                                     <label>NAMA KONSUMEN</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
-                                        id="konsumen" required>
+                                        id="editkonsumen" required>
                                     </select>
                                 </div>
                             </div>
@@ -230,25 +215,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label>SERTIFIKAT</label>
-                                    <select class="form-control select2bs4" style="width: 100%;" name="sertifikat"
-                                        required>
-                                        <option value="READY">READY</option>
-                                        <option value="NON READY">NON READY</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>KETERANGAN</label>
-                                    <textarea class="form-control" rows="4" name="keterangan" id="editketerangan"
-                                        placeholder="Masukan Keterangan" required></textarea>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>KETERANGAN</label>
+                            <textarea class="form-control" rows="4" name="keterangan" id="editketerangan"
+                                placeholder="Masukan Keterangan" required></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -258,7 +228,7 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" name="image_bukti" class="custom-file-input"
-                                                id="imgBukti">
+                                                id="editimgBukti">
                                             <label class="custom-file-label">Choose file</label>
                                         </div>
                                         <div class="input-group-append">
@@ -271,7 +241,7 @@
                             <div class="col-sm-6">
                                 <label>PREVIEW</label>
                                 <div class="form-group">
-                                    <a href="#" id="previewImgBukti" class="img-thumbnail"
+                                    <a href="#" id="editpreviewImgBukti" class="img-thumbnail"
                                         style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
                                 </div>
                             </div>

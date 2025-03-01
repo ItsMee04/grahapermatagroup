@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    resetFieldTutupModalTambah();
+    resetFieldTutupModalEditKonsumen();
     bsCustomFileInput.init();
 
     // Inisialisasi tooltip Bootstrap
@@ -49,16 +51,16 @@ $(document).ready(function () {
                 { data: "ajbnotaris", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "ajbbank", className: "text-center", render: data => `<b>${data}</b>` },
                 { data: "ttddirektur", className: "text-center", render: data => `<b>${data}</b>` },
-                { 
+                {
                     data: "image_bukti",
                     className: "text-center",
                     render: (data, type, row) => {
                         if (!data) {
-                            return `<span class="text-muted">Tidak ada berkas</span>`; // Jika tidak ada sertifikat
+                            return `<span class="text-muted"><b>BERKAS BELUM DI UPLOAD</b></span>`; // Jika tidak ada sertifikat
                         }
-                        
+
                         let fileUrl = `/storage/ImageBukti/${data}`; // Sesuaikan dengan path penyimpanan file
-                
+
                         return `
                             <a href="${fileUrl}" target="_blank">
                                 <button class="btn btn-outline-success btn-xs" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="Lihat Berkas">
@@ -356,20 +358,42 @@ $(document).ready(function () {
     $(document).on("click", ".btnedit", function () {
         const dataKonsumenID = $(this).data("id");
         $.ajax({
-            url: `/marketing/datakonsumen/showDataKonsumen/${dataKonsumenID}`, // Endpoint untuk mendapatkan data pegawai
+            url: `/marketing/datakonsumen/showDataKonsumen/${dataKonsumenID}`, // Endpoint untuk mendapatkan data konsumen
             type: "GET",
             success: function (response) {
-                loadNamaKonsumen();
                 const data = response.Data;
+
+                // Isi modal dengan data konsumen
+                $("#editid").val(data.id);
+                $("#editidlokasi").val(data.lokasi_id); // Pastikan lokasi terisi sebelum load konsumen
+                $("#editajbnotaris").val(data.ajbnotaris);
+                $("#editajbbank").val(data.ajbbank);
+                $("#editttddirektur").val(data.ttddirektur);
+                $("#editketerangan").val(data.keterangan);
+                $("#editsertifikat").val(data.sertifikat);
+                // Muat data id dari table
+                let selectedValue = $("#lokasiDropdown").val(); // Ambil lokasi yang dipilih
+
+                //load data konsumen
+                $.ajax({
+                    url: `/marketing/calonkonsumen/getCalonKonsumen/${selectedValue}`,
+                    type: "GET",
+                    success: function (jabatanResponse) {
+                        let options =
+                            '<option value="">-- PILIH KONSUMEN --</option>';
+                        jabatanResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.konsumen_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.konsumen}</option>`;
+                        });
+                        $("#editkonsumen").html(options);
+                    },
+                });
+
                 // Cek dan tampilkan gambar jika ada
-                updatePreviewImage("imgBukti", "previewImgBukti", "ImageBukti", data.image_bukti);
-                // Isi modal dengan data pegawai
-                $("#editidlokasi").val(response.Data.id);
-                $("#editshowlokasi").val(response.Data.lokasi.lokasi);
-                $("#editajbnotaris").val(response.Data.ajbnotaris);
-                $("#editajbbank").val(response.Data.ajbbank);
-                $("#editttddirektur").val(response.Data.ttddirektur);
-                $("#editketerangan").val(response.Data.keterangan);
+                updatePreviewImage("editimgBukti", "editpreviewImgBukti", "ImageBukti", data.image_bukti);
 
                 // Tampilkan modal edit
                 $("#mdEditKonsumen").modal("show");
@@ -381,6 +405,126 @@ $(document).ready(function () {
                     "error"
                 );
             },
+        });
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalEditKonsumen() {
+        $("#mdEditKonsumen").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeEditKonsumen")[0].reset();
+            editpreviewImgBukti.innerHTML = "";
+            editimgBukti.value = ""; // Reset input file
+        });
+    }
+
+    //kirim data ke server
+    $("#storeEditKonsumen").on("submit", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+        // Buat objek FormData
+        const formData = new FormData(this);
+        
+        // Ambil ID dari form
+        const idKonsumen = formData.get("id"); // Mengambil nilai input dengan name="id"
+        $.ajax({
+            url: `/marketing/datakonsumen/updateDataKonsumen/${idKonsumen}`, // Endpoint Laravel untuk menyimpan pegawai
+            type: "POST",
+            data: formData,
+            processData: false, // Agar data tidak diubah menjadi string
+            contentType: false, // Agar header Content-Type otomatis disesuaikan
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdEditKonsumen").modal("hide"); // Tutup modal
+                resetFieldTutupModalEditKonsumen();
+                tableDataKonsumen.ajax.reload(null, false); // Reload data dari server
+            },
+            error: function (xhr) {
+                // Tampilkan pesan error dari server
+                const errors = xhr.responseJSON.errors;
+                if (errors) {
+                    let errorMessage = "";
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+                    for (let key in errors) {
+                        errorMessage += `${errors[key][0]}\n`;
+                    }
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage,
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message,
+                    });
+                }
+            },
+        });
+    });
+
+    //ketika btn delete di tekan
+    $(document).on("click", ".btndelete", function () {
+        let id = $(this).data("id");
+
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+            customClass: {
+                popup: 'animated bounceIn', // Animasi masuk
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/marketing/datakonsumen/deleteDataKonsumen/${id}`, // Ganti dengan endpoint yang sesuai
+                    type: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") // Ambil token CSRF dari meta tag
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Terhapus!",
+                            text: "Data berhasil dihapus.",
+                            icon: "success",
+                            customClass: {
+                                popup: 'animated fadeOut' // Animasi keluar
+                            }
+                        });
+                        if (tableDataKonsumen) {
+                            tableDataKonsumen.ajax.reload(null, false);
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Gagal!",
+                            text: "Terjadi kesalahan, coba lagi nanti.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
         });
     });
 })

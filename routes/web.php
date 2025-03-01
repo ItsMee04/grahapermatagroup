@@ -183,6 +183,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/marketing/datakonsumen/getDataKonsumen/{id}', [DataKonsumenController::class, 'getDataKonsumenByLokasi']);
     Route::post('/marketing/datakonsumen/storeDataKonsumen', [DataKonsumenController::class, 'storeDataKonsumen']);
     Route::get('/marketing/datakonsumen/showDataKonsumen/{id}', [DataKonsumenController::class, 'showDataKonsumen']);
+    Route::post('/marketing/datakonsumen/updateDataKonsumen/{id}', [DataKonsumenController::class, 'updateDataKonsumen']);
+    Route::delete('/marketing/datakonsumen/deleteDataKonsumen/{id}', [DataKonsumenController::class, 'deleteDataKonsumen']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
