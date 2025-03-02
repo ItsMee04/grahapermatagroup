@@ -177,6 +177,29 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-industry"></i>
+                        <p>
+                            Produksi
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/produksi" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Produksi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/produksiharian" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Produksi Harian</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
                     <a href="/logout" class="nav-link">
                         <i class="nav-icon fas fa-times"></i>
                         <p>
