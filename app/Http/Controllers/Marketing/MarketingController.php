@@ -6,20 +6,21 @@ use Carbon\Carbon;
 use App\Models\Marketing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DataKonsumenKeuangan;
 use Illuminate\Support\Facades\Auth;
 
 class MarketingController extends Controller
 {
     public function getCalonKonsumen()
     {
-        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->get();
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->whereNull('tanggalbooking')->whereNull('image_buktibooking')->get();
 
         return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Ditemukan', 'Data' => $calonkonsumen]);
     }
 
     public function getCalonKonsumenByLokasi($id)
     {
-        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('lokasi_id', $id)->get();
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('lokasi_id', $id)->whereNull('tanggalbooking')->whereNull('image_buktibooking')->get();
 
         return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Lokasi ' . $id . ' Berhasil Ditemukan', 'Data' => $calonkonsumen]);
     }
@@ -123,8 +124,8 @@ class MarketingController extends Controller
         foreach ($folders as $key => $folder) {
             if ($request->hasFile($key)) {
                 $file = $request->file($key);
-                $filename = time() . '_' . $file->getClientOriginalName(); // Nama unik
-                $destinationPath = public_path("storage/{$folder}"); // Path tujuan di dalam public/storage/
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $destinationPath = public_path("storage/{$folder}");
 
                 // Buat folder jika belum ada
                 if (!file_exists($destinationPath)) {
@@ -155,6 +156,16 @@ class MarketingController extends Controller
         // Update data di database hanya jika ada perubahan
         if (!empty($dataToUpdate)) {
             $marketing->update($dataToUpdate);
+            // Jika tanggalbooking diupdate, tambahkan konsumen_id ke dalam datakonsumenkeuangan
+            if (isset($dataToUpdate['tanggalbooking'])) {
+                DataKonsumenKeuangan::updateOrCreate(
+                    ['konsumen_id' => $marketing->id], // Cari berdasarkan konsumen_id
+                    [
+                        'status'      => 1,
+                        'user_id'  => Auth::user()->id,
+                    ]
+                );
+            }
         }
 
         return response()->json([
@@ -163,7 +174,6 @@ class MarketingController extends Controller
             'data' => $dataToUpdate
         ]);
     }
-
 
     public function updateBerkasKomunikasiCalonKonsumen(Request $request, $id)
     {
@@ -265,7 +275,7 @@ class MarketingController extends Controller
 
     public function getKonsumen()
     {
-        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('tanggalbooking', '!=', null)->get();
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('tanggalbooking', '!=', null)->where('image_buktibooking', '!=', null)->get();
 
         return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Ditemukan', 'Data' => $calonkonsumen]);
     }

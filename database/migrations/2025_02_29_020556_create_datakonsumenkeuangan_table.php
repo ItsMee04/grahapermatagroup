@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('uangmuka')->nullable();
             $table->bigInteger('kpr')->nullable();
             $table->integer('status');
-            $table->unsignedBigInteger('user_d');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             $table->foreign('konsumen_id')->references('id')->on('marketing')->onDelete('cascade');

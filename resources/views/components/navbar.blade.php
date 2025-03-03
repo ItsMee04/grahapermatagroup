@@ -7,7 +7,7 @@
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="/" class="nav-link">
-                <marquee>{{ Session::get('nama') }}</marquee>
+                <marquee>Selamat Datang, {{ Session::get('nama') }}</marquee>
             </a>
         </li>
     </ul>
