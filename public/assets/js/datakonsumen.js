@@ -56,15 +56,17 @@ $(document).ready(function () {
                     className: "text-center",
                     render: (data, type, row) => {
                         if (!data) {
-                            return `<span class="text-muted"><b>BERKAS BELUM DI UPLOAD</b></span>`; // Jika tidak ada sertifikat
+                            return `<span class="text-muted"><b>BERKAS BELUM DI UPLOAD</b></span>`; // Jika tidak ada file bukti
                         }
 
                         let fileUrl = `/storage/ImageBukti/${data}`; // Sesuaikan dengan path penyimpanan file
+                        let statusText = (row.sertifikat && row.sertifikat.toUpperCase() === "READY") ? "<b>READY</b>" : "<b>NON READY</b>"; // Pastikan uppercase untuk menghindari case-sensitive
+                        let buttonClass = (row.sertifikat && row.sertifikat.toUpperCase() === "READY") ? "btn-outline-success" : "btn-outline-danger"; // Sesuaikan warna tombol
 
                         return `
                             <a href="${fileUrl}" target="_blank">
-                                <button class="btn btn-outline-success btn-xs" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="Lihat Berkas">
-                                    <b>READY</b>
+                                <button class="btn ${buttonClass} btn-xs" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="Lihat Berkas">
+                                    ${statusText}
                                 </button>
                             </a>
                         `;
@@ -136,7 +138,7 @@ $(document).ready(function () {
         // Event listener untuk mengubah data tabel berdasarkan lokasi yang dipilih
         $(document).on("change", "#lokasiDropdown", function () {
             let selectedValue = $(this).val();
-            let url = selectedValue ? `/marketing/datakonsumen/getDataKonsumen/${selectedValue}` : "/marketing/datakonsumen/getDataKonsumen";
+            let url = selectedValue ? `/marketing/datakonsumen/getDataKonsumenByLokasi/${selectedValue}` : "/marketing/datakonsumen/getDataKonsumen";
             tableDataKonsumen.ajax.url(url).load();
         });
 
@@ -171,7 +173,7 @@ $(document).ready(function () {
             return;
         }
 
-        let url = `/marketing/calonkonsumen/getCalonKonsumen/${selectedValue}`;
+        let url = `/marketing/konsumen/getKonsumenByLokasi/${selectedValue}`;
 
         $.ajax({
             url: url, // Endpoint berubah sesuai lokasi yang dipilih
@@ -376,7 +378,7 @@ $(document).ready(function () {
 
                 //load data konsumen
                 $.ajax({
-                    url: `/marketing/calonkonsumen/getCalonKonsumen/${selectedValue}`,
+                    url: `/marketing/konsumen/getKonsumenByLokasi/${selectedValue}`,
                     type: "GET",
                     success: function (jabatanResponse) {
                         let options =
@@ -423,7 +425,7 @@ $(document).ready(function () {
         event.preventDefault(); // Mencegah form submit secara default
         // Buat objek FormData
         const formData = new FormData(this);
-        
+
         // Ambil ID dari form
         const idKonsumen = formData.get("id"); // Mengambil nilai input dengan name="id"
         $.ajax({

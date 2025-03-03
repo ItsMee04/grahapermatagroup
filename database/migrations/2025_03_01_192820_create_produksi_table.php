@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('tambahan')->nullable();
             $table->bigInteger('potongan')->nullable();
             $table->string('progresrumah', 100)->nullable();
-            $table->date('tglspk')->nullable();
+            $table->date('tanggalspk')->nullable();
             $table->string('spk', 100)->nullable();
             $table->date('tanggaltermin1')->nullable();
             $table->bigInteger('nominaltermin1')->nullable();

@@ -275,7 +275,14 @@ class MarketingController extends Controller
 
     public function getKonsumen()
     {
-        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->where('tanggalbooking', '!=', null)->where('image_buktibooking', '!=', null)->get();
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->whereNotNull('tanggalbooking')->whereNotNull('image_buktibooking')->get();
+
+        return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Ditemukan', 'Data' => $calonkonsumen]);
+    }
+
+    public function getKonsumenByLokasi($id)
+    {
+        $calonkonsumen = Marketing::with(['metodepembayaran', 'lokasi', 'tipe', 'blok'])->where('status', 1)->whereNotNull('tanggalbooking')->whereNotNull('image_buktibooking')->where('lokasi_id', $id)->get();
 
         return response()->json(['success' => true, 'message' => 'Data Calon Konsumen Berhasil Ditemukan', 'Data' => $calonkonsumen]);
     }

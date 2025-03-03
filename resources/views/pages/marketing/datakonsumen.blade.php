@@ -125,6 +125,13 @@
                             <label>KETERANGAN</label>
                             <textarea class="form-control" rows="4" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
                         </div>
+                        <div class="form-group">
+                            <label>SERTIFIKAT</label>
+                            <select class="form-control select2bs4" style="width: 100%;" name="sertifikat" required>
+                                <option value="READY"> READY</option>
+                                <option value="NON READY"> NON READY </option>
+                            </select>
+                        </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <!-- text input -->
@@ -219,6 +226,14 @@
                             <label>KETERANGAN</label>
                             <textarea class="form-control" rows="4" name="keterangan" id="editketerangan"
                                 placeholder="Masukan Keterangan" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>SERTIFIKAT</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id="editsertifikat"
+                                name="sertifikat" required>
+                                <option value="READY"> READY</option>
+                                <option value="NON READY"> NON READY </option>
+                            </select>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">

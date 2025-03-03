@@ -176,7 +176,7 @@ $(document).ready(function () {
         // Event listener untuk mengubah data tabel berdasarkan lokasi yang dipilih
         $(document).on("change", "#lokasiDropdown", function () {
             let selectedValue = $(this).val();
-            let url = selectedValue ? `/marketing/calonkonsumen/getCalonKonsumen/${selectedValue}` : "/marketing/calonkonsumen/getCalonKonsumen";
+            let url = selectedValue ? `/marketing/konsumen/getKonsumenByLokasi/${selectedValue}` : "/marketing/konsumen/getKonsumen";
             tableCalon.ajax.url(url).load();
         });
 

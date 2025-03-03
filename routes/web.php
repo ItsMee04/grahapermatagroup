@@ -17,6 +17,7 @@ use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\SubkontraktorController;
 use App\Http\Controllers\Marketing\DataKonsumenController;
 use App\Http\Controllers\Master\MetodePembayaranController;
+use App\Http\Controllers\Produksi\PembangunanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,16 +176,22 @@ Route::middleware('auth')->group(function () {
         return view('Pages.marketing.konsumen');
     });
     Route::get('/marketing/konsumen/getKonsumen', [MarketingController::class, 'getKonsumen']);
+    Route::get('/marketing/konsumen/getKonsumenByLokasi/{id}', [MarketingController::class, 'getKonsumenByLokasi']);
 
     Route::get('/datakonsumen', function () {
         return view('Pages.marketing.datakonsumen');
     });
     Route::get('/marketing/datakonsumen/getDataKonsumen', [DataKonsumenController::class, 'getDataKonsumen']);
-    Route::get('/marketing/datakonsumen/getDataKonsumen/{id}', [DataKonsumenController::class, 'getDataKonsumenByLokasi']);
+    Route::get('/marketing/datakonsumen/getDataKonsumenByLokasi/{id}', [DataKonsumenController::class, 'getDataKonsumenByLokasi']);
     Route::post('/marketing/datakonsumen/storeDataKonsumen', [DataKonsumenController::class, 'storeDataKonsumen']);
     Route::get('/marketing/datakonsumen/showDataKonsumen/{id}', [DataKonsumenController::class, 'showDataKonsumen']);
     Route::post('/marketing/datakonsumen/updateDataKonsumen/{id}', [DataKonsumenController::class, 'updateDataKonsumen']);
     Route::delete('/marketing/datakonsumen/deleteDataKonsumen/{id}', [DataKonsumenController::class, 'deleteDataKonsumen']);
+
+    Route::get('/produksi', function () {
+        return view('Pages.produksi.produksi');
+    });
+    Route::get('/produksi/pembangunan/getPembangunan', [PembangunanController::class, 'getPembangunan']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

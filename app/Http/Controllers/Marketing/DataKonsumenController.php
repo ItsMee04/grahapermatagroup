@@ -82,6 +82,7 @@ class DataKonsumenController extends Controller
             'ajbnotaris'    => 'required',
             'ajbbank'       => 'required',
             'ttddirektur'   => 'required',
+            'sertifikat'    => 'required',
             'keterangan'    => 'required',
             'image_bukti'   => 'mimes:png,jpg,jpeg|max:1024',
         ], $messages);
@@ -98,6 +99,7 @@ class DataKonsumenController extends Controller
         $konsumen->ajbbank     = $request->ajbbank;
         $konsumen->ttddirektur = $request->ttddirektur;
         $konsumen->keterangan  = $request->keterangan;
+        $konsumen->sertifikat  = $request->sertifikat;
 
         // Jika ada file baru yang diunggah
         if ($request->hasFile('image_bukti')) {

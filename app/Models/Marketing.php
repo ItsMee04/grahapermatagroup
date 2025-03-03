@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -76,5 +77,15 @@ class Marketing extends Model
     public function blok(): BelongsTo
     {
         return $this->belongsTo(Blok::class, 'blok_id', 'id');
+    }
+
+    /**
+     * Get the produksi associated with the Marketing
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function produksi(): HasOne
+    {
+        return $this->hasOne(Produksi::class, 'konsumen_id', 'id');
     }
 }
