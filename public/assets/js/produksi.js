@@ -59,21 +59,21 @@ $(document).ready(function () {
                     data: null,
                     className: "text-center",
                     render: function (data, type, row) {
-                        return row.produksi && row.produksi.hargaborongan ? `<b>${row.produksi.hargaborongan}</b>` : `<span class="text-muted">Rp. 0</span>`; 
+                        return row.produksi && row.produksi.hargaborongan ? `<b>${row.produksi.hargaborongan}</b>` : `<span class="text-muted">Rp. 0</span>`;
                     }
                 },
                 {
                     data: null,
                     className: "text-center",
                     render: function (data, type, row) {
-                        return row.produksi && row.produksi.nilaiborongan ? `<b>${row.produksi.nilaiborongan}</b>` : `<span class="text-muted">Rp. 0</span>`; 
+                        return row.produksi && row.produksi.nilaiborongan ? `<b>${row.produksi.nilaiborongan}</b>` : `<span class="text-muted">Rp. 0</span>`;
                     }
                 },
                 {
                     data: null,
                     className: "text-center",
                     render: function (data, type, row) {
-                        return row.produksi && row.produksi.keterangan ? `<b>${row.produksi.keterangan}</b>` : `<span class="text-muted"> - </span>`; 
+                        return row.produksi && row.produksi.keterangan ? `<b>${row.produksi.keterangan}</b>` : `<span class="text-muted"> - </span>`;
                     }
                 },
                 {
@@ -161,4 +161,36 @@ $(document).ready(function () {
     }
 
     loadPembangunan();
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btneditpembangunan", function () {
+        const pembangunanID = $(this).data("id");
+        $.ajax({
+            url: `/produksi/pembangunan/showPembangunan/${pembangunanID}`, // Endpoint untuk mendapatkan data konsumen
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+
+                // Isi modal dengan data konsumen
+                $("#editid").val(data.id);
+                $("#editblok").val(data.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
+                $("#edittipe").val(data.tipe.tipe);
+
+                // Pastikan produksi tidak null sebelum mengambil data
+                const produksi = data.produksi ? data.produksi : {};
+                $("#edithargaborongan").val(produksi.hargaborongan ? produksi.hargaborongan : "");
+                $("#editketereangan").val(produksi.keterangan ? produksi.keterangan : "");
+
+                // Tampilkan modal edit
+                $("#mdEditPembangunan").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Pembangunan.",
+                    "error"
+                );
+            },
+        });
+    });
 })

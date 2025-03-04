@@ -53,25 +53,37 @@
     <!-- /.content-wrapper -->
 
 
-    <div class="modal fade" id="mdEditRole">
+    <div class="modal fade" id="mdEditPembangunan">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h4 class="modal-title"><b>EDIT HAK AKSES</b></h4>
+                    <h4 class="modal-title"><b>EDIT PEMBANGUNAN</b></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="storeEditRole" method="POST" enctype="multipart/form-data">
+                <form id="storeEditPembangunan" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">ID</label>
+                            <label for="editid">ID</label>
                             <input type="text" class="form-control" name="id" id="editid" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">HAK AKSES</label>
-                            <input type="text" class="form-control" name="role" id="editrole" required>
+                            <label for="editblok">BLOK</label>
+                            <input type="text" class="form-control" name="blok" id="editblok" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="edittipe">TIPE</label>
+                            <input type="text" class="form-control" name="tipe" id="edittipe" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="edithargaborongan">HARGA BORONGAN</label>
+                            <input type="text" class="form-control" name="hargaborongan" id="edithargaborongan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editketerangan">KETERANGAN</label>
+                            <textarea class="form-control" name="keterangan" rows="4" id="editketerangan"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">

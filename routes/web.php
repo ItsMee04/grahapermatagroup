@@ -192,6 +192,8 @@ Route::middleware('auth')->group(function () {
         return view('Pages.produksi.produksi');
     });
     Route::get('/produksi/pembangunan/getPembangunan', [PembangunanController::class, 'getPembangunan']);
+    Route::get('/produksi/pembangunan/getPembangunanByLokasi/{id}', [PembangunanController::class, 'getPembangunanByLokasi']);
+    Route::get('/produksi/pembangunan/showPembangunan/{id}', [PembangunanController::class, 'showPembangunan']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

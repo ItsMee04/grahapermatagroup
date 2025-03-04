@@ -14,4 +14,18 @@ class PembangunanController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Data Pembangunan Berhasil Ditemukan', 'Data' => $pembangunan]);
     }
+
+    public function getPembangunanByLokasi($id)
+    {
+        $pembangunan = Marketing::with(['lokasi', 'tipe', 'blok', 'produksi'])->whereNotNull('tanggalbooking')->whereNot('status', 2)->where('lokasi_id', $id)->get();
+
+        return response()->json(['success' => true, 'message' => 'Data Pembangunan By Lokasi Berhasil Ditemukan', 'Data' => $pembangunan]);
+    }
+
+    public function showPembangunan($id)
+    {
+        $pembangunan = Marketing::with(['lokasi', 'tipe', 'blok', 'produksi'])->findOrFail($id);
+
+        return response()->json(['success' => true, 'message' => 'Data Pembangunan Berhasil Ditemukan', 'Data' => $pembangunan]);
+    }
 }
