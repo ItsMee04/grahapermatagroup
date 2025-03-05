@@ -193,4 +193,14 @@ $(document).ready(function () {
             },
         });
     });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalEdit() {
+        $("#mdEditPembangunan").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#storeEditPembangunan")[0].reset();
+        });
+    }
+
+    resetFieldTutupModalEdit();
 })
