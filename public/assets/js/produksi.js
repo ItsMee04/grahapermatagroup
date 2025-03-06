@@ -56,17 +56,32 @@ $(document).ready(function () {
                     },
                 },
                 {
-                    data: null,
+                    data: "produksi.hargaborongan",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return row.produksi && row.produksi.hargaborongan ? `<b>${row.produksi.hargaborongan}</b>` : `<span class="text-muted">Rp. 0</span>`;
+                        // Format angka ke Rupiah
+                        const formattedRupiah = new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(data);
+
+                        return `<b>${formattedRupiah}</b>`; // Menjadikan teks tebal
                     }
                 },
                 {
-                    data: null,
+                    data: "produksi.nilaiborongan",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return row.produksi && row.produksi.nilaiborongan ? `<b>${row.produksi.nilaiborongan}</b>` : `<span class="text-muted">Rp. 0</span>`;
+                        const formattedRupiah = new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(data);
+
+                        return `<b>${formattedRupiah}</b>`; // Menjadikan teks tebal
                     }
                 },
                 {
@@ -82,7 +97,7 @@ $(document).ready(function () {
                     className: "text-center",
                     render: function (data, type, row, meta) {
                         return `
-                        <button type="button" class="btn btn-outline-warning btn-sm btneditpembangunan" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="EDIT DATA"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-outline-warning btn-sm btneditpembangunan" data-id="${row.produksi.id}" data-toggle="tooltip" data-placement="top" title="EDIT DATA"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-outline-danger btn-sm btnBangunUnit" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="BANGUN UNIT"><i class="fa fa-recycle"></i></button>
                     `;
                     },
@@ -173,13 +188,11 @@ $(document).ready(function () {
 
                 // Isi modal dengan data konsumen
                 $("#editid").val(data.id);
-                $("#editblok").val(data.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
-                $("#edittipe").val(data.tipe.tipe);
+                $("#editblok").val(data.marketing.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
+                $("#edittipe").val(data.marketing.tipe.tipe);
 
-                // Pastikan produksi tidak null sebelum mengambil data
-                const produksi = data.produksi ? data.produksi : {};
-                $("#edithargaborongan").val(produksi.hargaborongan ? produksi.hargaborongan : "");
-                $("#editketereangan").val(produksi.keterangan ? produksi.keterangan : "");
+                $("#edithargaborongan").val(data.hargaborongan);
+                $("#editketereangan").val(data.keterangan ? data.keterangan : "");
 
                 // Tampilkan modal edit
                 $("#mdEditPembangunan").modal("show");
@@ -203,4 +216,72 @@ $(document).ready(function () {
     }
 
     resetFieldTutupModalEdit();
+
+    //kirim data ke server <i class=""></i>
+    $(document).on("submit", "#storeEditPembangunan", function (event) {
+        event.preventDefault(); // Mencegah form submit secara default
+    
+        // Buat objek FormData
+        const formData = new FormData(this);
+        const idPembangunan = formData.get("id"); // Ambil ID
+    
+        $.ajax({
+            url: `/produksi/pembangunan/updatePembangunan/${idPembangunan}`,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: response.message,
+                    timer: 3000,
+                    showConfirmButton: false,
+                    position: "top-end",
+                });
+    
+                $("#mdEditPembangunan").modal("hide"); // Tutup modal
+                resetFieldTutupModalEdit();
+                tablePembangunan.ajax.reload(null, false); // Reload tabel
+            },
+            error: function (xhr) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = "";
+    
+                    for (let key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
+                    }
+    
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage.trim(),
+                    });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
+                    });
+                }
+            }
+        });
+    });
+    
 })

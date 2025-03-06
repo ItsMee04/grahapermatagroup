@@ -76,11 +76,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">NAMA BANK</label>
-                            <input type="text" class="form-control" name="bank" required>
+                            <input type="text" class="form-control" name="bank">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">NOMOR REKENING</label>
-                            <input type="text" class="form-control" name="nomor" required>
+                            <input type="text" class="form-control" name="nomor">
                         </div>
                         <div class="form-group">
                             <label>LOKASI PROYEK</label>
@@ -119,11 +119,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">NAMA BANK</label>
-                            <input type="text" class="form-control" name="bank" id="editbank" required>
+                            <input type="text" class="form-control" name="bank" id="editbank">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">NOMOR REKENING</label>
-                            <input type="text" class="form-control" name="nomor" id="editnomor" required>
+                            <input type="text" class="form-control" name="nomor" id="editnomor">
                         </div>
                         <div class="form-group">
                             <label>LOKASI PROYEK</label>

@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label>NAMA KONSUMEN</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
-                                        id="konsumen" required>
+                                        id="konsumen">
                                     </select>
                                 </div>
                             </div>
@@ -123,11 +123,11 @@
                         </div>
                         <div class="form-group">
                             <label>KETERANGAN</label>
-                            <textarea class="form-control" rows="4" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
+                            <textarea class="form-control" rows="4" name="keterangan" placeholder="Masukan Keterangan"></textarea>
                         </div>
                         <div class="form-group">
                             <label>SERTIFIKAT</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="sertifikat" required>
+                            <select class="form-control select2bs4" style="width: 100%;" name="sertifikat">
                                 <option value="READY"> READY</option>
                                 <option value="NON READY"> NON READY </option>
                             </select>
@@ -193,7 +193,7 @@
                                 <div class="form-group">
                                     <label>NAMA KONSUMEN</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
-                                        id="editkonsumen" required>
+                                        id="editkonsumen">
                                     </select>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
                         <div class="form-group">
                             <label>KETERANGAN</label>
                             <textarea class="form-control" rows="4" name="keterangan" id="editketerangan"
-                                placeholder="Masukan Keterangan" required></textarea>
+                                placeholder="Masukan Keterangan"></textarea>
                         </div>
                         <div class="form-group">
                             <label>SERTIFIKAT</label>

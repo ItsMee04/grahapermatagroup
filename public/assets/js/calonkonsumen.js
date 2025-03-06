@@ -352,31 +352,41 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    });
-
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 
@@ -418,6 +428,7 @@ $(document).ready(function () {
     function updatePreviewImage(inputId, previewId, folderName, imageName) {
         const inputFile = document.getElementById(inputId);
         const previewContainer = document.getElementById(previewId);
+        const imagePath = `/assets/dist/img/notfound.png`;
 
         if (!inputFile || !previewContainer) {
             console.error("Elemen tidak ditemukan!");
@@ -435,7 +446,9 @@ $(document).ready(function () {
         `;
         } else {
             // Jika tidak ada gambar, kosongkan preview
-            previewContainer.innerHTML = "";
+            previewContainer.innerHTML = `
+            <img src="${imagePath}" alt="Gambar Tidak Ditemukan" style="width: 100%; height: 100%; object-fit: contain;">
+        `;
         }
 
         // Event listener untuk input file agar bisa preview gambar baru saat upload
@@ -530,31 +543,41 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    });
-
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 
@@ -641,31 +664,41 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    });
-
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 
@@ -730,7 +763,7 @@ $(document).ready(function () {
                     success: function (metodeResponse) {
                         let options =
                             '<option value="">-- PILIH METODE PEMBAYARAN --</option>';
-                            metodeResponse.Data.forEach((item) => {
+                        metodeResponse.Data.forEach((item) => {
                             const selected =
                                 item.id === response.Data.metodepembayaran_id
                                     ? "selected"
@@ -748,7 +781,7 @@ $(document).ready(function () {
                     success: function (lokasiResponse) {
                         let options =
                             '<option value="">-- PILIH LOKASI --</option>';
-                            lokasiResponse.Data.forEach((item) => {
+                        lokasiResponse.Data.forEach((item) => {
                             const selected =
                                 item.id === response.Data.lokasi_id
                                     ? "selected"
@@ -766,7 +799,7 @@ $(document).ready(function () {
                     success: function (tipeResponse) {
                         let options =
                             '<option value="">-- PILIH TIPE --</option>';
-                            tipeResponse.Data.forEach((item) => {
+                        tipeResponse.Data.forEach((item) => {
                             const selected =
                                 item.id === response.Data.tipe_id
                                     ? "selected"
@@ -784,7 +817,7 @@ $(document).ready(function () {
                     success: function (blokResponse) {
                         let options =
                             '<option value="">-- PILIH BLOK --</option>';
-                            blokResponse.Data.forEach((item) => {
+                        blokResponse.Data.forEach((item) => {
                             const selected =
                                 item.id === response.Data.blok_id
                                     ? "selected"
@@ -797,7 +830,7 @@ $(document).ready(function () {
 
                 $("#editlokasi").on("change", function () {
                     let lokasiId = $(this).val();
-        
+
                     if (lokasiId) {
                         $.ajax({
                             url: "/tipe/getTipeByLokasi/" + lokasiId, // Endpoint untuk mendapatkan data jabatan
@@ -818,10 +851,10 @@ $(document).ready(function () {
                         });
                     }
                 });
-        
+
                 $("#edittipe").on("change", function () {
                     let tipeId = $(this).val();
-        
+
                     if (tipeId) {
                         $.ajax({
                             url: "/blok/getBlokByTipe/" + tipeId, // Endpoint untuk mendapatkan data jabatan
@@ -905,31 +938,41 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    });
-
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 

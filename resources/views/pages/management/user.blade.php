@@ -88,17 +88,15 @@
                         <div class="form-group">
                             <label>EMAIL</label>
                             <input type="text" name="email" class="form-control" id="editemail"
-                                placeholder="Masukan Email" required>
+                                placeholder="Masukan Email">
                         </div>
                         <div class="form-group">
                             <label>PASSWORD</label>
-                            <input type="password" name="password" class="form-control" placeholder="Masukan Password"
-                                required>
+                            <input type="password" name="password" class="form-control" placeholder="Masukan Password">
                         </div>
                         <div class="form-group">
                             <label>HAK AKSES</label>
-                            <select class="form-control select2bs4" style="width: 100%;" name="role" id="editrole"
-                                required>
+                            <select class="form-control select2bs4" style="width: 100%;" name="role" id="editrole">
                             </select>
                         </div>
                     </div>

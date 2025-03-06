@@ -143,24 +143,41 @@ $(document).ready(function(){
                 tableAgama.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 
@@ -232,24 +249,41 @@ $(document).ready(function(){
                 tableAgama.ajax.reload(null, false); // Reload data dari server
             },
             error: function (xhr) {
-                // Tampilkan pesan error dari server
-                const errors = xhr.responseJSON.errors;
-                if (errors) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
+    
                     for (let key in errors) {
-                        errorMessage += `${errors[key][0]}\n`;
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
                     }
+    
                     Toast.fire({
                         icon: "error",
-                        title: errorMessage,
+                        title: errorMessage.trim(),
                     });
+    
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+    
                 } else {
                     Toast.fire({
                         icon: "error",
-                        title: response.message,
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
-            },
+            }
         });
     });
 

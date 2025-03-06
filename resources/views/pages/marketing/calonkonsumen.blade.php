@@ -109,11 +109,11 @@
                         </div>
                         <div class="form-group">
                             <label>ALAMAT KONSUMEN</label>
-                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat" required></textarea>
+                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat"></textarea>
                         </div>
                         <div class="form-group">
                             <label>PROGRES</label>
-                            <textarea class="form-control" rows="4" name="progres" placeholder="Masukan Progress" required></textarea>
+                            <textarea class="form-control" rows="4" name="progres" placeholder="Masukan Progress"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -121,7 +121,7 @@
                                 <div class="form-group">
                                     <label>METODE PEMBAYARAN</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="metodepembayaran"
-                                        id="metodepembayaran" required>
+                                        id="metodepembayaran">
                                     </select>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                                 <div class="form-group">
                                     <label>LOKASI PROYEK</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="lokasi"
-                                        id="lokasi" required>
+                                        id="lokasi">
                                     </select>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                                 <div class="form-group">
                                     <label>TIPE</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="tipe"
-                                        id="tipe" required>
+                                        id="tipe">
                                     </select>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                 <div class="form-group">
                                     <label>BLOK</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="blok"
-                                        id="blok" required>
+                                        id="blok">
                                     </select>
                                 </div>
                             </div>
@@ -165,8 +165,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>SUMBER INFORMASI</label>
-                                    <input type="text" name="sumber" class="form-control" placeholder="Masukan Sumber"
-                                        required>
+                                    <input type="text" name="sumber" class="form-control" placeholder="Masukan Sumber">
                                 </div>
                             </div>
                         </div>
@@ -512,12 +511,11 @@
                         </div>
                         <div class="form-group">
                             <label>ALAMAT KONSUMEN</label>
-                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
+                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat"></textarea>
                         </div>
                         <div class="form-group">
                             <label>PROGRES</label>
-                            <textarea class="form-control" rows="4" id="editprogres" name="progres" placeholder="Masukan Progress"
-                                required></textarea>
+                            <textarea class="form-control" rows="4" id="editprogres" name="progres" placeholder="Masukan Progress"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -525,7 +523,7 @@
                                 <div class="form-group">
                                     <label>METODE PEMBAYARAN</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="metodepembayaran"
-                                        id="editmetodepembayaran" required>
+                                        id="editmetodepembayaran">
                                     </select>
                                 </div>
                             </div>
@@ -533,7 +531,7 @@
                                 <div class="form-group">
                                     <label>LOKASI PROYEK</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="lokasi"
-                                        id="editlokasi" required>
+                                        id="editlokasi">
                                     </select>
                                 </div>
                             </div>
@@ -544,7 +542,7 @@
                                 <div class="form-group">
                                     <label>TIPE</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="tipe"
-                                        id="edittipe" required>
+                                        id="edittipe">
                                     </select>
                                 </div>
                             </div>
@@ -552,7 +550,7 @@
                                 <div class="form-group">
                                     <label>BLOK</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="blok"
-                                        id="editblok" required>
+                                        id="editblok">
                                     </select>
                                 </div>
                             </div>
@@ -570,7 +568,7 @@
                                 <div class="form-group">
                                     <label>SUMBER INFORMASI</label>
                                     <input type="text" name="sumber" id="editsumber" class="form-control"
-                                        placeholder="Masukan Sumber" required>
+                                        placeholder="Masukan Sumber">
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ use App\Models\Marketing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DataKonsumenKeuangan;
+use App\Models\Produksi;
 use Illuminate\Support\Facades\Auth;
 
 class MarketingController extends Controller
@@ -160,6 +161,16 @@ class MarketingController extends Controller
             if (isset($dataToUpdate['tanggalbooking'])) {
                 DataKonsumenKeuangan::updateOrCreate(
                     ['konsumen_id' => $marketing->id], // Cari berdasarkan konsumen_id
+                    [
+                        'status'      => 1,
+                        'user_id'  => Auth::user()->id,
+                    ]
+                );
+
+                Produksi::updateOrCreate(
+                    [
+                        'konsumen_id'   =>  $marketing->id,
+                    ],
                     [
                         'status'      => 1,
                         'user_id'  => Auth::user()->id,

@@ -73,11 +73,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">JAM MASUK</label>
-                            <input type="time" class="form-control" name="checkin" required>
+                            <input type="time" class="form-control" name="checkin">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">JAM PULANG</label>
-                            <input type="time" class="form-control" name="checkout" required>
+                            <input type="time" class="form-control" name="checkout">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -111,11 +111,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">JAM MASUK</label>
-                            <input type="time" class="form-control" name="checkin" id="editcheckin" required>
+                            <input type="time" class="form-control" name="checkin" id="editcheckin">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">JAM PULANG</label>
-                            <input type="time" class="form-control" name="checkout" id="editcheckout" required>
+                            <input type="time" class="form-control" name="checkout" id="editcheckout">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">

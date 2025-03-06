@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/pembangunan/getPembangunan', [PembangunanController::class, 'getPembangunan']);
     Route::get('/produksi/pembangunan/getPembangunanByLokasi/{id}', [PembangunanController::class, 'getPembangunanByLokasi']);
     Route::get('/produksi/pembangunan/showPembangunan/{id}', [PembangunanController::class, 'showPembangunan']);
+    Route::post('/produksi/pembangunan/updatePembangunan/{id}', [PembangunanController::class, 'updatePembangunan']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

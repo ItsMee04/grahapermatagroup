@@ -92,15 +92,13 @@
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>NIP PEGAWAI</label>
-                                    <input type="text" name="nip" class="form-control" placeholder="Masukan NIP"
-                                        required>
+                                    <input type="text" name="nip" class="form-control" placeholder="Masukan NIP">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>NAMA PEGAWAI</label>
-                                    <input type="text" name="nama" class="form-control" placeholder="Masukan Nama"
-                                        required>
+                                    <input type="text" name="nama" class="form-control" placeholder="Masukan Nama">
                                 </div>
                             </div>
                         </div>
@@ -110,7 +108,7 @@
                                 <div class="form-group">
                                     <label>JENIS KELAMIM PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" id="jeniskelamin"
-                                        name="jeniskelamin" aria-placeholder="Pilih Jenis Kelamin" required>
+                                        name="jeniskelamin" aria-placeholder="Pilih Jenis Kelamin">
                                     </select>
                                 </div>
                             </div>
@@ -118,7 +116,7 @@
                                 <div class="form-group">
                                     <label>AGAMA PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" id="agama"
-                                        name="agama" aria-placeholder="Pilih Agama" required>
+                                        name="agama" aria-placeholder="Pilih Agama">
                                     </select>
                                 </div>
                             </div>
@@ -129,14 +127,14 @@
                                 <div class="form-group">
                                     <label>TEMPAT LAHIR PEGAWAI</label>
                                     <input type="text" name="tempat" class="form-control"
-                                        placeholder="Masukan Tempat Lahir" required>
+                                        placeholder="Masukan Tempat Lahir">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>TANGGAL LAHIR PEGAWAI</label>
                                     <input type="date" name="tanggal" class="form-control"
-                                        placeholder="Masukan Tanggal Lahir" required>
+                                        placeholder="Masukan Tanggal Lahir">
                                 </div>
                             </div>
                         </div>
@@ -146,21 +144,20 @@
                                 <div class="form-group">
                                     <label>JABATAN PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="jabatan"
-                                        id="jabatan" required>
+                                        id="jabatan">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>KONTAK PEGAWAI</label>
-                                    <input type="text" name="kontak" class="form-control" placeholder="Masukan Kontak"
-                                        required>
+                                    <input type="text" name="kontak" class="form-control" placeholder="Masukan Kontak">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>ALAMAT PEGAWAI</label>
-                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat" required></textarea>
+                            <textarea class="form-control" rows="4" name="alamat" placeholder="Masukan Alamat"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -227,14 +224,14 @@
                                 <div class="form-group">
                                     <label>NIP PEGAWAI</label>
                                     <input type="text" name="nip" class="form-control" placeholder="Masukan NIP"
-                                        id="editnip" required>
+                                        id="editnip">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>NAMA PEGAWAI</label>
                                     <input type="text" name="nama" class="form-control" placeholder="Masukan Nama"
-                                        id="editnama" required>
+                                        id="editnama">
                                 </div>
                             </div>
                         </div>
@@ -244,7 +241,7 @@
                                 <div class="form-group">
                                     <label>JENIS KELAMIM PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" id="editjeniskelamin"
-                                        name="jeniskelamin" aria-placeholder="Pilih Jenis Kelamin" required>
+                                        name="jeniskelamin" aria-placeholder="Pilih Jenis Kelamin">
                                     </select>
                                 </div>
                             </div>
@@ -252,7 +249,7 @@
                                 <div class="form-group">
                                     <label>AGAMA PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" id="editagama"
-                                        name="agama" aria-placeholder="Pilih Agama" required>
+                                        name="agama" aria-placeholder="Pilih Agama">
                                     </select>
                                 </div>
                             </div>
@@ -263,14 +260,14 @@
                                 <div class="form-group">
                                     <label>TEMPAT LAHIR PEGAWAI</label>
                                     <input type="text" name="tempat" class="form-control" id="edittempat"
-                                        placeholder="Masukan Tempat Lahir" required>
+                                        placeholder="Masukan Tempat Lahir">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>TANGGAL LAHIR PEGAWAI</label>
                                     <input type="date" name="tanggal" class="form-control" id="edittanggal"
-                                        placeholder="Masukan Tanggal Lahir" required>
+                                        placeholder="Masukan Tanggal Lahir">
                                 </div>
                             </div>
                         </div>
@@ -280,7 +277,7 @@
                                 <div class="form-group">
                                     <label>JABATAN PEGAWAI</label>
                                     <select class="form-control select2bs4" style="width: 100%;" name="jabatan"
-                                        id="editjabatan" required>
+                                        id="editjabatan">
                                     </select>
                                 </div>
                             </div>
@@ -288,13 +285,13 @@
                                 <div class="form-group">
                                     <label>KONTAK PEGAWAI</label>
                                     <input type="text" name="kontak" class="form-control" id="editkontak"
-                                        placeholder="Masukan Kontak" required>
+                                        placeholder="Masukan Kontak">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>ALAMAT PEGAWAI</label>
-                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat" required></textarea>
+                            <textarea class="form-control" rows="4" name="alamat" id="editalamat" placeholder="Masukan Alamat"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">

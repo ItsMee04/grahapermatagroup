@@ -79,7 +79,7 @@
                         </div>
                         <div class="form-group">
                             <label for="edithargaborongan">HARGA BORONGAN</label>
-                            <input type="text" class="form-control" name="hargaborongan" id="edithargaborongan" required>
+                            <input type="text" class="form-control" name="hargaborongan" id="edithargaborongan">
                         </div>
                         <div class="form-group">
                             <label for="editketerangan">KETERANGAN</label>

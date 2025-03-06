@@ -84,7 +84,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">BLOK</label>
-                            <input type="text" class="form-control" name="blok" required>
+                            <input type="text" class="form-control" name="blok">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -128,7 +128,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">BLOK</label>
-                            <input type="text" class="form-control" name="blok" id="editblok" required>
+                            <input type="text" class="form-control" name="blok" id="editblok">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
