@@ -192,7 +192,7 @@ $(document).ready(function () {
                 $("#edittipe").val(data.marketing.tipe.tipe);
 
                 $("#edithargaborongan").val(data.hargaborongan);
-                $("#editketereangan").val(data.keterangan ? data.keterangan : "");
+                $("#editketerangan").val(data.keterangan ?? "");
 
                 // Tampilkan modal edit
                 $("#mdEditPembangunan").modal("show");
@@ -232,13 +232,16 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (response) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Berhasil!",
-                    text: response.message,
-                    timer: 3000,
-                    showConfirmButton: false,
+                var Toast = Swal.mixin({
+                    toast: true,
                     position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
                 });
     
                 $("#mdEditPembangunan").modal("hide"); // Tutup modal
