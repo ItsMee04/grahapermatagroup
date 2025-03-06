@@ -195,6 +195,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/pembangunan/getPembangunanByLokasi/{id}', [PembangunanController::class, 'getPembangunanByLokasi']);
     Route::get('/produksi/pembangunan/showPembangunan/{id}', [PembangunanController::class, 'showPembangunan']);
     Route::post('/produksi/pembangunan/updatePembangunan/{id}', [PembangunanController::class, 'updatePembangunan']);
+    Route::get('/produksi/pembangunan/updatePembangunanBowplang/{id}', [PembangunanController::class, 'updatePembangunanBowplang']);
+
+    Route::get('/produksi/getProduksi', [PembangunanController::class, 'getProduksi']);
+    Route::get('/produksi/getProduksiByLokasi/{id}', [PembangunanController::class, 'getProduksiByLokasi']);
+
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

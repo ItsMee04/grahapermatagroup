@@ -3,21 +3,19 @@
 @section('content')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1><b>DATA PRODUKSI</b></h1>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
+                    <section class="content-header">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <h1><b>DATA PRODUKSI PEMBANGUNAN</b></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     <div class="col-12">
                         <div class="card">
                             <!-- /.card-header -->
@@ -31,6 +29,47 @@
                                             <th>HARGA BORONGAN</th>
                                             <th>NILAI BORONGAN</th>
                                             <th>KETERANGAN</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <section class="content-header">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <h1><b>DATA PRODUKSI</b></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="tableProduksi" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>BLOK</th>
+                                            <th>TIPE</th>
+                                            <th>HARGA BORONGAN</th>
+                                            <th>NILAI BORONGAN</th>
+                                            <th>TAMBAHAN</th>
+                                            <th>POTONGAN</th>
+                                            <th>SISA PEMBAYARAN</th>
+                                            <th>SUB KONTRAKTOR</th>
                                             <th>ACTION</th>
                                         </tr>
                                     </thead>
