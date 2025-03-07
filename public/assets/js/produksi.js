@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    bsCustomFileInput.init();
     // Inisialisasi Select2 dengan tema Bootstrap 4
     $('.select2bs4').select2({
         theme: 'bootstrap4'
@@ -220,11 +221,11 @@ $(document).ready(function () {
     //kirim data ke server <i class=""></i>
     $(document).on("submit", "#storeEditPembangunan", function (event) {
         event.preventDefault(); // Mencegah form submit secara default
-    
+
         // Buat objek FormData
         const formData = new FormData(this);
         const idPembangunan = formData.get("id"); // Ambil ID
-    
+
         $.ajax({
             url: `/produksi/pembangunan/updatePembangunan/${idPembangunan}`,
             type: "POST",
@@ -243,7 +244,7 @@ $(document).ready(function () {
                     icon: "success",
                     title: response.message,
                 });
-    
+
                 $("#mdEditPembangunan").modal("hide"); // Tutup modal
                 resetFieldTutupModalEdit();
                 tablePembangunan.ajax.reload(null, false); // Reload tabel
@@ -255,28 +256,28 @@ $(document).ready(function () {
                     showConfirmButton: false,
                     timer: 3000,
                 });
-    
+
                 if (xhr.responseJSON && xhr.responseJSON.errors) {
                     const errors = xhr.responseJSON.errors;
                     let errorMessage = "";
-    
+
                     for (let key in errors) {
                         if (errors.hasOwnProperty(key)) {
                             errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
                         }
                     }
-    
+
                     Toast.fire({
                         icon: "error",
                         title: errorMessage.trim(),
                     });
-    
+
                 } else if (xhr.responseJSON && xhr.responseJSON.message) {
                     Toast.fire({
                         icon: "error",
                         title: xhr.responseJSON.message,
                     });
-    
+
                 } else {
                     Toast.fire({
                         icon: "error",
@@ -286,7 +287,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
 
     //ketika button delete di tekan
     $(document).on("click", ".btnBangunUnit", function () {
@@ -324,6 +325,7 @@ $(document).ready(function () {
                             }
                         });
                         tablePembangunan.ajax.reload(); // Reload DataTable setelah penghapusan
+                        tableProduksi.ajax.reload();
                     },
                     error: function () {
                         Swal.fire({
@@ -456,7 +458,7 @@ $(document).ready(function () {
                     data: "subkontraktor",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return data && data.subkontraktor ? `<b>${data.subkontraktor}</b>` : ""; 
+                        return data && data.subkontraktor ? `<b>${data.subkontraktor}</b>` : "";
                     }
                 },
                 {
@@ -544,4 +546,78 @@ $(document).ready(function () {
             });
         });
     }
+
+    function handlePDFUpload(inputId, previewId) {
+        let fileInput = document.getElementById(inputId);
+        let previewContainer = document.getElementById(previewId);
+    
+        fileInput.addEventListener("change", function (event) {
+            let file = event.target.files[0];
+    
+            // Reset preview sebelum validasi
+            previewContainer.innerHTML = "";
+    
+            // Validasi format file harus PDF
+            if (file && file.type !== "application/pdf") {
+                
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+    
+                Toast.fire({
+                    icon: "error",
+                    title: "Hanya File PDF yang diperbolehkan",
+                });
+
+                fileInput.value = ""; // Reset input file
+                return;
+            }
+    
+            // Jika valid, tampilkan checkbox sukses
+            if (file) {
+                previewContainer.innerHTML = `
+                    <div class="form-check">
+                        <label class="form-check-label text-success" for="pdfSuccess">
+                            <p class="fas fa-check-circle"></p> File PDF berhasil diunggah!
+                        </label>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btneditproduksi", function () {
+        const produksiID = $(this).data("id");
+        $("#mdEditProduksi").modal("show");
+        handlePDFUpload("filespk", "previewFileSpk");
+        // $.ajax({
+        //     url: `/produksi/showProduksi/${pembangunanID}`, // Endpoint untuk mendapatkan data konsumen
+        //     type: "GET",
+        //     success: function (response) {
+        //         const data = response.Data;
+
+        //         // Isi modal dengan data konsumen
+        //         // $("#editid").val(data.id);
+        //         // $("#editblok").val(data.marketing.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
+        //         // $("#edittipe").val(data.marketing.tipe.tipe);
+
+        //         // $("#edithargaborongan").val(data.hargaborongan);
+        //         // $("#editketerangan").val(data.keterangan ?? "");
+
+        //         // Tampilkan modal edit
+        //         $("#mdEditProduksi").modal("show");
+        //     },
+        //     error: function () {
+        //         Swal.fire(
+        //             "Gagal!",
+        //             "Tidak dapat mengambil data Produksi.",
+        //             "error"
+        //         );
+        //     },
+        // });
+    });
 })
