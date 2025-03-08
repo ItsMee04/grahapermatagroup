@@ -199,7 +199,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/produksi/getProduksi', [PembangunanController::class, 'getProduksi']);
     Route::get('/produksi/getProduksiByLokasi/{id}', [PembangunanController::class, 'getProduksiByLokasi']);
-
+    Route::get('/produksi/showProduksi/{id}', [PembangunanController::class, 'showProduksi']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

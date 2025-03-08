@@ -112,4 +112,11 @@ class PembangunanController extends Controller
             ->get();
         return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Ditemukan', 'Data' => $produksi]);
     }
+
+    public function showProduksi($id)
+    {
+        $produksi = Produksi::with(['marketing.lokasi', 'marketing.tipe', 'marketing.blok', 'marketing'])->findOrFail($id);
+
+        return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Ditemukan', 'Data' => $produksi]);
+    }
 }

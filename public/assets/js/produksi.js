@@ -594,30 +594,52 @@ $(document).ready(function () {
         const produksiID = $(this).data("id");
         $("#mdEditProduksi").modal("show");
         handlePDFUpload("filespk", "previewFileSpk");
-        // $.ajax({
-        //     url: `/produksi/showProduksi/${pembangunanID}`, // Endpoint untuk mendapatkan data konsumen
-        //     type: "GET",
-        //     success: function (response) {
-        //         const data = response.Data;
+        $.ajax({
+            url: `/produksi/showProduksi/${produksiID}`, // Endpoint untuk mendapatkan data konsumen
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
 
-        //         // Isi modal dengan data konsumen
-        //         // $("#editid").val(data.id);
-        //         // $("#editblok").val(data.marketing.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
-        //         // $("#edittipe").val(data.marketing.tipe.tipe);
+                // Isi modal dengan data konsumen
+                $("#editidproduksi").val(data.id);
+                $("#showblok").val(data.marketing.blok.blok); // Pastikan lokasi terisi sebelum load konsumen
+                $("#showtipe").val(data.marketing.tipe.tipe);
+                $("#editketeranganproduksi").val(data.keterangan ?? "");
+                $("#edithargaboronganproduksi").val(data.hargaborongan);
+                $("#edittambahanproduksi").val(data.tambahan);
+                $("#editpotonganproduksi").val(data.potongan);
+                $("#editprogresproduksi").val(data.progresrumah);
+                $("#editlistrikproduksi").val(data.listrik);
+                $("#editairproduksi").val(data.air);
 
-        //         // $("#edithargaborongan").val(data.hargaborongan);
-        //         // $("#editketerangan").val(data.keterangan ?? "");
+                // Muat opsi subkontraktor
+                $.ajax({
+                    url: "/subkontraktor/getSubkontraktor",
+                    type: "GET",
+                    success: function (jabatanResponse) {
+                        let options =
+                            '<option value="">-- PILIH SUB KONTRAKTOR --</option>';
+                        jabatanResponse.Data.forEach((item) => {
+                            const selected =
+                                item.id === response.Data.subkon_id
+                                    ? "selected"
+                                    : "";
+                            options += `<option value="${item.id}" ${selected}>${item.subkontraktor}</option>`;
+                        });
+                        $("#editsubkontraktorproduksi").html(options);
+                    },
+                });
 
-        //         // Tampilkan modal edit
-        //         $("#mdEditProduksi").modal("show");
-        //     },
-        //     error: function () {
-        //         Swal.fire(
-        //             "Gagal!",
-        //             "Tidak dapat mengambil data Produksi.",
-        //             "error"
-        //         );
-        //     },
-        // });
+                // Tampilkan modal edit
+                $("#mdEditProduksi").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Produksi.",
+                    "error"
+                );
+            },
+        });
     });
 })

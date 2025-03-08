@@ -150,8 +150,8 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="editid">ID</label>
-                            <input type="text" class="form-control" name="id" id="editid" readonly>
+                            <label for="editidproduksi">ID</label>
+                            <input type="text" class="form-control" name="id" id="editidproduksi" readonly>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -170,21 +170,22 @@
                         </div>
                         <div class="form-group">
                             <label for="editketerangan">KETERANGAN</label>
-                            <textarea class="form-control" name="keterangan" rows="4" id="editketerangan"></textarea>
+                            <textarea class="form-control" name="keterangan" rows="4" id="editketeranganproduksi"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label for="showhargaborongan">HARGA BORONGAN</label>
+                                    <label for="edithargaboronganproduksi">HARGA BORONGAN</label>
                                     <input type="text" class="form-control" name="hargaborongan"
-                                        id="showhargaborongan">
+                                        id="edithargaboronganproduksi">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="showtambahan">TAMBAHAN</label>
-                                    <input type="text" class="form-control" name="tambahan" id="showtambahan">
+                                    <label for="edittambahanproduksi">TAMBAHAN</label>
+                                    <input type="text" class="form-control" name="tambahan"
+                                        id="edittambahanproduksi">
                                 </div>
                             </div>
                         </div>
@@ -192,14 +193,15 @@
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label for="showpotongan">POTONGAN</label>
-                                    <input type="text" class="form-control" name="hargaborongan" id="showpotongan">
+                                    <label for="editpotonganproduksi">POTONGAN</label>
+                                    <input type="text" class="form-control" name="potongan"
+                                        id="editpotonganproduksi">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="showprogres">PROGRES</label>
-                                    <input type="text" class="form-control" name="tambahan" id="showprogres">
+                                    <label for="editprogresproduksi">PROGRES</label>
+                                    <input type="text" class="form-control" name="progres" id="editprogresproduksi">
                                 </div>
                             </div>
                         </div>
@@ -221,6 +223,75 @@
                                     <p class="text-danger" id="previewFileSpk"><i><b>* Format Berkas Harus PDF</b></i></p>
                                 </div>
                             </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label for="showhargaborongan">TERMIN 1</label>
+                                    <button id="btnTermin1" class="form-control btn btn-outline-warning btn-sm">
+                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 1
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="showhargaborongan">TERMIN 2</label>
+                                    <button id="btnTermin2" class="form-control btn btn-outline-warning btn-sm">
+                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 2
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label for="showhargaborongan">TERMIN 3</label>
+                                    <button id="btnTermin3" class="form-control btn btn-outline-warning btn-sm">
+                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 3
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="showhargaborongan">TERMIN 4</label>
+                                    <button id="btnTermin4" class="form-control btn btn-outline-warning btn-sm">
+                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 4
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label for="showhargaborongan">RETENSI</label>
+                            <button id="btnRetensi" class="form-control btn btn-outline-warning btn-sm">
+                                <i class="fa fa-upload"></i> UPLOAD RETENSI
+                            </button>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label for="editlistrikproduksi">NOMINAL INSTALASI LISTRIK</label>
+                                    <input type="text" class="form-control" name="listrik" id="editlistrikproduksi">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editairproduksi">NOMINAL INSTALASI AIR</label>
+                                    <input type="text" class="form-control" name="air" id="editairproduksi">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>SUB KONTRAKTOR</label>
+                            <select class="form-control select2bs4" style="width: 100%;" name="subkontraktor"
+                                id="editsubkontraktorproduksi">
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
