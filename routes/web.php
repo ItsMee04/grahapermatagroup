@@ -200,6 +200,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/getProduksi', [PembangunanController::class, 'getProduksi']);
     Route::get('/produksi/getProduksiByLokasi/{id}', [PembangunanController::class, 'getProduksiByLokasi']);
     Route::get('/produksi/showProduksi/{id}', [PembangunanController::class, 'showProduksi']);
+    Route::post('/produksi/updateTermin/{id}', [PembangunanController::class, 'updateTermin']);
+
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

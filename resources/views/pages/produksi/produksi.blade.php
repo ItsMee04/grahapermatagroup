@@ -230,16 +230,16 @@
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label for="showhargaborongan">TERMIN 1</label>
-                                    <button id="btnTermin1" class="form-control btn btn-outline-warning btn-sm">
-                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 1
+                                    <button type="button" class="form-control btn btn-outline-warning btn-sm btnTermin"
+                                        data-termin="1"><i class="fa fa-upload"></i> <b>UPLOAD TERMIN 1</b>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="showhargaborongan">TERMIN 2</label>
-                                    <button id="btnTermin2" class="form-control btn btn-outline-warning btn-sm">
-                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 2
+                                    <button type="button" class="form-control btn btn-outline-warning btn-sm btnTermin"
+                                        data-termin="2"><i class="fa fa-upload"></i> <b>UPLOAD TERMIN 2</b>
                                     </button>
                                 </div>
                             </div>
@@ -250,16 +250,16 @@
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label for="showhargaborongan">TERMIN 3</label>
-                                    <button id="btnTermin3" class="form-control btn btn-outline-warning btn-sm">
-                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 3
+                                    <button type="button" class="form-control btn btn-outline-warning btn-sm btnTermin"
+                                        data-termin="3"><i class="fa fa-upload"></i> <b>UPLOAD TERMIN 3</b>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="showhargaborongan">TERMIN 4</label>
-                                    <button id="btnTermin4" class="form-control btn btn-outline-warning btn-sm">
-                                        <i class="fa fa-upload"></i> UPLOAD TERMIN 4
+                                    <button type="button" class="form-control btn btn-outline-warning btn-sm btnTermin"
+                                        data-termin="4"><i class="fa fa-upload"></i> <b>UPLOAD TERMIN 4</b>
                                     </button>
                                 </div>
                             </div>
@@ -267,8 +267,8 @@
                         <hr>
                         <div class="form-group">
                             <label for="showhargaborongan">RETENSI</label>
-                            <button id="btnRetensi" class="form-control btn btn-outline-warning btn-sm">
-                                <i class="fa fa-upload"></i> UPLOAD RETENSI
+                            <button type="button" class="form-control btn btn-outline-warning btn-sm btnTermin"
+                                data-termin="RETENSI"><i class="fa fa-upload"></i> <b>UPLOAD RETENSI</b>
                             </button>
                         </div>
                         <hr>
@@ -304,6 +304,41 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    <!-- /.modal -->
+
+    <!-- Modal Edit Termin -->
+    <div class="modal fade" id="mdTermin" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="formEditTermin">
+                    <div class="modal-header bg-primary">
+                        <h4 class="modal-title" id="modalTerminTitle"><b>EDIT TERMIN</b></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="terminType" name="terminType"> <!-- Untuk menyimpan jenis termin -->
+                        <div class="form-group">
+                            <label for="editterminid">ID</label>
+                            <input type="text" class="form-control" id="editterminid" name="editterminid" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editnominaltermin">NOMINAL TERMIN</label>
+                            <input type="text" class="form-control" id="editnominaltermin" name="editnominaltermin">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- /.modal -->
 
     <!-- jQuery -->

@@ -550,23 +550,23 @@ $(document).ready(function () {
     function handlePDFUpload(inputId, previewId) {
         let fileInput = document.getElementById(inputId);
         let previewContainer = document.getElementById(previewId);
-    
+
         fileInput.addEventListener("change", function (event) {
             let file = event.target.files[0];
-    
+
             // Reset preview sebelum validasi
             previewContainer.innerHTML = "";
-    
+
             // Validasi format file harus PDF
             if (file && file.type !== "application/pdf") {
-                
+
                 var Toast = Swal.mixin({
                     toast: true,
                     position: "top-end",
                     showConfirmButton: false,
                     timer: 3000,
                 });
-    
+
                 Toast.fire({
                     icon: "error",
                     title: "Hanya File PDF yang diperbolehkan",
@@ -575,7 +575,7 @@ $(document).ready(function () {
                 fileInput.value = ""; // Reset input file
                 return;
             }
-    
+
             // Jika valid, tampilkan checkbox sukses
             if (file) {
                 previewContainer.innerHTML = `
@@ -611,6 +611,7 @@ $(document).ready(function () {
                 $("#editprogresproduksi").val(data.progresrumah);
                 $("#editlistrikproduksi").val(data.listrik);
                 $("#editairproduksi").val(data.air);
+                $(".btnTermin1").attr("data-id", data.id); // Set ID produksi ke tombol Termin 1
 
                 // Muat opsi subkontraktor
                 $.ajax({
@@ -642,4 +643,138 @@ $(document).ready(function () {
             },
         });
     });
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnTermin", function () {
+        const produksiIDTermin = $("#editidproduksi").val();
+        const terminType = $(this).data("termin"); // Menentukan Termin 1, 2, 3, 4, atau Retensi
+        $.ajax({
+            url: `/produksi/showProduksi/${produksiIDTermin}`, // Endpoint untuk mendapatkan data konsumen
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+
+                // Set judul modal sesuai termin yang ditekan
+                $("#modalTerminTitle").text(`EDIT TERMIN ${terminType}`);
+
+                // Set data berdasarkan termin yang dipilih
+                let terminValue = "";
+                switch (terminType) {
+                    case 1:
+                        terminValue = data.nominaltermin1;
+                        break;
+                    case 2:
+                        terminValue = data.nominaltermin2;
+                        break;
+                    case 3:
+                        terminValue = data.nominaltermin3;
+                        break;
+                    case 4:
+                        terminValue = data.nominaltermin4;
+                        break;
+                    case "RETENSI":
+                        terminValue = data.nominalretensi;
+                        break;
+                }
+
+                // Isi modal dengan data konsumen
+                $("#editterminid").val(data.id);
+                $("#terminType").val(terminType); // Simpan tipe termin dalam input hidden
+                // Tampilkan modal edit
+                $("#editnominaltermin").val(terminValue);
+                
+                $("#mdTermin").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Produksi.",
+                    "error"
+                );
+            },
+        });
+    });
+
+    $(document).on("hidden.bs.modal", "#mdTermin", function () {
+        $("body").addClass("modal-open"); // Kembalikan efek scrolling modal utama
+    });
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalEditTermin() {
+        $("#mdTermin").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#formEditTermin")[0].reset();
+        });
+    }
+
+    $(document).on("submit", "#formEditTermin", function (e) {
+        e.preventDefault(); // Mencegah reload halaman
+
+        const produksiID = $("#editterminid").val();
+        let formData = new FormData(this); // Ambil data form
+        formData.append("_token", $('meta[name="csrf-token"]').attr("content")); // Tambahkan CSRF Token
+
+        $.ajax({
+            url: `/produksi/updateTermin/${produksiID}`, // Endpoint untuk update termin
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdTermin").modal("hide"); // Tutup modal
+                resetFieldTutupModalEditTermin();
+                tableProduksi.ajax.reload(null, false); // Reload tabel
+            },
+            error: function (xhr) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = "";
+
+                    for (let key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
+                    }
+
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage.trim(),
+                    });
+
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
+                    });
+                }
+            }
+        });
+    });
+
+
 })
