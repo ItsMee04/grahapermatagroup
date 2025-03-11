@@ -7,6 +7,9 @@ use App\Models\Produksi;
 use App\Models\Marketing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CashBesar;
+use App\Models\DataKonsumenKeuangan;
+use App\Models\DataKonsumenKeuangan2;
 use Illuminate\Support\Facades\Auth;
 
 class PembangunanController extends Controller
@@ -123,59 +126,117 @@ class PembangunanController extends Controller
 
     public function updateTermin(Request $request, $id)
     {
-        // Validasi data yang dikirim dari form
+        // Validasi request
         $request->validate([
-            'terminType' => 'required|string|max:50', // Pastikan termin valid
-            'editnominaltermin' => 'required|numeric|min:0', // Nominal harus angka dan minimal 0
+            'terminType' => 'required|string|max:50',
+            'editnominaltermin' => 'required|numeric|min:0',
         ]);
 
-        // Cari data produksi berdasarkan ID
+        // Cari data produksi
         $produksi = Produksi::find($id);
         if (!$produksi) {
+            return response()->json(['success' => false, 'message' => 'Data Produksi tidak ditemukan!'], 404);
+        }
+
+        // Jika sisa sudah 0, hentikan proses dan kirim error
+        if ($produksi->sisa == 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data Produksi tidak ditemukan!'
-            ], 404);
+                'message' => 'Sisa sudah 0, tidak bisa menambahkan termin atau retensi lagi!'
+            ], 400);
         }
 
-        // Menggunakan Carbon untuk mendapatkan tanggal sekarang
+        // Ambil data yang diperlukan
+        $nominal = $request->editnominaltermin;
         $tanggalSekarang = Carbon::now()->toDateString();
+        $nilaiBorongan = $produksi->nilaiborongan;
+        $sisa = $nilaiBorongan - $nominal;
 
-        // Tentukan kolom yang diperbarui berdasarkan terminType
+        // Ambil ID Konsumen & Lokasi Proyek
+        $idKonsumen = $produksi->konsumen_id;
+        $lokasiProyek = Marketing::where('id', $idKonsumen)->value('lokasi_id');
+
+        // Ambil ID DakonKeuangan
+        $idDakon = DataKonsumenKeuangan::where('konsumen_id', $idKonsumen)->value('id');
+        $idDakon2 = DataKonsumenKeuangan2::where('datakonsumenkeuangan_id', $idDakon)->value('id');
+
+        // Ambil nama petugas (User yang login)
+        $petugas = Auth::user()->id;
+
+        // Tentukan kolom yang akan diperbarui berdasarkan terminType
         switch ($request->terminType) {
             case '1':
-                $produksi->nominaltermin1 = $request->editnominaltermin;
-                $produksi->tanggaltermin1 = $tanggalSekarang;
+                $terminKolom = ['nominaltermin1', 'tanggaltermin1'];
+                $keteranganTermin = 'Termin 1';
                 break;
             case '2':
-                $produksi->nominaltermin2 = $request->editnominaltermin;
-                $produksi->tanggaltermin2 = $tanggalSekarang;
+                $terminKolom = ['nominaltermin2', 'tanggaltermin2'];
+                $keteranganTermin = 'Termin 2';
                 break;
             case '3':
-                $produksi->nominaltermin3 = $request->editnominaltermin;
-                $produksi->tanggaltermin3 = $tanggalSekarang;
+                $terminKolom = ['nominaltermin3', 'tanggaltermin3'];
+                $keteranganTermin = 'Termin 3';
                 break;
             case '4':
-                $produksi->nominaltermin4 = $request->editnominaltermin;
-                $produksi->tanggaltermin4 = $tanggalSekarang;
+                $terminKolom = ['nominaltermin4', 'tanggaltermin4'];
+                $keteranganTermin = 'Termin 4';
                 break;
             case 'retensi':
-                $produksi->nominalretensi = $request->editnominaltermin;
-                $produksi->tanggalretensi = $tanggalSekarang;
+                $terminKolom = ['nominalretensi', 'tanggalretensi'];
+                $keteranganTermin = 'Retensi';
                 break;
             default:
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Jenis termin tidak valid!'
-                ], 400);
+                return response()->json(['success' => false, 'message' => 'Jenis termin tidak valid!'], 400);
         }
 
-        // Simpan perubahan ke database
-        $produksi->save();
+        // Cek apakah nominal termin sebelumnya kosong
+        $terminLama = $produksi[$terminKolom[0]];
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Termin berhasil diperbarui!'
-        ]);
+        if ($terminLama == 0) {
+            // Insert data baru
+            $produksi->update([
+                $terminKolom[0] => $nominal,
+                $terminKolom[1] => $tanggalSekarang,
+                'sisa' => $sisa
+            ]);
+
+            DataKonsumenKeuangan2::create([
+                'datakonsumenkeuangan_id' => $idDakon,
+                'tanggal' => $tanggalSekarang,
+                'keterangan' => $keteranganTermin,
+                'biayakeluar' => $nominal,
+                'user_id'   => $petugas,
+                'status'    => 1,
+            ]);
+
+            CashBesar::create([
+                'lokasi_id' => $lokasiProyek,
+                'konsumen_id' => $idKonsumen,
+                'tanggal' => $tanggalSekarang,
+                'keterangan' => $keteranganTermin,
+                'kredit' => $nominal,
+                'user_id' => $petugas,
+                'status'    => 1,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Data berhasil disimpan!']);
+        } else {
+            // Update data yang sudah ada
+            $produksi->update([
+                $terminKolom[0] => $nominal,
+                $terminKolom[1] => $tanggalSekarang,
+                'sisa' => $sisa
+            ]);
+
+            DataKonsumenKeuangan2::where('id', $idDakon2)
+                ->where('keterangan', $keteranganTermin)
+                ->update(['biayakeluar' => $nominal]);
+
+            CashBesar::where('id_konsumen', $idKonsumen)
+                ->where('keterangan', $keteranganTermin)
+                ->update(['kredit' => $nominal]);
+
+            return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui!']);
+        }
     }
 }

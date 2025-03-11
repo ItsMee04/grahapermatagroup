@@ -328,9 +328,9 @@
                             <input type="text" class="form-control" id="editnominaltermin" name="editnominaltermin">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
+                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
                     </div>
                 </form>
             </div>
