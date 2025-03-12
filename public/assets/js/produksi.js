@@ -592,7 +592,6 @@ $(document).ready(function () {
     //ketika button edit di tekan
     $(document).on("click", ".btneditproduksi", function () {
         const produksiID = $(this).data("id");
-        $("#mdEditProduksi").modal("show");
         handlePDFUpload("filespk", "previewFileSpk");
         $.ajax({
             url: `/produksi/showProduksi/${produksiID}`, // Endpoint untuk mendapatkan data konsumen
@@ -776,5 +775,73 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("submit", "#FormEditProduksi", function (e) {
+        e.preventDefault(); // Mencegah reload halaman
+
+        const produksiEditID = $("#editidproduksi").val();
+        let formData = new FormData(this); // Ambil data form
+        formData.append("_token", $('meta[name="csrf-token"]').attr("content")); // Tambahkan CSRF Token
+
+        $.ajax({
+            url: `/produksi/updateProduksi/${produksiEditID}`, // Endpoint untuk update termin
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdEditProduksi").modal("hide"); // Tutup modal
+                resetFieldTutupModalEditTermin();
+                tableProduksi.ajax.reload(null, false); // Reload tabel
+            },
+            error: function (xhr) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = "";
+
+                    for (let key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
+                    }
+
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage.trim(),
+                    });
+
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
+                    });
+                }
+            }
+        });
+    });
 
 })

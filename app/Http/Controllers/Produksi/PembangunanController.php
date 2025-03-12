@@ -260,4 +260,37 @@ class PembangunanController extends Controller
             return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui!']);
         }
     }
+
+    public function updateProduksi(Request $request, $id)
+    {
+        $messages = [
+            'required' => ':attribute wajib di pilih !!!',
+        ];
+
+        $credentials = $request->validate([
+            'keterangan'       =>  'string',
+            'hargaborongan'    =>  'required|integer',
+            'tambahan'         =>  'integer',
+            'potongan'         =>  'integer',
+            'progres'          =>  'integer',
+            'listrik'          =>  'integer',
+            'air'              =>  'integer',
+            'subkontraktor'    =>  'required',
+        ], $messages);
+
+        $produksi = Produksi::findOrFail($id);
+
+        $produksi->update([
+            'keterangan'    =>  $request->keterangan,
+            'hargaborongan' =>  $request->hargaborongan,
+            'tambahan'      =>  $request->tambahan,
+            'potongan'      =>  $request->potongan,
+            'progresrumah'  =>  $request->progres,
+            'listrik'       =>  $request->listrik,
+            'air'           =>  $request->air,
+            'subkon_id'     =>  $request->subkontraktor,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Disimpan']);
+    }
 }

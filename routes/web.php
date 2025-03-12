@@ -201,6 +201,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/getProduksiByLokasi/{id}', [PembangunanController::class, 'getProduksiByLokasi']);
     Route::get('/produksi/showProduksi/{id}', [PembangunanController::class, 'showProduksi']);
     Route::post('/produksi/updateTermin/{id}', [PembangunanController::class, 'updateTermin']);
+    Route::post('/produksi/updateProduksi/{id}', [PembangunanController::class, 'updateProduksi']);
 
 
     Route::get('/logout', [AuthController::class, 'logout']);

@@ -146,7 +146,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="storeEditPembangunan" method="POST" enctype="multipart/form-data">
+                <form id="FormEditProduksi" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
