@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Produksi;
 
 use Carbon\Carbon;
 use App\Models\Produksi;
+use App\Models\CashBesar;
 use App\Models\Marketing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\CashBesar;
 use App\Models\DataKonsumenKeuangan;
-use App\Models\DataKonsumenKeuangan2;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use App\Models\DataKonsumenKeuangan2;
 
 class PembangunanController extends Controller
 {
@@ -79,6 +80,7 @@ class PembangunanController extends Controller
             'hargaborongan' =>  $request->hargaborongan,
             'nilaiborongan' =>  $totalnilaiborongan,
             'keterangan'    =>  $request->keterangan,
+            'sisa'          =>  $totalnilaiborongan,
             'user_id'       =>  Auth::user()->id,
         ]);
 
@@ -265,6 +267,8 @@ class PembangunanController extends Controller
     {
         $messages = [
             'required' => ':attribute wajib di pilih !!!',
+            'mimes'    => ':attribute format wajib menggunakan PDF',
+            'unique'   => ':attribute sudah digunakan'
         ];
 
         $credentials = $request->validate([
@@ -276,20 +280,47 @@ class PembangunanController extends Controller
             'listrik'          =>  'integer',
             'air'              =>  'integer',
             'subkontraktor'    =>  'required',
+            'filespk'          =>  'mimes:pdf'
         ], $messages);
 
         $produksi = Produksi::findOrFail($id);
 
-        $produksi->update([
-            'keterangan'    =>  $request->keterangan,
-            'hargaborongan' =>  $request->hargaborongan,
-            'tambahan'      =>  $request->tambahan,
-            'potongan'      =>  $request->potongan,
-            'progresrumah'  =>  $request->progres,
-            'listrik'       =>  $request->listrik,
-            'air'           =>  $request->air,
-            'subkon_id'     =>  $request->subkontraktor,
-        ]);
+        if ($request->file('filespk')) {
+            $pathavatar     = 'storage/BerkasSPK/' . $produksi->spk;
+
+            if (File::exists($pathavatar)) {
+                File::delete($pathavatar);
+            }
+
+            $extension = $request->file('filespk')->getClientOriginalExtension();
+            $newAvatar = time() . '.' . $extension;
+            $request->file('filespk')->storeAs('BerkasSPK', $newAvatar);
+            $request['filespk'] = $newAvatar;
+
+            $produksi->update([
+                'keterangan'    =>  $request->keterangan,
+                'hargaborongan' =>  $request->hargaborongan,
+                'tambahan'      =>  $request->tambahan,
+                'potongan'      =>  $request->potongan,
+                'progresrumah'  =>  $request->progres,
+                'listrik'       =>  $request->listrik,
+                'air'           =>  $request->air,
+                'subkon_id'     =>  $request->subkontraktor,
+                'spk'           =>  $newAvatar,
+                'tanggalspk'    =>  now()->toDateString(),
+            ]);
+        } else {
+            $produksi->update([
+                'keterangan'    =>  $request->keterangan,
+                'hargaborongan' =>  $request->hargaborongan,
+                'tambahan'      =>  $request->tambahan,
+                'potongan'      =>  $request->potongan,
+                'progresrumah'  =>  $request->progres,
+                'listrik'       =>  $request->listrik,
+                'air'           =>  $request->air,
+                'subkon_id'     =>  $request->subkontraktor,
+            ]);
+        }
 
         return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Disimpan']);
     }

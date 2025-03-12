@@ -612,6 +612,14 @@ $(document).ready(function () {
                 $("#editairproduksi").val(data.air);
                 $(".btnTermin1").attr("data-id", data.id); // Set ID produksi ke tombol Termin 1
 
+                // Cek apakah berkas SPK ada di database
+                if (data.spk) {
+                    $(".viewBerkasSPK").parent().show(); // Tampilkan tombol VIEW BERKAS
+                    $(".viewBerkasSPK").attr("data-file", data.spk); // Simpan path file dalam atribut
+                } else {
+                    $(".viewBerkasSPK").parent().hide(); // Sembunyikan tombol jika file tidak ada
+                }
+
                 // Muat opsi subkontraktor
                 $.ajax({
                     url: "/subkontraktor/getSubkontraktor",
@@ -681,7 +689,7 @@ $(document).ready(function () {
                 $("#terminType").val(terminType); // Simpan tipe termin dalam input hidden
                 // Tampilkan modal edit
                 $("#editnominaltermin").val(terminValue);
-                
+
                 $("#mdTermin").modal("show");
             },
             error: function () {
@@ -843,5 +851,38 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on("click", ".viewBerkasSPK", function () {
+        const filePath = $(this).attr("data-file");
+    
+        if (!filePath) {
+            alert("Berkas tidak ditemukan.");
+            return;
+        }
+    
+        let url = window.location.origin + "/storage/BerkasSPK/" + filePath;
+        console.log("Opening PDF:", url); // Debugging URL
+    
+        // Deteksi jika dibuka di mobile
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Buat elemen <a> tersembunyi untuk download
+            let downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = filePath.split("/").pop(); // Ambil nama file dari URL
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink); // Hapus elemen setelah klik
+        } else {
+            // Desktop: Tampilkan dalam iframe
+            $("#pdfIframe").attr("src", url);
+            $("#previewModal").modal("show");
+        }
+    });
+    
+    
+    $(document).on("hidden.bs.modal", "#previewModal", function () {
+        $("body").addClass("modal-open"); // Kembalikan efek scrolling modal utama
+    });
+
 
 })

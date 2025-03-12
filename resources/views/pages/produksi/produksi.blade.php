@@ -223,6 +223,20 @@
                                     <p class="text-danger" id="previewFileSpk"><i><b>* Format Berkas Harus PDF</b></i></p>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>VIEW BERKAS SPK</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <button type="button"
+                                                class="form-control btn btn-outline-success btn-sm viewBerkasSPK">
+                                                <i class="fa fa-upload"></i> <b>VIEW BERKAS</b>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <div class="row">
@@ -336,10 +350,26 @@
             </div>
         </div>
     </div>
-
-
-
     <!-- /.modal -->
+
+    <!-- Modal untuk preview PDF -->
+    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Preview Berkas SPK</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="pdfIframe" src="" width="100%" height="600px" style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- jQuery -->
     <script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
