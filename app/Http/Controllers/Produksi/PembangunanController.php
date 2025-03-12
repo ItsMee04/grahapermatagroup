@@ -142,23 +142,23 @@ class PembangunanController extends Controller
         if ($produksi->sisa == 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Sisa sudah 0, tidak bisa menambahkan termin atau retensi lagi!'
+                'message' => 'Sisa pembayaran sudah lunas, tidak bisa menambahkan termin atau retensi lagi!'
             ], 400);
         }
 
         // Ambil data yang diperlukan
         $nominal = $request->editnominaltermin;
         $tanggalSekarang = Carbon::now()->toDateString();
-        $nilaiBorongan = $produksi->nilaiborongan;
-        $sisa = $nilaiBorongan - $nominal;
 
         // Ambil ID Konsumen & Lokasi Proyek
         $idKonsumen = $produksi->konsumen_id;
         $lokasiProyek = Marketing::where('id', $idKonsumen)->value('lokasi_id');
 
-        // Ambil ID DakonKeuangan
+        // Ambil ID DataKonsumenKeuangan
         $idDakon = DataKonsumenKeuangan::where('konsumen_id', $idKonsumen)->value('id');
-        $idDakon2 = DataKonsumenKeuangan2::where('datakonsumenkeuangan_id', $idDakon)->value('id');
+        $idDakon2 = DataKonsumenKeuangan2::where('datakonsumenkeuangan_id', $idDakon)
+            ->where('keterangan', 'Termin ' . $request->terminType)
+            ->value('id');
 
         // Ambil nama petugas (User yang login)
         $petugas = Auth::user()->id;
@@ -181,12 +181,34 @@ class PembangunanController extends Controller
                 $terminKolom = ['nominaltermin4', 'tanggaltermin4'];
                 $keteranganTermin = 'Termin 4';
                 break;
-            case 'retensi':
+            case 'RETENSI':
                 $terminKolom = ['nominalretensi', 'tanggalretensi'];
-                $keteranganTermin = 'Retensi';
+                $keteranganTermin = 'RETENSI';
                 break;
             default:
                 return response()->json(['success' => false, 'message' => 'Jenis termin tidak valid!'], 400);
+        }
+
+        // 🔹 Perhitungan ulang sisa:
+        $totalTerminSebelumnya = $produksi->nominaltermin1
+            + $produksi->nominaltermin2
+            + $produksi->nominaltermin3
+            + $produksi->nominaltermin4;
+
+        if ($request->terminType == '1') {
+            // Jika termin 1, langsung hitung dari nilaiborongan
+            $sisa = $produksi->nilaiborongan - $nominal;
+        } else {
+            // Jika termin 2, 3, atau 4, kurangi dari total termin sebelumnya + nominal baru
+            $sisa = $produksi->nilaiborongan - ($totalTerminSebelumnya + $nominal);
+        }
+
+        // Jika nominal melebihi sisa yang tersedia, tolak update
+        if ($nominal > $produksi->sisa) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nominal yang dimasukkan melebihi sisa yang tersedia!'
+            ], 400);
         }
 
         // Cek apakah nominal termin sebelumnya kosong
@@ -229,10 +251,9 @@ class PembangunanController extends Controller
             ]);
 
             DataKonsumenKeuangan2::where('id', $idDakon2)
-                ->where('keterangan', $keteranganTermin)
                 ->update(['biayakeluar' => $nominal]);
 
-            CashBesar::where('id_konsumen', $idKonsumen)
+            CashBesar::where('konsumen_id', $idKonsumen)
                 ->where('keterangan', $keteranganTermin)
                 ->update(['kredit' => $nominal]);
 
