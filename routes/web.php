@@ -202,7 +202,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/produksi/showProduksi/{id}', [PembangunanController::class, 'showProduksi']);
     Route::post('/produksi/updateTermin/{id}', [PembangunanController::class, 'updateTermin']);
     Route::post('/produksi/updateProduksi/{id}', [PembangunanController::class, 'updateProduksi']);
-
-
+    Route::get('/produksi/showProgresBangunan/{id}', [PembangunanController::class, 'showProgresBangunan']);
+    Route::post('/produksi/storeProgresBangunan', [PembangunanController::class, 'storeProgresBangunan']);
     Route::get('/logout', [AuthController::class, 'logout']);
 });

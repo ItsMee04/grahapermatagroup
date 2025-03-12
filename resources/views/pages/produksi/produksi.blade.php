@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Produksi')
 @section('content')
+    <style>
+        #editpreviewImgProgres img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Gambar tetap proporsional dan tidak terpotong */
+        }
+    </style>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Main content -->
@@ -355,16 +363,116 @@
     <!-- Modal untuk preview PDF -->
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="previewModalLabel">Preview Berkas SPK</h5>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>PREVIEW BERKAS SPK</b></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <iframe id="pdfIframe" src="" width="100%" height="600px" style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk update progres bangunan -->
+    <div class="modal fade" id="mdEditUpdateProgres" tabindex="-1" role="dialog"
+        aria-labelledby="mdEditUpdateProgresLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>UPDATE PROGRES BANGUNAN</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="FormUpdateProgresBangunan" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label for="editidprogres">ID</label>
+                                    <input type="text" class="form-control" name="id" id="editidprogres"
+                                        readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editkonsumenprogres">KONSUMEN</label>
+                                    <input type="text" class="form-control" id="editkonsumenprogres" readonly>
+                                    <input type="hidden" class="form-control" name="konsumen"
+                                        id="editkonsumenidprogres">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edittanggalprogres">TANGGAL</label>
+                            <input type="date" class="form-control" name="tanggal" id="edittanggalprogres">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>BUKTI UPDATE PROGRES BANGUNAN</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="image_progres" class="custom-file-input"
+                                                id="editimgprogres">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger"><i><b>* Format Foto Harus JPG/PNG</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>PREVIEW</label>
+                                <div class="form-group">
+                                    <a href="#" id="editpreviewImgProgres" class="img-thumbnail"
+                                        style="width: 150px; height: 150px; display: block; overflow: hidden;"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><b>CLOSE</b></button>
+                        <button type="submit" class="btn btn-primary"><b>SIMPAN</b></button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"><b>DATA UPDATE PROGRES BANGUNAN</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="tableProgresBangunan" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>KETERANGAN</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
                 </div>
             </div>
         </div>

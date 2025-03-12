@@ -12,6 +12,7 @@ use App\Models\DataKonsumenKeuangan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\DataKonsumenKeuangan2;
+use App\Models\ProgresBangunan;
 
 class PembangunanController extends Controller
 {
@@ -323,5 +324,44 @@ class PembangunanController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Disimpan']);
+    }
+
+    public function showProgresBangunan($id)
+    {
+        $produksi = Produksi::with(['marketing.lokasi', 'marketing.tipe', 'marketing.blok', 'marketing'])->findOrFail($id);
+
+        return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Ditemukan', 'Data' => $produksi]);
+    }
+
+    public function storeProgresBangunan(Request $request)
+    {
+        $messages = [
+            'required' => ':attribute wajib di pilih !!!',
+            'mimes'    => ':attribute format wajib menggunakan png/jpg',
+            'unique'   => ':attribute sudah digunakan'
+        ];
+
+        $credentials = $request->validate([
+            'tanggal'          =>  'required',
+            'image_progres'    =>  'mimes:mimes:png,jpg,jpeg'
+        ], $messages);
+
+        if ($request->file('image_progres')) {
+            $file = $request->file('image_progres');
+            $imageProgres = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/ImageProgresBangunan'), $imageProgres); // Simpan di public/uploads/ImageSurvei
+        }
+
+        $calonkonsumen = ProgresBangunan::create([
+            'konsumen_id'           => $request->konsumen,
+            'produksi_id'           => $request->id,
+            'tanggal'               => $request->tanggal,
+            'image_progres'         => $imageProgres,
+            'keterangan'            => 'FOTO UPDATE PROGRES BANGUNAN',
+            'user_id'               => Auth::user()->id,
+            'status'                => 1,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data Update Progres Bangunan Berhasil Disimpan']);
     }
 }

@@ -884,5 +884,129 @@ $(document).ready(function () {
         $("body").addClass("modal-open"); // Kembalikan efek scrolling modal utama
     });
 
+    function uploadImageProgres(inputId, previewId) {
+        const inputFile = document.getElementById(inputId);
+        const previewContainer = document.getElementById(previewId);
 
+        inputFile.addEventListener("change", () => {
+            const file = inputFile.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                previewContainer.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = reader.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btnupdateprogres", function () {
+        const produksiID = $(this).data("id");
+        $.ajax({
+            url: `/produksi/showProgresBangunan/${produksiID}`, // Endpoint untuk mendapatkan data konsumen
+            type: "GET",
+            success: function (response) {
+                const data = response.Data;
+
+                // Isi modal dengan data konsumen
+                $("#editidprogres").val(data.id);
+                $("#editkonsumenprogres").val(data.marketing.konsumen);
+                $("#editkonsumenidprogres").val(data.marketing.id);
+
+                uploadImageProgres("editimgprogres", "editpreviewImgProgres");
+                // Tampilkan modal edit
+                $("#mdEditUpdateProgres").modal("show");
+            },
+            error: function () {
+                Swal.fire(
+                    "Gagal!",
+                    "Tidak dapat mengambil data Progres Bangunan.",
+                    "error"
+                );
+            },
+        });
+    });
+
+    resetFieldTutupModalUpdateProgres();
+
+    // Ketika modal ditutup, reset semua field
+    function resetFieldTutupModalUpdateProgres() {
+        $("#mdEditUpdateProgres").on("hidden.bs.modal", function () {
+            // Reset form input (termasuk gambar dan status)
+            $("#FormUpdateProgresBangunan")[0].reset();
+            editpreviewImgProgres.innerHTML = "";
+            editimgprogres.value = ""; // Reset input file
+        });
+    }
+
+    $(document).on("submit", "#FormUpdateProgresBangunan", function (e) {
+        e.preventDefault(); // Mencegah reload halaman
+        let formData = new FormData(this); // Ambil data form
+        formData.append("_token", $('meta[name="csrf-token"]').attr("content")); // Tambahkan CSRF Token
+
+        $.ajax({
+            url: `/produksi/storeProgresBangunan`, // Endpoint untuk update termin
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdEditUpdateProgres").modal("hide"); // Tutup modal
+                resetFieldTutupModalUpdateProgres();
+            },
+            error: function (xhr) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = "";
+
+                    for (let key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
+                    }
+
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage.trim(),
+                    });
+
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
+                    });
+                }
+            }
+        });
+    });
 })
