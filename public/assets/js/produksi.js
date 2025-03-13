@@ -218,7 +218,7 @@ $(document).ready(function () {
 
     resetFieldTutupModalEdit();
 
-    //kirim data ke server <i class=""></i>
+    //kirim data ke server
     $(document).on("submit", "#storeEditPembangunan", function (event) {
         event.preventDefault(); // Mencegah form submit secara default
 
@@ -854,15 +854,15 @@ $(document).ready(function () {
 
     $(document).on("click", ".viewBerkasSPK", function () {
         const filePath = $(this).attr("data-file");
-    
+
         if (!filePath) {
             alert("Berkas tidak ditemukan.");
             return;
         }
-    
+
         let url = window.location.origin + "/storage/BerkasSPK/" + filePath;
         console.log("Opening PDF:", url); // Debugging URL
-    
+
         // Deteksi jika dibuka di mobile
         if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             // Buat elemen <a> tersembunyi untuk download
@@ -878,8 +878,7 @@ $(document).ready(function () {
             $("#previewModal").modal("show");
         }
     });
-    
-    
+
     $(document).on("hidden.bs.modal", "#previewModal", function () {
         $("body").addClass("modal-open"); // Kembalikan efek scrolling modal utama
     });
@@ -1035,6 +1034,289 @@ $(document).ready(function () {
                         title: "Terjadi kesalahan. Silakan coba lagi!",
                     });
                 }
+            }
+        });
+    });
+
+    //ketika button edit di tekan
+    $(document).on("click", ".btndetail", function () {
+        const produksiID = $(this).data("id");
+    
+        // Simpan ID produksi ke sessionStorage sebelum berpindah halaman
+        sessionStorage.setItem("produksiID", produksiID);
+    
+        // Redirect ke halaman detail
+        window.location.href = `/produksi/DetailProgresBangunan/${produksiID}`;
+    });
+
+    // Fungsi untuk mendapatkan ID dari URL
+    
+    function getProduksiIDFromURL() {
+        let pathArray = window.location.pathname.split("/");
+        return pathArray[pathArray.length - 1]; // Ambil bagian terakhir dari URL sebagai ID
+    }
+
+    //funsi untuk memuat data role
+    function loadProgresBangunan() {
+        let produksiID = getProduksiIDFromURL(); // Ambil ID dari URL
+        tableProgres = $("#tableProgresBangunan").DataTable({
+            paging: true,
+            lengthChange: false,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            ajax: {
+                url: `/produksi/getProgresBangunan/${produksiID}`, // Ganti dengan URL endpoint server Anda
+                type: "GET", // Metode HTTP (GET/POST)
+                dataSrc: "Data", // Jalur data di response JSON
+            },
+            columns: [
+                {
+                    data: null, // Kolom nomor urut
+                    className: "text-center",
+                    render: function (data, type, row, meta) {
+                        return meta.row + 1; // Nomor urut dimulai dari 1
+                    },
+                    orderable: false,
+                },
+                {
+                    data: "tanggal",
+                    className: "text-center",
+                    render: function (data, type, row) {
+                        return `
+                            <button type="button" class="btn btn-outline-primary btn-sm btnpreviewProgresBanguan" data-id="${row.id}" data-toggle="tooltip" data-placement="top" title="Lihat Gambar">
+                                <b>${data}</b>
+                            </button>
+                        `;
+                    },
+                },
+            ],
+            drawCallback: function () {
+                // Re-inisialisasi tooltip Bootstrap setelah render ulang DataTable
+                initializeTooltip();
+            },
+            initComplete: function () {
+                // Tambahkan tombol refresh ke dalam header tabel
+                $("#tableProgresBangunan_wrapper .dataTables_filter").append(`
+                <button id="btnRefreshProgresBangunan" class="btn btn-primary btn-sm ml-2">
+                    <i class="fa fa-sync"></i> Refresh
+                </button>
+            `);
+            },
+        });
+    }
+
+    //ketika menekan tombol refresh
+    $(document).on("click", "#btnRefreshProgresBangunan", function () {
+        if (tableProgres) {
+            tableProgres.ajax.reload(null, false); // Reload data dari server
+        }
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+        });
+
+        Toast.fire({
+            icon: "success",
+            title: "Data Progres Bangunan Berhasil Di Refresh",
+        });
+    });
+
+    $(document).on("click", ".btnpreviewProgresBanguan", function () {
+        let progresID = $(this).data("id");
+
+        $.ajax({
+            url: `/produksi/getProgresBangunan/${progresID}`, // Endpoint untuk mendapatkan data gambar
+            type: "GET",
+            success: function (response) {
+                console.log(response); // Debugging: Pastikan respons benar
+
+                // Periksa apakah `Data` ada dan tidak kosong
+                if (response.Data && response.Data.length > 0 && response.Data[0].image_progres) {
+                    let imageUrl = `/storage/ImageProgresBangunan/${response.Data[0].image_progres}`;
+
+                    Swal.fire({
+                        title: "Preview Gambar",
+                        imageUrl: imageUrl,
+                        imageAlt: "Gambar Progres Bangunan",
+                        showCloseButton: true
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Gambar tidak tersedia",
+                        text: "Tidak ada gambar yang diupload untuk progres ini."
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi Kesalahan",
+                    text: "Gagal mengambil data gambar."
+                });
+            }
+        });
+    });
+
+    // Fungsi untuk memuat data detail produksi
+    function loadDetailProduksi() {
+        let produksiIDD = getProduksiIDFromURL(); // Ambil ID dari URL
+        $.ajax({
+            url: `/produksi/showProduksi/${produksiIDD}`, // Gantilah {id} dengan ID yang sesuai
+            type: "GET",
+            success: function (response) {
+                if (response.success && response.Data) {
+                    let data = response.Data;
+                    let marketing = data.marketing;
+
+                    // Mengisi input dengan nilai dari response
+                    $("#detailProduksiBlok").val(marketing.blok ? marketing.blok.blok : "Tidak tersedia");
+                    $("#detailProduksiTipe").val(marketing.tipe ? marketing.tipe.tipe : "Tidak tersedia");
+                    $("#detailProduksiKeterangan").val(data.keterangan || "Tidak tersedia");
+                    $("#detailProduksiHargaBorongan").val(formatRupiah(data.hargaborongan));
+                    $("#detailProduksiTambahan").val(formatRupiah(data.tambahan));
+                    $("#detailProduksiPotongan").val(formatRupiah(data.potongan));
+                    $("#detailProduksiProgres").val(data.progresrumah + "%");
+                    $("#detailProduksiTanggalTermin1").val(data.tanggaltermin1 || "Tidak tersedia");
+                    $("#detailProduksiNominalTermin1").val(formatRupiah(data.nominaltermin1));
+                    $("#detailProduksiTanggalTermin2").val(data.tanggaltermin2 || "Tidak tersedia");
+                    $("#detailProduksiNominalTermin2").val(formatRupiah(data.nominaltermin2));
+                    $("#detailProduksiTanggalTermin3").val(data.tanggaltermin3 || "Tidak tersedia");
+                    $("#detailProduksiNominalTermin3").val(formatRupiah(data.nominaltermin3));
+                    $("#detailProduksiTanggalTermin4").val(data.tanggaltermin4 || "Tidak tersedia");
+                    $("#detailProduksiNominalTermin4").val(formatRupiah(data.nominaltermin4));
+                    $("#detailProduksiTanggalRetensi").val(data.tanggalretensi || "Tidak tersedia");
+                    $("#detailProduksiNominalRetensi").val(formatRupiah(data.nominalretensi));
+                    $("#detailProduksiListrik").val(formatRupiah(data.listrik));
+                    $("#detailProduksiAir").val(formatRupiah(data.air));
+                    $("#detailProduksiSubkontraktor").val(data.subkon_id || "Tidak tersedia");
+                    $("#detailProduksiSisa").val(formatRupiah(data.sisa));
+                    $("#detailProduksiTanggalSPK").val(data.tanggalspk || "Tidak tersedia");
+
+                    // Cek apakah berkas SPK ada di database
+                    if (data.spk) {
+                        $(".DetailviewBerkasSPK").parent().show(); // Tampilkan tombol VIEW BERKAS
+                        $(".DetailviewBerkasSPK").attr("data-file", data.spk); // Simpan path file dalam atribut
+                    } else {
+                        $(".DetailviewBerkasSPK").parent().hide(); // Sembunyikan tombol jika file tidak ada
+                    }
+
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Data tidak ditemukan atau terjadi kesalahan!",
+                    });
+                }
+            },
+            error: function () {
+                Toast.fire({
+                    icon: "error",
+                    title: "Gagal mengambil data produksi!",
+                });
+            },
+        });
+    }
+
+    // Fungsi untuk memformat angka menjadi Rupiah
+    function formatRupiah(angka) {
+        if (angka === null || angka === undefined) return "Tidak tersedia";
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0
+        }).format(angka);
+    }
+
+    $(document).on("click", ".DetailviewBerkasSPK", function () {
+        const filePath = $(this).attr("data-file");
+
+        if (!filePath) {
+            alert("Berkas tidak ditemukan.");
+            return;
+        }
+
+        let url = window.location.origin + "/storage/BerkasSPK/" + filePath;
+        console.log("Opening PDF:", url); // Debugging URL
+
+        // Deteksi jika dibuka di mobile
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Buat elemen <a> tersembunyi untuk download
+            let downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = filePath.split("/").pop(); // Ambil nama file dari URL
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink); // Hapus elemen setelah klik
+        } else {
+            // Desktop: Tampilkan dalam iframe
+            $("#pdfIframe").attr("src", url);
+            $("#previewModal").modal("show");
+        }
+    });
+
+    // Ambil ID produksi dari sessionStorage
+    const produksiID = sessionStorage.getItem("produksiID");
+
+    if (produksiID) {
+        // Panggil fungsi dengan ID produksi yang ditemukan
+        loadDetailProduksi(produksiID);
+        loadProgresBangunan(produksiID);
+
+        // Hapus sessionStorage agar tidak dieksekusi terus-menerus
+        sessionStorage.removeItem("produksiID");
+    }
+
+    //ketika button delete di tekan
+    $(document).on("click", ".btnDelete", function () {
+        let id = $(this).data("id");
+
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+            customClass: {
+                popup: 'animated bounceIn', // Animasi masuk
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/produksi/deleteProduksi/${id}`, // Ganti dengan endpoint yang sesuai
+                    type: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") // Ambil token CSRF dari meta tag
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Terhapus!",
+                            text: "Data berhasil dihapus.",
+                            icon: "success",
+                            customClass: {
+                                popup: 'animated fadeOut' // Animasi keluar
+                            }
+                        });
+                        tableProduksi.ajax.reload(null, false); // Reload DataTable setelah penghapusan
+                        tablePembangunan.ajax.reload(null, false);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Gagal!",
+                            text: "Terjadi kesalahan, coba lagi nanti.",
+                            icon: "error"
+                        });
+                    }
+                });
             }
         });
     });

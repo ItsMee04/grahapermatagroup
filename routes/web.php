@@ -204,5 +204,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/produksi/updateProduksi/{id}', [PembangunanController::class, 'updateProduksi']);
     Route::get('/produksi/showProgresBangunan/{id}', [PembangunanController::class, 'showProgresBangunan']);
     Route::post('/produksi/storeProgresBangunan', [PembangunanController::class, 'storeProgresBangunan']);
+    Route::get('/produksi/DetailProgresBangunan/{id}', function () {
+        return view('pages.produksi.progresbangunan');
+    });
+    Route::get('/produksi/getProgresBangunan/{id}', [PembangunanController::class, 'getProgresBangunan']);
+    Route::delete('/produksi/deleteProduksi/{id}', [PembangunanController::class, 'deleteProduksi']);
+
     Route::get('/logout', [AuthController::class, 'logout']);
 });

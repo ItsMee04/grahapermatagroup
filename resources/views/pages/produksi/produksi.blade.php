@@ -447,34 +447,6 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h4 class="modal-title"><b>DATA UPDATE PROGRES BANGUNAN</b></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="tableProgresBangunan" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>KETERANGAN</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-            </div>
         </div>
     </div>
 

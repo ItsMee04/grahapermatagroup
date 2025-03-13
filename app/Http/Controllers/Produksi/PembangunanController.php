@@ -7,12 +7,14 @@ use App\Models\Produksi;
 use App\Models\CashBesar;
 use App\Models\Marketing;
 use Illuminate\Http\Request;
+use App\Models\ProgresBangunan;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\DataKonsumen;
 use App\Models\DataKonsumenKeuangan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\DataKonsumenKeuangan2;
-use App\Models\ProgresBangunan;
 
 class PembangunanController extends Controller
 {
@@ -363,5 +365,47 @@ class PembangunanController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'Data Update Progres Bangunan Berhasil Disimpan']);
+    }
+
+    public function getProgresBangunan($id)
+    {
+        $produksi = ProgresBangunan::where('produksi_id', $id)->get();
+
+        return response()->json(['success' => true, 'message' => 'Data Progres Bangunan Berhasil Ditemukan', 'Data' => $produksi]);
+    }
+
+    public function deleteProduksi($id)
+    {
+        // Cari data produksi
+        $produksi = Produksi::find($id);
+
+        // Jika data tidak ditemukan, kembalikan response error
+        if (!$produksi) {
+            return response()->json(['success' => false, 'message' => 'Data Produksi Tidak Ditemukan'], 404);
+        }
+
+        try {
+            // Gunakan transaksi database untuk memastikan konsistensi data
+            DB::transaction(function () use ($produksi) {
+                // Update status produksi menjadi nonaktif (0)
+                $produksi->update(['status' => 0]);
+
+                // Update status konsumen terkait jika ada
+                if ($produksi->konsumen_id) {
+                    Marketing::where('id', $produksi->konsumen_id)->update(['status' => 0]);
+                    CashBesar::where('konsumen_id', $produksi->konsumen_id)->update(['status' => 0]);
+                    DataKonsumen::where('konsumen_id', $produksi->konsumen_id)->update(['status' => 0]);
+
+                    $idDatakonsumen = DataKonsumenKeuangan::where('konsumen_id', $produksi->konsumen_id)->first()->id;
+                    DataKonsumenKeuangan::where('konsumen_id', $produksi->konsumen_id)->update(['status' => 0]);
+                    DataKonsumenKeuangan2::where('datakonsumenkeuangan_id', $idDatakonsumen)->update(['status' => 0]);
+                    ProgresBangunan::where('konsumen_id', $produksi->konsumen_id)->update(['status' => 0]);
+                }
+            });
+
+            return response()->json(['success' => true, 'message' => 'Data Produksi Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat menghapus data'], 500);
+        }
     }
 }
