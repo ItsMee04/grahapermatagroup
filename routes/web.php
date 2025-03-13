@@ -17,6 +17,7 @@ use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\SubkontraktorController;
 use App\Http\Controllers\Marketing\DataKonsumenController;
 use App\Http\Controllers\Master\MetodePembayaranController;
+use App\Http\Controllers\Produksi\LaporanHarianController;
 use App\Http\Controllers\Produksi\PembangunanController;
 
 /*
@@ -209,6 +210,16 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/produksi/getProgresBangunan/{id}', [PembangunanController::class, 'getProgresBangunan']);
     Route::delete('/produksi/deleteProduksi/{id}', [PembangunanController::class, 'deleteProduksi']);
+
+    Route::get('/laporanharian', function () {
+        return view('pages.produksi.laporanharian');
+    });
+    Route::get('produksi/getLaporanHarian', [LaporanHarianController::class, 'getLaporanHarian']);
+    Route::post('produksi/storeLaporanHarian', [LaporanHarianController::class, 'storeLaporanHarian']);
+    Route::get('produksi/showLaporanHarian/{id}', [LaporanHarianController::class, 'showLaporanHarian']);
+    Route::post('produksi/updateLaporanHarian/{id}', [LaporanHarianController::class, 'updateLaporanHarian']);
+    Route::delete('produksi/deleteLaporanHarian/{id}', [LaporanHarianController::class, 'deleteLaporanHarian']);
+
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

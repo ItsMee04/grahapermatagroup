@@ -38,6 +38,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Icon -->
+    <link rel="shortcut icon" href="{{ asset('assets') }}/dist/img/ism.ico">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -45,7 +47,7 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('assets') }}/dist/img/AdminLTELogo.png" alt="AdminLTELogo"
+            <img class="animation__shake" src="{{ asset('assets') }}/dist/img/logohitam.png" alt="GrahaPermataLogo"
                 height="60" width="60">
         </div>
 

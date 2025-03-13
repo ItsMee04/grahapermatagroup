@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/toastr/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assets') }}/dist/css/adminlte.min.css">
+    <!-- Icon -->
+    <link rel="shortcut icon" href="{{ asset('assets') }}/dist/img/ism.ico">
 </head>
 
 <body class="hold-transition login-page">
