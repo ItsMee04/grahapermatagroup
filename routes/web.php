@@ -18,6 +18,7 @@ use App\Http\Controllers\Master\SubkontraktorController;
 use App\Http\Controllers\Marketing\DataKonsumenController;
 use App\Http\Controllers\Master\LokasiPajakController;
 use App\Http\Controllers\Master\MetodePembayaranController;
+use App\Http\Controllers\Pajak\PajakController;
 use App\Http\Controllers\Produksi\LaporanHarianController;
 use App\Http\Controllers\Produksi\PembangunanController;
 
@@ -233,6 +234,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pajak', function () {
         return view('pages.perpajakan.pajak');
     });
+    Route::get('/pajak/getRekapitulasiPajak', [PajakController::class, 'getRekapitulasiPajak']);
+    Route::get('/pajak/getRekapitulasiPajakByLokasi/{id}', [PajakController::class, 'getRekapitulasiPajakByLokasi']);
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

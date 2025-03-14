@@ -13,7 +13,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <button type="button" class="btn btn-outline-primary btn-sm btn-tambahPajak"><i
+                                <button type="button" class="btn btn-outline-primary btn-sm btntambahRekapitulasiPajak"><i
                                         class="fa fa-plus"></i>
                                     FORM INPUT PERPAJAKAN</button>
                             </li>
@@ -63,7 +63,7 @@
     </div>
     <!-- /.content-wrapper -->
 
-    <div class="modal fade" id="mdTambahLaporan">
+    <div class="modal fade" id="mdTambahRekapitulasiPajak">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -72,23 +72,132 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="storeLaporanHarian" method="POST" enctype="multipart/form-data">
+                <form id="storeRekapitulasiPajak" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <div class="col-sm-6">
-                            <!-- text input -->
-                            <div class="form-group">
-                                <label>NAMA KONSUMEN</label>
-                                <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
-                                    id="editkonsumen">
-                                </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>NAMA KONSUMEN</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" name="konsumen"
+                                        id="konsumen">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>HARGA TRANSAKSI</label>
+                                    <input type="text" name="hargatransaksi" class="form-control"
+                                        placeholder="Masukan Harga Transaksi">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>HARGA TRANSAKSI</label>
-                                <input type="text" name="hargatransaksi" class="form-control"
-                                    placeholder="Masukan Harga Transaksi">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>TANGGAL INPUT PPH</label>
+                                    <input type="date" name="tanggalinputpph" class="form-control"
+                                        placeholder="Masukan Harga Transaksi">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>TANGGAL INPUT PPN</label>
+                                    <input type="date" name="tanggalinputppn" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>TANGGAL BAYAR PPH</label>
+                                    <input type="date" name="tanggalbayarpph" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>TANGGAL BAYAR PPN</label>
+                                    <input type="date" name="tanggalbayarppn" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>TANGGAL LAPOR PPH</label>
+                                    <input type="date" name="tanggallaporpph" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>TANGGAL LAPOR PPN</label>
+                                    <input type="date" name="tanggallaporppn" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>FILE REKAP PAJAK</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="fileRekapPajak" class="custom-file-input"
+                                                id="fileRekapPajak">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger" id="previewFileRekapPajak"><i><b>* Format Berkas Harus
+                                                PDF</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>MASA PAJAK</label>
+                                    <input type="date" name="masapajak" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>FILE BUKTI LAPOR INPUT PPH</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="fileLaporInputPph" class="custom-file-input"
+                                                id="fileLaporInputPph">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger" id="previewfileLaporInputPph"><i><b>* Format Berkas Harus
+                                                PDF</b></i></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>FILE BUKTI LAPOR INPUT PPN</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="fileLaporInputPpn" class="custom-file-input"
+                                                id="fileLaporInputPpn">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger" id="previewfileLaporInputPpn"><i><b>* Format Berkas Harus
+                                                PDF</b></i></p>
+                                </div>
                             </div>
                         </div>
                     </div>
