@@ -16,6 +16,7 @@ use App\Http\Controllers\Marketing\MarketingController;
 use App\Http\Controllers\Master\JenisKelaminController;
 use App\Http\Controllers\Master\SubkontraktorController;
 use App\Http\Controllers\Marketing\DataKonsumenController;
+use App\Http\Controllers\Master\LokasiPajakController;
 use App\Http\Controllers\Master\MetodePembayaranController;
 use App\Http\Controllers\Produksi\LaporanHarianController;
 use App\Http\Controllers\Produksi\PembangunanController;
@@ -51,6 +52,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/lokasi/{id}', [LokasiController::class, 'show']);
     Route::post('/lokasi/{id}', [LokasiController::class, 'update']);
     Route::delete('/lokasi/delete/{id}', [LokasiController::class, 'delete']);
+
+    Route::get('/lokasipajak', function () {
+        return view("Pages.Master.lokasipajak");
+    });
+    Route::get('/lokasipajak/getLokasiPajak', [LokasiPajakController::class, 'getLokasiPajak']);
+    Route::post('/lokasipajak/storeLokasiPajak', [LokasiPajakController::class, 'storeLokasiPajak']);
+    Route::get('/lokasipajak/showLokasiPajak/{id}', [LokasiPajakController::class, 'showLokasiPajak']);
+    Route::post('/lokasipajak/updateLokasiPajak/{id}', [LokasiPajakController::class, 'updateLokasiPajak']);
+    Route::delete('/lokasipajak/deleteLokasiPajak/{id}', [LokasiPajakController::class, 'deleteLokasiPajak']);
 
     Route::get('/tipe', function () {
         return view('Pages.Master.tipe');
@@ -214,12 +224,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporanharian', function () {
         return view('pages.produksi.laporanharian');
     });
-    Route::get('produksi/getLaporanHarian', [LaporanHarianController::class, 'getLaporanHarian']);
-    Route::post('produksi/storeLaporanHarian', [LaporanHarianController::class, 'storeLaporanHarian']);
-    Route::get('produksi/showLaporanHarian/{id}', [LaporanHarianController::class, 'showLaporanHarian']);
-    Route::post('produksi/updateLaporanHarian/{id}', [LaporanHarianController::class, 'updateLaporanHarian']);
-    Route::delete('produksi/deleteLaporanHarian/{id}', [LaporanHarianController::class, 'deleteLaporanHarian']);
+    Route::get('/produksi/getLaporanHarian', [LaporanHarianController::class, 'getLaporanHarian']);
+    Route::post('/produksi/storeLaporanHarian', [LaporanHarianController::class, 'storeLaporanHarian']);
+    Route::get('/produksi/showLaporanHarian/{id}', [LaporanHarianController::class, 'showLaporanHarian']);
+    Route::post('/produksi/updateLaporanHarian/{id}', [LaporanHarianController::class, 'updateLaporanHarian']);
+    Route::delete('/produksi/deleteLaporanHarian/{id}', [LaporanHarianController::class, 'deleteLaporanHarian']);
 
+    Route::get('/pajak', function () {
+        return view('pages.perpajakan.pajak');
+    });
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });

@@ -91,7 +91,12 @@
                                 <p>Blok</p>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a href="/lokasipajak" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lokasi Pajak</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="/rekening" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -198,6 +203,14 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="/pajak" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        <p>
+                            Perpajakan
+                        </p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="/logout" class="nav-link">
