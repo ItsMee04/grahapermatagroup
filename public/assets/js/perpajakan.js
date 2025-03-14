@@ -310,4 +310,71 @@ $(document).ready(function () {
     }
 
     resetFieldTutupModalTambahRekapitulasi();
+
+    $(document).on("submit", "#storeRekapitulasiPajak", function (e) {
+        e.preventDefault(); // Mencegah reload halaman
+        let formData = new FormData(this); // Ambil data form
+        formData.append("_token", $('meta[name="csrf-token"]').attr("content")); // Tambahkan CSRF Token
+
+        $.ajax({
+            url: `/produksi/updateTermin/${produksiID}`, // Endpoint untuk update termin
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: response.message,
+                });
+
+                $("#mdTermin").modal("hide"); // Tutup modal
+                resetFieldTutupModalEditTermin();
+                tableProduksi.ajax.reload(null, false); // Reload tabel
+            },
+            error: function (xhr) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = "";
+
+                    for (let key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            errorMessage += `${errors[key][0]}\n`; // Ambil pesan pertama dari setiap error
+                        }
+                    }
+
+                    Toast.fire({
+                        icon: "error",
+                        title: errorMessage.trim(),
+                    });
+
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    Toast.fire({
+                        icon: "error",
+                        title: xhr.responseJSON.message,
+                    });
+
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan. Silakan coba lagi!",
+                    });
+                }
+            }
+        });
+    });
 });
