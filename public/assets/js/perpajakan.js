@@ -317,7 +317,7 @@ $(document).ready(function () {
         formData.append("_token", $('meta[name="csrf-token"]').attr("content")); // Tambahkan CSRF Token
 
         $.ajax({
-            url: `/produksi/updateTermin/${produksiID}`, // Endpoint untuk update termin
+            url: `/pajak/storeRekapitulasiPajak`, // Endpoint untuk update termin
             type: "POST",
             data: formData,
             processData: false,
@@ -335,9 +335,8 @@ $(document).ready(function () {
                     title: response.message,
                 });
 
-                $("#mdTermin").modal("hide"); // Tutup modal
-                resetFieldTutupModalEditTermin();
-                tableProduksi.ajax.reload(null, false); // Reload tabel
+                $("#mdTambahRekapitulasiPajak").modal("hide"); // Tutup modal
+                tableRekapitulasiPajak.ajax.reload(null, false); // Reload tabel
             },
             error: function (xhr) {
                 var Toast = Swal.mixin({
